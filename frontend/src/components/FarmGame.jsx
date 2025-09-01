@@ -6,7 +6,8 @@ import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { 
   Sprout, Star, RotateCcw, TrendingUp, Clock, 
-  Zap, Sparkles, ShoppingCart, Lock, Coins, Gamepad2, Target 
+  Zap, Sparkles, ShoppingCart, Lock, Coins, Gamepad2, Target, 
+  Flame, Trophy, BookOpen
 } from 'lucide-react';
 import { 
   initialGameData, 
@@ -22,10 +23,12 @@ import {
   getGrowthSpeedLevel,
   getHarvestAmount,
   getMultiHarvestAmount,
+  getCriticalHarvestChance,
+  getExperienceMultiplier,
   getUpgradeCost,
   getGridSize,
   canUnlockGridSize,
-  canUnlockMultiHarvest,
+  canUnlockUpgrade,
   getNextGrowthSpeedThreshold
 } from '../data/mock';
 import './FarmGame.css';
@@ -39,6 +42,14 @@ const FarmGame = () => {
       if (!parsedData.inventory.totalClicks) {
         parsedData.inventory.totalClicks = 0;
       }
+      // Ajouter les nouvelles améliorations si elles n'existent pas
+      const newUpgrades = { ...parsedData.upgrades };
+      Object.keys(UPGRADES).forEach(key => {
+        if (newUpgrades[UPGRADES[key]] === undefined) {
+          newUpgrades[UPGRADES[key]] = 0;
+        }
+      });
+      parsedData.upgrades = newUpgrades;
       return parsedData;
     }
     return initialGameData;
@@ -99,6 +110,88 @@ const FarmGame = () => {
       }));
     }
   }, [gameData.inventory.totalClicks, gameData.upgrades[UPGRADES.GROWTH_SPEED]]);
+
+  // Système de récolte automatique
+  useEffect(() => {
+    if (gameData.upgrades[UPGRADES.AUTO_HARVEST] === 0) return;
+
+    const interval = setInterval(() => {
+      setGameData(prev => {
+        let hasChanges = false;
+        const newGrid = prev.grid.map(row =>
+          row.map(cell => {
+            if (cell.state === WHEAT_STATES.MATURE) {
+              hasChanges = true;
+              // Auto-récolte avec les mêmes calculs que la récolte manuelle
+              const wheatType = getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]);
+              const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
+              const harvestAmount = getHarvestAmount(prev.upgrades[UPGRADES.HARVEST_AMOUNT]);
+              const multiHarvestAmount = getMultiHarvestAmount(prev.upgrades[UPGRADES.MULTI_HARVEST]);
+              const isCritical = Math.random() < getCriticalHarvestChance(prev.upgrades[UPGRADES.CRITICAL_HARVEST]);
+              const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
+              const totalWheat = wheatValue * harvestAmount * multiHarvestAmount * criticalMultiplier;
+              const xpMultiplier = getExperienceMultiplier(prev.upgrades[UPGRADES.EXPERIENCE_BOOST]);
+              const xpGained = Math.floor(wheatValue * 5 * multiHarvestAmount * xpMultiplier);
+
+              // Mise à jour de l'inventaire (sera fait après la boucle)
+              return {
+                ...cell,
+                state: WHEAT_STATES.SEED,
+                plantedAt: Date.now(),
+                wheatType: wheatType,
+                boosted: false,
+                boostCooldown: 0,
+                _autoHarvested: { totalWheat, xpGained } // Temporaire pour les calculs
+              };
+            }
+            return cell;
+          })
+        );
+
+        if (hasChanges) {
+          // Calculer les totaux des récoltes automatiques
+          let totalAutoWheat = 0;
+          let totalAutoXp = 0;
+          let totalAutoClicks = 0;
+
+          newGrid.forEach(row => {
+            row.forEach(cell => {
+              if (cell._autoHarvested) {
+                totalAutoWheat += cell._autoHarvested.totalWheat;
+                totalAutoXp += cell._autoHarvested.xpGained;
+                totalAutoClicks += 1;
+                delete cell._autoHarvested; // Nettoyer
+              }
+            });
+          });
+
+          const newXp = prev.player.xp + totalAutoXp;
+          const newLevel = Math.floor(newXp / 100) + 1;
+
+          return {
+            ...prev,
+            grid: newGrid,
+            inventory: {
+              ...prev.inventory,
+              wheat: prev.inventory.wheat + totalAutoWheat,
+              totalHarvested: prev.inventory.totalHarvested + totalAutoWheat,
+              totalClicks: prev.inventory.totalClicks + totalAutoClicks
+            },
+            player: {
+              ...prev.player,
+              level: newLevel,
+              xp: newXp,
+              xpToNext: newLevel * 100
+            }
+          };
+        }
+
+        return prev;
+      });
+    }, UPGRADE_INFO[UPGRADES.AUTO_HARVEST].harvestInterval);
+
+    return () => clearInterval(interval);
+  }, [gameData.upgrades[UPGRADES.AUTO_HARVEST]]);
 
   // Système de croissance automatique
   useEffect(() => {
@@ -196,8 +289,11 @@ const FarmGame = () => {
     const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
     const harvestAmount = getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]);
     const multiHarvestAmount = getMultiHarvestAmount(gameData.upgrades[UPGRADES.MULTI_HARVEST]);
-    const totalWheat = wheatValue * harvestAmount * multiHarvestAmount;
-    const xpGained = wheatValue * 5 * multiHarvestAmount; // XP basée sur la rareté et quantité
+    const isCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
+    const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
+    const totalWheat = wheatValue * harvestAmount * multiHarvestAmount * criticalMultiplier;
+    const xpMultiplier = getExperienceMultiplier(gameData.upgrades[UPGRADES.EXPERIENCE_BOOST]);
+    const xpGained = Math.floor(wheatValue * 5 * multiHarvestAmount * xpMultiplier);
 
     // Mise à jour des données
     setGameData(prev => {
@@ -258,9 +354,7 @@ const FarmGame = () => {
     if (upgradeType === UPGRADES.GRID_SIZE) {
       if (!canUnlockGridSize(gameData.player.level, currentLevel + 1)) return;
     }
-    if (upgradeType === UPGRADES.MULTI_HARVEST) {
-      if (!canUnlockMultiHarvest(gameData.player.level)) return;
-    }
+    if (!canUnlockUpgrade(upgradeType, gameData.player.level)) return;
 
     setGameData(prev => ({
       ...prev,
@@ -313,6 +407,7 @@ const FarmGame = () => {
   const xpProgress = (gameData.player.xp % 100);
   const gridSize = Math.sqrt(getGridSize(gameData.upgrades[UPGRADES.GRID_SIZE]));
   const nextGrowthThreshold = getNextGrowthSpeedThreshold(gameData.inventory.totalClicks);
+  const rareMultiplier = Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, gameData.upgrades[UPGRADES.RARE_CHANCE]);
 
   return (
     <div className="farm-game-idle discord-theme">
@@ -363,7 +458,7 @@ const FarmGame = () => {
               Clic gauche: récolter | Clic droit: accélérer la pousse (2s cooldown)
             </p>
             <div 
-              className="farm-grid-idle"
+              className={`farm-grid-idle grid-size-${gridSize}`}
               style={{
                 gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
                 gridTemplateRows: `repeat(${gridSize}, 1fr)`
@@ -404,12 +499,12 @@ const FarmGame = () => {
                     >
                       <div className="cell-content-idle">
                         <span className={`wheat-sprite-idle grid-${gridSize}`}>
-                          {cell.state === WHEAT_STATES.MATURE ? wheatInfo.emoji : stateInfo.emoji}
+                          {cell.state === WHEAT_STATES.MATURE ? '🌾' : stateInfo.emoji}
                         </span>
                         {isHarvesting && (
                           <div className="harvest-effect-idle">
                             <span className="floating-reward-idle">
-                              +{WHEAT_TYPE_INFO[getRandomWheatType()].value * getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]) * getMultiHarvestAmount(gameData.upgrades[UPGRADES.MULTI_HARVEST])}🌾
+                              +{Math.floor(WHEAT_TYPE_INFO[getRandomWheatType()].value * getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]) * getMultiHarvestAmount(gameData.upgrades[UPGRADES.MULTI_HARVEST]))}🌾
                             </span>
                           </div>
                         )}
@@ -453,22 +548,22 @@ const FarmGame = () => {
                   const canAfford = gameData.inventory.wheat >= cost;
                   const isMaxLevel = currentLevel >= info.maxLevel;
                   const isAutoUnlock = info.isAutoUnlock;
+                  const canUnlock = canUnlockUpgrade(upgradeType, gameData.player.level);
                   
-                  let canUnlock = true;
                   let unlockMessage = '';
                   
                   if (upgradeType === UPGRADES.GRID_SIZE) {
-                    canUnlock = canUnlockGridSize(gameData.player.level, currentLevel + 1);
-                    if (!canUnlock) {
+                    const canUnlockGrid = canUnlockGridSize(gameData.player.level, currentLevel + 1);
+                    if (!canUnlockGrid) {
                       const targetLevel = UPGRADE_INFO[UPGRADES.GRID_SIZE].levels[currentLevel + 1];
                       unlockMessage = `Niveau ${targetLevel?.reqLevel || '?'} requis`;
                     }
-                  } else if (upgradeType === UPGRADES.MULTI_HARVEST) {
-                    canUnlock = canUnlockMultiHarvest(gameData.player.level);
-                    if (!canUnlock) {
-                      unlockMessage = `Niveau ${UPGRADE_INFO[UPGRADES.MULTI_HARVEST].unlockLevel} requis`;
-                    }
+                  } else if (!canUnlock) {
+                    unlockMessage = `Niveau ${info.unlockLevel} requis`;
                   }
+
+                  const shouldShow = canUnlock || currentLevel > 0 || upgradeType === UPGRADES.GRID_SIZE || isAutoUnlock;
+                  if (!shouldShow) return null;
 
                   return (
                     <div key={upgradeType} className="upgrade-card">
@@ -477,6 +572,12 @@ const FarmGame = () => {
                           <div className="flex items-center gap-2 mb-1">
                             {upgradeType === UPGRADES.GROWTH_SPEED ? (
                               <Target className="w-4 h-4 text-discord-green" />
+                            ) : upgradeType === UPGRADES.AUTO_HARVEST ? (
+                              <Clock className="w-4 h-4 text-discord-blurple" />
+                            ) : upgradeType === UPGRADES.CRITICAL_HARVEST ? (
+                              <Flame className="w-4 h-4 text-discord-red" />
+                            ) : upgradeType === UPGRADES.EXPERIENCE_BOOST ? (
+                              <BookOpen className="w-4 h-4 text-discord-yellow" />
                             ) : (
                               <TrendingUp className="w-4 h-4 text-discord-blurple" />
                             )}
@@ -484,7 +585,7 @@ const FarmGame = () => {
                             <Badge variant="secondary" className="bg-discord-accent text-discord-text">
                               Niv. {currentLevel}
                             </Badge>
-                            {upgradeType === UPGRADES.MULTI_HARVEST && (
+                            {(upgradeType === UPGRADES.MULTI_HARVEST || upgradeType === UPGRADES.AUTO_HARVEST || upgradeType === UPGRADES.CRITICAL_HARVEST || upgradeType === UPGRADES.EXPERIENCE_BOOST) && (
                               <Badge variant="outline" className="text-discord-green border-discord-green">
                                 Nouveau!
                               </Badge>
@@ -514,7 +615,7 @@ const FarmGame = () => {
                             </Badge>
                           ) : isMaxLevel ? (
                             <Badge variant="default" className="bg-discord-blurple text-white">MAX</Badge>
-                          ) : !canUnlock ? (
+                          ) : unlockMessage ? (
                             <div className="flex items-center gap-1 text-discord-red">
                               <Lock className="w-4 h-4" />
                               <span className="text-sm">{unlockMessage}</span>
@@ -559,6 +660,16 @@ const FarmGame = () => {
                     <Zap className="w-6 h-6 text-discord-red mb-2" />
                     <div className="text-2xl font-bold text-discord-text">{getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT])}</div>
                     <div className="text-sm text-discord-muted">Blé par Récolte</div>
+                  </div>
+                  <div className="stat-card bg-discord-primary border-discord-accent">
+                    <Sparkles className="w-6 h-6 text-discord-green mb-2" />
+                    <div className="text-2xl font-bold text-discord-text">x{rareMultiplier.toFixed(1)}</div>
+                    <div className="text-sm text-discord-muted">Multiplicateur de Rareté</div>
+                  </div>
+                  <div className="stat-card bg-discord-primary border-discord-accent">
+                    <Trophy className="w-6 h-6 text-discord-yellow mb-2" />
+                    <div className="text-2xl font-bold text-discord-text">{Math.round(getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]) * 100)}%</div>
+                    <div className="text-sm text-discord-muted">Chance Critique</div>
                   </div>
                 </div>
               </TabsContent>

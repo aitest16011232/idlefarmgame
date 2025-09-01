@@ -20,7 +20,7 @@ export const WHEAT_TYPE_INFO = {
     bgColor: '#F5F5DC'
   },
   [WHEAT_TYPES.UNCOMMON]: {
-    emoji: '🌽',
+    emoji: '🌾',
     name: 'Blé Peu Commun',
     value: 3,
     rarity: 0.2, // 1/5
@@ -28,7 +28,7 @@ export const WHEAT_TYPE_INFO = {
     bgColor: '#F0FFF0'
   },
   [WHEAT_TYPES.RARE]: {
-    emoji: '✨',
+    emoji: '🌾',
     name: 'Blé Rare',
     value: 8,
     rarity: 0.1, // 1/10
@@ -36,7 +36,7 @@ export const WHEAT_TYPE_INFO = {
     bgColor: '#E6F3FF'
   },
   [WHEAT_TYPES.EPIC]: {
-    emoji: '🔥',
+    emoji: '🌾',
     name: 'Blé Épique',
     value: 25,
     rarity: 0.05, // 1/20
@@ -44,7 +44,7 @@ export const WHEAT_TYPE_INFO = {
     bgColor: '#F3E5F5'
   },
   [WHEAT_TYPES.LEGENDARY]: {
-    emoji: '💎',
+    emoji: '🌾',
     name: 'Blé Légendaire',
     value: 100,
     rarity: 0.01, // 1/100
@@ -52,7 +52,7 @@ export const WHEAT_TYPE_INFO = {
     bgColor: '#FFFACD'
   },
   [WHEAT_TYPES.MYTHIC]: {
-    emoji: '🌟',
+    emoji: '🌾',
     name: 'Blé Mythique',
     value: 500,
     rarity: 0.002, // 1/500
@@ -60,7 +60,7 @@ export const WHEAT_TYPE_INFO = {
     bgColor: '#FFF0F5'
   },
   [WHEAT_TYPES.DIVINE]: {
-    emoji: '🔮',
+    emoji: '🌾',
     name: 'Blé Divin',
     value: 2000,
     rarity: 0.0005, // 1/2000
@@ -114,7 +114,10 @@ export const UPGRADES = {
   GROWTH_SPEED: 'growthSpeed',
   HARVEST_AMOUNT: 'harvestAmount',
   RARE_CHANCE: 'rareChance',
-  MULTI_HARVEST: 'multiHarvest'
+  MULTI_HARVEST: 'multiHarvest',
+  AUTO_HARVEST: 'autoHarvest',
+  CRITICAL_HARVEST: 'criticalHarvest',
+  EXPERIENCE_BOOST: 'experienceBoost'
 };
 
 export const GROWTH_SPEED_THRESHOLDS = [
@@ -177,6 +180,33 @@ export const UPGRADE_INFO = {
     baseChance: 0.1, // 10% de base
     increment: 0.04, // +4% par niveau
     unlockLevel: 5 // Déblocké au niveau 5
+  },
+  [UPGRADES.AUTO_HARVEST]: {
+    name: "Récolte Automatique",
+    description: "Récolte automatiquement les blés matures",
+    baseCost: 500,
+    maxLevel: 1,
+    unlockLevel: 20,
+    harvestInterval: 5000 // 5 secondes entre les récoltes auto
+  },
+  [UPGRADES.CRITICAL_HARVEST]: {
+    name: "Récolte Critique",
+    description: "Chance d'obtenir 5x plus de blé",
+    baseCost: 300,
+    maxLevel: 20,
+    baseChance: 0.05, // 5% de base
+    increment: 0.02, // +2% par niveau
+    multiplier: 5,
+    unlockLevel: 15
+  },
+  [UPGRADES.EXPERIENCE_BOOST]: {
+    name: "Boost d'Expérience",
+    description: "Augmente l'XP gagnée par récolte",
+    baseCost: 200,
+    maxLevel: Infinity,
+    baseMultiplier: 1,
+    increment: 0.25, // +25% XP par niveau
+    unlockLevel: 10
   }
 };
 
@@ -200,7 +230,10 @@ export const initialGameData = {
     [UPGRADES.GROWTH_SPEED]: 0,
     [UPGRADES.HARVEST_AMOUNT]: 0,
     [UPGRADES.RARE_CHANCE]: 0,
-    [UPGRADES.MULTI_HARVEST]: 0
+    [UPGRADES.MULTI_HARVEST]: 0,
+    [UPGRADES.AUTO_HARVEST]: 0,
+    [UPGRADES.CRITICAL_HARVEST]: 0,
+    [UPGRADES.EXPERIENCE_BOOST]: 0
   },
   settings: {
     autoPlant: false,
@@ -250,17 +283,21 @@ export const getHarvestAmount = (harvestAmountLevel = 0) => {
 };
 
 export const getMultiHarvestChance = (multiHarvestLevel = 0) => {
+  if (multiHarvestLevel === 0) return 0;
   const info = UPGRADE_INFO[UPGRADES.MULTI_HARVEST];
-  return Math.min(1, info.baseChance + (multiHarvestLevel * info.increment));
+  return Math.min(1, info.baseChance + ((multiHarvestLevel - 1) * info.increment));
 };
 
 export const getMultiHarvestAmount = (multiHarvestLevel = 0) => {
+  if (multiHarvestLevel === 0) return 1;
+  
   const chance = getMultiHarvestChance(multiHarvestLevel);
   
   // Si on a atteint 100% pour 2 blés, on passe au système de 3 blés
   if (chance >= 1) {
-    const excessLevels = multiHarvestLevel - Math.ceil((1 - UPGRADE_INFO[UPGRADES.MULTI_HARVEST].baseChance) / UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment);
-    const tripleChance = excessLevels * UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment;
+    const maxLevelsFor2 = Math.ceil((1 - UPGRADE_INFO[UPGRADES.MULTI_HARVEST].baseChance) / UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment) + 1;
+    const excessLevels = multiHarvestLevel - maxLevelsFor2;
+    const tripleChance = Math.max(0, excessLevels * UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment);
     
     if (Math.random() < tripleChance) return 3;
     return 2; // Toujours au moins 2 si on a 100%
@@ -270,6 +307,17 @@ export const getMultiHarvestAmount = (multiHarvestLevel = 0) => {
   return Math.random() < chance ? 2 : 1;
 };
 
+export const getCriticalHarvestChance = (criticalHarvestLevel = 0) => {
+  if (criticalHarvestLevel === 0) return 0;
+  const info = UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST];
+  return Math.min(1, info.baseChance + ((criticalHarvestLevel - 1) * info.increment));
+};
+
+export const getExperienceMultiplier = (experienceBoostLevel = 0) => {
+  const info = UPGRADE_INFO[UPGRADES.EXPERIENCE_BOOST];
+  return info.baseMultiplier + (experienceBoostLevel * info.increment);
+};
+
 export const getUpgradeCost = (upgradeType, currentLevel) => {
   const info = UPGRADE_INFO[upgradeType];
   if (upgradeType === UPGRADES.GRID_SIZE) {
@@ -277,6 +325,9 @@ export const getUpgradeCost = (upgradeType, currentLevel) => {
   }
   if (upgradeType === UPGRADES.GROWTH_SPEED) {
     return 0; // Gratuit, auto-déblocké
+  }
+  if (upgradeType === UPGRADES.AUTO_HARVEST) {
+    return currentLevel >= info.maxLevel ? Infinity : info.baseCost;
   }
   return Math.floor(info.baseCost * Math.pow(1.4, currentLevel));
 };
@@ -291,8 +342,9 @@ export const canUnlockGridSize = (playerLevel, targetGridLevel) => {
   return level ? playerLevel >= level.reqLevel : false;
 };
 
-export const canUnlockMultiHarvest = (playerLevel) => {
-  return playerLevel >= UPGRADE_INFO[UPGRADES.MULTI_HARVEST].unlockLevel;
+export const canUnlockUpgrade = (upgradeType, playerLevel) => {
+  const info = UPGRADE_INFO[upgradeType];
+  return !info.unlockLevel || playerLevel >= info.unlockLevel;
 };
 
 export const getNextGrowthSpeedThreshold = (totalClicks) => {
