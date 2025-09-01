@@ -29,7 +29,11 @@ import {
   getGridSize,
   canUnlockGridSize,
   canUnlockUpgrade,
-  getNextGrowthSpeedThreshold
+  getNextGrowthSpeedThreshold,
+  getXpMultiplier,
+  getXpRequired,
+  getWheatTypeProbability,
+  formatProbability
 } from '../data/mock';
 import './FarmGame.css';
 
