@@ -321,7 +321,7 @@ export const getUpgradeCost = (upgradeType, currentLevel) => {
     return 0; // Gratuit, auto-déblocké
   }
   if (upgradeType === UPGRADES.AUTO_HARVEST) {
-    return currentLevel >= info.maxLevel ? Infinity : info.baseCost;
+    return currentLevel >= info.maxLevel ? Infinity : Math.floor(info.baseCost * Math.pow(1.5, currentLevel));
   }
   return Math.floor(info.baseCost * Math.pow(1.4, currentLevel));
 };
