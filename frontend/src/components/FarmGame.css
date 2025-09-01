@@ -60,6 +60,10 @@
 .farm-grid-idle.grid-size-5 { max-width: 550px; }
 .farm-grid-idle.grid-size-6 { max-width: 650px; }
 .farm-grid-idle.grid-size-7 { max-width: 750px; }
+.farm-grid-idle.grid-size-8 { max-width: 800px; }
+.farm-grid-idle.grid-size-9 { max-width: 850px; }
+.farm-grid-idle.grid-size-10 { max-width: 900px; }
+.farm-grid-idle.grid-size-11 { max-width: 950px; }
 
 .farm-cell-idle {
   aspect-ratio: 1;
