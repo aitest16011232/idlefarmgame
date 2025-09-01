@@ -154,8 +154,8 @@ const FarmGame = () => {
             
             if (shouldHarvest) {
               // Auto-récolte avec les mêmes calculs que la récolte manuelle
-              const wheatType = getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]);
-              const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
+              const cellWheatType = cell.wheatType;
+              const wheatValue = WHEAT_TYPE_INFO[cellWheatType].value;
               const harvestAmountValue = getHarvestAmount(prev.upgrades[UPGRADES.HARVEST_AMOUNT]);
               const isCritical = Math.random() < getCriticalHarvestChance(prev.upgrades[UPGRADES.CRITICAL_HARVEST]);
               const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
@@ -170,7 +170,7 @@ const FarmGame = () => {
                 ...cell,
                 state: WHEAT_STATES.SEED,
                 plantedAt: Date.now(),
-                wheatType: wheatType,
+                wheatType: getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]),
                 boosted: false,
                 boostCooldown: 0
               };
