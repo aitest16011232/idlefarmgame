@@ -115,55 +115,61 @@ const FarmGame = () => {
   useEffect(() => {
     if (gameData.upgrades[UPGRADES.AUTO_HARVEST] === 0) return;
 
+    const harvestInterval = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestInterval(gameData.upgrades[UPGRADES.AUTO_HARVEST]);
+    const harvestAmount = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestAmount(gameData.upgrades[UPGRADES.AUTO_HARVEST]);
+
     const interval = setInterval(() => {
       setGameData(prev => {
-        let hasChanges = false;
-        const newGrid = prev.grid.map(row =>
-          row.map(cell => {
+        // Trouver tous les blés matures
+        const matureCells = [];
+        prev.grid.forEach((row, rowIndex) => {
+          row.forEach((cell, colIndex) => {
             if (cell.state === WHEAT_STATES.MATURE) {
-              hasChanges = true;
+              matureCells.push({ rowIndex, colIndex, cell });
+            }
+          });
+        });
+
+        if (matureCells.length === 0) return prev;
+
+        // Récolter le nombre de blés selon le niveau (minimum 1, maximum le nombre disponible)
+        const cellsToHarvest = matureCells.slice(0, Math.min(harvestAmount, matureCells.length));
+        
+        let totalAutoWheat = 0;
+        let totalAutoXp = 0;
+
+        const newGrid = prev.grid.map((row, rowIndex) =>
+          row.map((cell, colIndex) => {
+            const shouldHarvest = cellsToHarvest.some(c => c.rowIndex === rowIndex && c.colIndex === colIndex);
+            
+            if (shouldHarvest) {
               // Auto-récolte avec les mêmes calculs que la récolte manuelle
               const wheatType = getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]);
               const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
-              const harvestAmount = getHarvestAmount(prev.upgrades[UPGRADES.HARVEST_AMOUNT]);
+              const harvestAmountValue = getHarvestAmount(prev.upgrades[UPGRADES.HARVEST_AMOUNT]);
               const isCritical = Math.random() < getCriticalHarvestChance(prev.upgrades[UPGRADES.CRITICAL_HARVEST]);
               const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
-              const totalWheat = wheatValue * harvestAmount * criticalMultiplier;
+              const wheatHarvested = wheatValue * harvestAmountValue * criticalMultiplier;
               const xpMultiplier = getExperienceMultiplier(prev.upgrades[UPGRADES.EXPERIENCE_BOOST]);
               const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
 
-              // Mise à jour de l'inventaire (sera fait après la boucle)
+              totalAutoWheat += wheatHarvested;
+              totalAutoXp += xpGained;
+
               return {
                 ...cell,
                 state: WHEAT_STATES.SEED,
                 plantedAt: Date.now(),
                 wheatType: wheatType,
                 boosted: false,
-                boostCooldown: 0,
-                _autoHarvested: { totalWheat, xpGained } // Temporaire pour les calculs
+                boostCooldown: 0
               };
             }
             return cell;
           })
         );
 
-        if (hasChanges) {
-          // Calculer les totaux des récoltes automatiques
-          let totalAutoWheat = 0;
-          let totalAutoXp = 0;
-          let totalAutoClicks = 0;
-
-          newGrid.forEach(row => {
-            row.forEach(cell => {
-              if (cell._autoHarvested) {
-                totalAutoWheat += cell._autoHarvested.totalWheat;
-                totalAutoXp += cell._autoHarvested.xpGained;
-                totalAutoClicks += 1;
-                delete cell._autoHarvested; // Nettoyer
-              }
-            });
-          });
-
+        if (totalAutoWheat > 0) {
           const newXp = prev.player.xp + totalAutoXp;
           const newLevel = Math.floor(newXp / 100) + 1;
 
@@ -174,7 +180,7 @@ const FarmGame = () => {
               ...prev.inventory,
               wheat: prev.inventory.wheat + totalAutoWheat,
               totalHarvested: prev.inventory.totalHarvested + totalAutoWheat,
-              totalClicks: prev.inventory.totalClicks + totalAutoClicks
+              totalClicks: prev.inventory.totalClicks + cellsToHarvest.length
             },
             player: {
               ...prev.player,
@@ -187,7 +193,7 @@ const FarmGame = () => {
 
         return prev;
       });
-    }, UPGRADE_INFO[UPGRADES.AUTO_HARVEST].harvestInterval);
+    }, harvestInterval);
 
     return () => clearInterval(interval);
   }, [gameData.upgrades[UPGRADES.AUTO_HARVEST]]);
