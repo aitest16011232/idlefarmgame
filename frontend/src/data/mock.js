@@ -185,9 +185,22 @@ export const UPGRADE_INFO = {
     name: "Récolte Automatique",
     description: "Récolte automatiquement les blés matures",
     baseCost: 500,
-    maxLevel: 1,
+    maxLevel: Infinity,
     unlockLevel: 20,
-    harvestInterval: 5000 // 5 secondes entre les récoltes auto
+    baseHarvestInterval: 10000, // 10 secondes de base
+    intervalReduction: 500, // -0.5 secondes par niveau
+    harvestUpgradeLevel: 6, // À partir du niveau 6, on récolte 2 blés
+    getHarvestInterval: (level) => {
+      const baseInterval = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].baseHarvestInterval;
+      const reduction = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].intervalReduction;
+      
+      // Calculer le niveau dans le cycle actuel
+      const cycleLevel = ((level - 1) % 6) + 1;
+      return Math.max(1000, baseInterval - (cycleLevel - 1) * reduction);
+    },
+    getHarvestAmount: (level) => {
+      return Math.floor((level - 1) / 6) + 1;
+    }
   },
   [UPGRADES.CRITICAL_HARVEST]: {
     name: "Récolte Critique",
