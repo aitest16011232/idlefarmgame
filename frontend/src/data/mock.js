@@ -227,8 +227,8 @@ export const UPGRADE_INFO = {
     baseValue: 1,
     multiplier: 1.15 // +15% de chance par niveau
   },
-  [UPGRADES.HARVEST_CHANCE]: {
-    name: "Chance de Récolte",
+  [UPGRADES.MULTI_HARVEST]: {
+    name: "Récolte Multiple",
     description: "Chance de récolter un blé mature supplémentaire",
     baseCost: 150,
     maxLevel: Infinity,
@@ -236,26 +236,21 @@ export const UPGRADE_INFO = {
     increment: 0.05, // +5% par niveau
     unlockLevel: 5 // Déblocké au niveau 5
   },
-  [UPGRADES.AUTO_HARVEST]: {
-    name: "Récolte Automatique",
-    description: "Récolte automatiquement les blés matures",
-    baseCost: 500,
+  [UPGRADES.AUTO_HARVEST_CHANCE]: {
+    name: "Récolte Auto - Chance",
+    description: "Améliore la chance de récolte automatique",
+    baseCost: 300,
     maxLevel: Infinity,
-    unlockLevel: 20,
-    baseHarvestInterval: 10000, // 10 secondes de base
-    intervalReduction: 500, // -0.5 secondes par niveau
-    harvestUpgradeLevel: 6, // À partir du niveau 6, on récolte 2 blés
-    getHarvestInterval: (level) => {
-      const baseInterval = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].baseHarvestInterval;
-      const reduction = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].intervalReduction;
-      
-      // Calculer le niveau dans le cycle actuel
-      const cycleLevel = ((level - 1) % 6) + 1;
-      return Math.max(1000, baseInterval - (cycleLevel - 1) * reduction);
-    },
-    getHarvestAmount: (level) => {
-      return Math.floor((level - 1) / 6) + 1;
-    }
+    baseChance: 0.1, // 10% de base
+    increment: 0.05, // +5% par niveau
+    unlockLevel: 20
+  },
+  [UPGRADES.AUTO_HARVEST_SPEED]: {
+    name: "Récolte Auto - Vitesse",
+    description: "Se débloque automatiquement avec les récoltes automatiques",
+    isAutoUnlock: true,
+    baseInterval: 10000, // 10 secondes de base
+    reduction: 500 // -0.5 secondes par niveau
   },
   [UPGRADES.CRITICAL_HARVEST]: {
     name: "Récolte Critique",
