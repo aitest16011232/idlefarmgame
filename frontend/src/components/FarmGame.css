@@ -207,6 +207,37 @@
   background: linear-gradient(145deg, #DAA520 0%, var(--discord-yellow) 50%, #DAA520 100%);
 }
 
+/* Couleurs spécifiques pour les raretés - ces styles ont la priorité */
+.farm-cell-idle.mature.rarity-uncommon {
+  background: linear-gradient(145deg, #F0FFF0 0%, #90EE90 50%, #F0FFF0 100%) !important;
+  border-color: #228B22 !important;
+}
+
+.farm-cell-idle.mature.rarity-rare {
+  background: linear-gradient(145deg, #E6F3FF 0%, #87CEEB 50%, #E6F3FF 100%) !important;
+  border-color: #4169E1 !important;
+}
+
+.farm-cell-idle.mature.rarity-epic {
+  background: linear-gradient(145deg, #F3E5F5 0%, #DDA0DD 50%, #F3E5F5 100%) !important;
+  border-color: #8A2BE2 !important;
+}
+
+.farm-cell-idle.mature.rarity-legendary {
+  background: linear-gradient(145deg, #FFFACD 0%, #FFD700 50%, #FFFACD 100%) !important;
+  border-color: #B8860B !important;
+}
+
+.farm-cell-idle.mature.rarity-mythic {
+  background: linear-gradient(145deg, #FFF0F5 0%, #FF69B4 50%, #FFF0F5 100%) !important;
+  border-color: #FF1493 !important;
+}
+
+.farm-cell-idle.mature.rarity-divine {
+  background: linear-gradient(145deg, #E6E6FA 0%, #DDA0DD 50%, #E6E6FA 100%) !important;
+  border-color: #9370DB !important;
+}
+
 /* Animations */
 .farm-cell-idle.harvesting {
   animation: harvest-shake-idle 0.6s ease-in-out;
