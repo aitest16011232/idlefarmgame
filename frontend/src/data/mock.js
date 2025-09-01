@@ -336,7 +336,31 @@ export const getHarvestAmount = (harvestAmountLevel = 0) => {
 export const getHarvestChance = (harvestChanceLevel = 0) => {
   if (harvestChanceLevel === 0) return 0;
   const info = UPGRADE_INFO[UPGRADES.HARVEST_CHANCE];
-  return Math.min(1, info.baseChance + ((harvestChanceLevel - 1) * info.increment));
+  return info.baseChance + ((harvestChanceLevel - 1) * info.increment);
+};
+
+// Nouvelle fonction pour calculer le multiplicateur XP selon les paliers de terrain atteints
+export const getXpMultiplier = (playerLevel) => {
+  let multiplier = 1;
+  const gridLevels = UPGRADE_INFO[UPGRADES.GRID_SIZE].levels;
+  
+  // Pour chaque palier de terrain atteint, multiplier l'XP par 4
+  for (let i = 1; i < gridLevels.length; i++) {
+    if (playerLevel >= gridLevels[i].reqLevel) {
+      multiplier *= 4;
+    } else {
+      break;
+    }
+  }
+  
+  return multiplier;
+};
+
+// Fonction pour calculer l'XP requise pour passer au niveau suivant
+export const getXpRequired = (currentLevel) => {
+  const baseXp = 100;
+  const multiplier = getXpMultiplier(currentLevel);
+  return baseXp * multiplier;
 };
 
 export const getCriticalHarvestChance = (criticalHarvestLevel = 0) => {
