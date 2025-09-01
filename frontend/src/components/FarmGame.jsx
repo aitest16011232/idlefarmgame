@@ -368,11 +368,11 @@ const FarmGame = () => {
       }
     } else {
       // Système normal de récolte multiple
-    const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
-    
-    if (harvestChance >= 1.0) {
-      // À 100%+, on récolte 2 blés de base + chance pour les suivants
-      const baseHarvests = 2;
+      const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
+      
+      if (harvestChance >= 1.0) {
+        // À 100%+, on récolte 2 blés de base + chance pour les suivants
+        const baseHarvests = 2;
       const extraChance = harvestChance - 1.0; // Chance pour le 3ème, 4ème, etc.
       
       // Collecter tous les autres blés matures
