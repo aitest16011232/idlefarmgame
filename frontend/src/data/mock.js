@@ -172,6 +172,21 @@ export const GROWTH_SPEED_THRESHOLDS = [
   { clicks: 1000000, level: 9, name: "Vitesse Quantique" }
 ];
 
+export const AUTO_HARVEST_SPEED_THRESHOLDS = [
+  { harvested: 0, level: 0, name: "Vitesse Normale" },
+  { harvested: 50, level: 1, name: "Vitesse Améliorée" },
+  { harvested: 200, level: 2, name: "Vitesse Rapide" },
+  { harvested: 500, level: 3, name: "Vitesse Très Rapide" },
+  { harvested: 750, level: 4, name: "Vitesse Ultra" },
+  { harvested: 1000, level: 5, name: "Vitesse Turbo" },
+  { harvested: 1500, level: 6, name: "Vitesse Supersonique" },
+  { harvested: 2000, level: 7, name: "Vitesse Hypersonique" },
+  { harvested: 3000, level: 8, name: "Vitesse Lumière" },
+  { harvested: 5000, level: 9, name: "Vitesse Quantique" },
+  { harvested: 10000, level: 10, name: "Vitesse Cosmique" },
+  { harvested: 15000, level: 11, name: "Vitesse Divine" }
+];
+
 export const UPGRADE_INFO = {
   [UPGRADES.GRID_SIZE]: {
     name: "Taille du Terrain",
