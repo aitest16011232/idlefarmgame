@@ -138,10 +138,11 @@ const FarmGame = () => {
 
   // Système de récolte automatique
   useEffect(() => {
-    if (gameData.upgrades[UPGRADES.AUTO_HARVEST] === 0) return;
+    if (gameData.upgrades[UPGRADES.AUTO_HARVEST_CHANCE] === 0) return;
 
-    const harvestInterval = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestInterval(gameData.upgrades[UPGRADES.AUTO_HARVEST]);
-    const harvestAmount = UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestAmount(gameData.upgrades[UPGRADES.AUTO_HARVEST]);
+    const currentSpeedLevel = getAutoHarvestSpeedLevel(gameData.inventory.totalAutoHarvested);
+    const harvestInterval = getAutoHarvestInterval(currentSpeedLevel);
+    const autoHarvestChance = getAutoHarvestChance(gameData.upgrades[UPGRADES.AUTO_HARVEST_CHANCE]);
 
     const interval = setInterval(() => {
       setGameData(prev => {
@@ -157,11 +158,31 @@ const FarmGame = () => {
 
         if (matureCells.length === 0) return prev;
 
-        // Récolter le nombre de blés selon le niveau (sélection aléatoire)
+        // Nouveau système : comme la chance de récolte normale
         const cellsToHarvest = [];
-        const shuffledCells = [...matureCells].sort(() => Math.random() - 0.5);
-        for (let i = 0; i < Math.min(harvestAmount, shuffledCells.length); i++) {
-          cellsToHarvest.push(shuffledCells[i]);
+        
+        if (autoHarvestChance >= 1.0) {
+          // À 100%+, on calcule le nombre de blés de base garanti + chance pour les suivants
+          const baseHarvests = Math.floor(autoHarvestChance);
+          const extraChance = autoHarvestChance - Math.floor(autoHarvestChance);
+          
+          const shuffledCells = [...matureCells].sort(() => Math.random() - 0.5);
+          
+          // Récolter le nombre de base garanti
+          for (let i = 0; i < Math.min(shuffledCells.length, baseHarvests); i++) {
+            cellsToHarvest.push(shuffledCells[i]);
+          }
+          
+          // Pour le suivant, utiliser la chance restante
+          if (baseHarvests < shuffledCells.length && extraChance > 0 && Math.random() < extraChance) {
+            cellsToHarvest.push(shuffledCells[baseHarvests]);
+          }
+        } else if (autoHarvestChance > 0) {
+          // Système normal < 100%
+          if (Math.random() < autoHarvestChance) {
+            const randomIndex = Math.floor(Math.random() * matureCells.length);
+            cellsToHarvest.push(matureCells[randomIndex]);
+          }
         }
         
         let totalAutoWheat = 0;
