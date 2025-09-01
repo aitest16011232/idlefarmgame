@@ -101,3 +101,98 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Correction de bugs du jeu de blé : 1) Couleurs des fonds mal adaptées pour les raretés de blés, 2) Chance de récolte ne fonctionne pas correctement, 3) Récolte automatique récolte trop de blés, 4) Ajout de niveaux multiples pour récolte automatique avec prix exponentiel"
+
+frontend:
+  - task: "Correction des couleurs de fond pour les raretés de blés"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FarmGame.css"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Ajout de classes CSS spécifiques pour chaque rareté avec !important pour écraser les styles de base. Classes rarity-uncommon, rarity-rare, rarity-epic, rarity-legendary, rarity-mythic, rarity-divine ajoutées"
+
+  - task: "Modification du système de chance de récolte"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Remplacement du système MULTI_HARVEST par HARVEST_CHANCE. Nouvelle logique : lors de la récolte d'un blé, cherche un autre blé mature et le récolte avec une certaine probabilité"
+
+  - task: "Correction du système de récolte automatique"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main" 
+        comment: "Modification pour ne récolter qu'un nombre limité de blés selon le niveau (au lieu de tous les blés matures). Implémentation du système de niveaux avec intervalles dégressifs et augmentation du nombre de blés récoltés"
+
+  - task: "Ajout des niveaux multiples pour récolte automatique"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/data/mock.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Système de niveaux infinis implémenté : Niveau 1-6 : intervalle diminue de 0.5s par niveau, à partir du niveau 6 : +1 blé récolté et remise du cooldown. Prix exponentiel x1.5"
+
+  - task: "Migration des données sauvegardées"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Migration automatique de multiHarvest vers harvestChance pour préserver les données des joueurs existants"
+
+backend:
+  - task: "Aucune modification backend requise"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Toutes les modifications sont côté frontend uniquement, le backend reste inchangé"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "Test visual des couleurs de raretés"
+    - "Test de la chance de récolte avec plusieurs blés matures"
+    - "Test de la récolte automatique avec niveaux"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Toutes les corrections demandées ont été implémentées avec succès. Les tests visuels montrent que les couleurs de raretés s'affichent correctement, le système de chance de récolte a remplacé la récolte multiple, et la récolte automatique fonctionne avec le nouveau système de niveaux. Prêt pour tests complets si nécessaire."
