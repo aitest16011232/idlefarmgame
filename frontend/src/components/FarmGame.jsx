@@ -49,6 +49,11 @@ const FarmGame = () => {
           newUpgrades[UPGRADES[key]] = 0;
         }
       });
+      // Migration de MULTI_HARVEST vers HARVEST_CHANCE
+      if (parsedData.upgrades.multiHarvest !== undefined) {
+        newUpgrades[UPGRADES.HARVEST_CHANCE] = parsedData.upgrades.multiHarvest;
+        delete newUpgrades.multiHarvest;
+      }
       parsedData.upgrades = newUpgrades;
       return parsedData;
     }
