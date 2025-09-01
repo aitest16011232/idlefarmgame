@@ -136,6 +136,34 @@ const FarmGame = () => {
     }
   }, [gameData.inventory.totalClicks, gameData.upgrades[UPGRADES.GROWTH_SPEED]]);
 
+  // Mise à jour automatique du niveau de vitesse de récolte automatique
+  useEffect(() => {
+    const newAutoHarvestSpeedLevel = getAutoHarvestSpeedLevel(gameData.inventory.totalAutoHarvested);
+    if (newAutoHarvestSpeedLevel !== gameData.upgrades[UPGRADES.AUTO_HARVEST_SPEED]) {
+      setGameData(prev => ({
+        ...prev,
+        upgrades: {
+          ...prev.upgrades,
+          [UPGRADES.AUTO_HARVEST_SPEED]: newAutoHarvestSpeedLevel
+        }
+      }));
+    }
+  }, [gameData.inventory.totalAutoHarvested, gameData.upgrades[UPGRADES.AUTO_HARVEST_SPEED]]);
+
+  // Mise à jour automatique du niveau de compétence de récolte complète
+  useEffect(() => {
+    const newFullHarvestSkillLevel = getFullHarvestSkillLevel(levelInfo.level);
+    if (newFullHarvestSkillLevel !== gameData.upgrades[UPGRADES.FULL_HARVEST_SKILL]) {
+      setGameData(prev => ({
+        ...prev,
+        upgrades: {
+          ...prev.upgrades,
+          [UPGRADES.FULL_HARVEST_SKILL]: newFullHarvestSkillLevel
+        }
+      }));
+    }
+  }, [levelInfo.level, gameData.upgrades[UPGRADES.FULL_HARVEST_SKILL]]);
+
   // Système de récolte automatique
   useEffect(() => {
     if (gameData.upgrades[UPGRADES.AUTO_HARVEST_CHANCE] === 0) return;
