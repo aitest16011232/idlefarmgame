@@ -375,6 +375,28 @@ export const getXpRequired = (currentLevel) => {
   return baseXp * multiplier;
 };
 
+// Fonction pour calculer le niveau à partir de l'XP total
+export const calculateLevelFromXp = (totalXp) => {
+  let currentLevel = 1;
+  let remainingXp = totalXp;
+  
+  while (remainingXp > 0) {
+    const xpNeeded = getXpRequired(currentLevel);
+    if (remainingXp >= xpNeeded) {
+      remainingXp -= xpNeeded;
+      currentLevel++;
+    } else {
+      break;
+    }
+  }
+  
+  return {
+    level: currentLevel,
+    currentLevelXp: remainingXp,
+    xpToNext: getXpRequired(currentLevel)
+  };
+};
+
 export const getCriticalHarvestChance = (criticalHarvestLevel = 0) => {
   if (criticalHarvestLevel === 0) return 0;
   const info = UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST];
