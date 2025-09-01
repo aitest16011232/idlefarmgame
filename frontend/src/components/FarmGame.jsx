@@ -543,7 +543,7 @@ const FarmGame = () => {
                         {isHarvesting && (
                           <div className="harvest-effect-idle">
                             <span className="floating-reward-idle">
-                              +{Math.floor(WHEAT_TYPE_INFO[getRandomWheatType()].value * getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]) * getMultiHarvestAmount(gameData.upgrades[UPGRADES.MULTI_HARVEST]))}🌾
+                              +{Math.floor(WHEAT_TYPE_INFO[getRandomWheatType()].value * getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]))}🌾
                             </span>
                           </div>
                         )}
