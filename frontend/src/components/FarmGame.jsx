@@ -422,9 +422,6 @@ const FarmGame = () => {
         }
       }
     }
-        harvestedCells.push(otherMatureCells[randomIndex]);
-      }
-    }
 
     // Traiter toutes les cellules récoltées en bonus
     harvestedCells.forEach(selectedCell => {
