@@ -198,10 +198,10 @@ export const UPGRADE_INFO = {
       { cost: 50, value: 4, description: "4 cases", reqLevel: 5 },
       { cost: 200, value: 9, description: "9 cases", reqLevel: 15 },
       { cost: 500, value: 16, description: "16 cases", reqLevel: 30 },
-      { cost: 1200, value: 25, description: "25 cases", reqLevel: 50 },
-      { cost: 3000, value: 36, description: "36 cases", reqLevel: 75 },
-      { cost: 7500, value: 49, description: "49 cases", reqLevel: 100 },
-      { cost: 18000, value: 64, description: "64 cases", reqLevel: 130 }
+      { cost: 1200, value: 25, description: "25 cases", reqLevel: 75 },
+      { cost: 3000, value: 36, description: "36 cases", reqLevel: 150 },
+      { cost: 7500, value: 49, description: "49 cases", reqLevel: 300 },
+      { cost: 18000, value: 64, description: "64 cases", reqLevel: 500 }
     ]
   },
   [UPGRADES.GROWTH_SPEED]: {
