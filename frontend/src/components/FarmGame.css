@@ -153,6 +153,10 @@
 .wheat-sprite-idle.grid-5 { font-size: 20px; }
 .wheat-sprite-idle.grid-6 { font-size: 18px; }
 .wheat-sprite-idle.grid-7 { font-size: 16px; }
+.wheat-sprite-idle.grid-8 { font-size: 14px; }
+.wheat-sprite-idle.grid-9 { font-size: 12px; }
+.wheat-sprite-idle.grid-10 { font-size: 11px; }
+.wheat-sprite-idle.grid-11 { font-size: 10px; }
 
 .farm-cell-idle:hover .wheat-sprite-idle {
   transform: scale(1.1);
