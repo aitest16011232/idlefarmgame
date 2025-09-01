@@ -62,6 +62,7 @@ const FarmGame = () => {
   const [harvestAnimations, setHarvestAnimations] = useState({});
   const [soundEffect, setSoundEffect] = useState('');
   const [boostAnimations, setBoostAnimations] = useState({});
+  const [harvestHistory, setHarvestHistory] = useState([]);
 
   // Sauvegarder automatiquement
   useEffect(() => {
