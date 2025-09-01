@@ -423,7 +423,7 @@ const FarmGame = () => {
       }
     } else {
       // Système normal de récolte multiple
-      const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
+      const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.MULTI_HARVEST]);
       
       if (harvestChance >= 1.0) {
         // À 100%+, on calcule le nombre de blés de base garanti + chance pour les suivants
