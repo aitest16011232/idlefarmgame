@@ -34,7 +34,9 @@ import {
   getXpRequired,
   calculateLevelFromXp,
   getWheatTypeProbability,
-  formatProbability
+  formatProbability,
+  getFullHarvestSkillLevel,
+  getFullHarvestChance
 } from '../data/mock';
 import './FarmGame.css';
 
