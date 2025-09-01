@@ -270,6 +270,12 @@ export const UPGRADE_INFO = {
     baseMultiplier: 1,
     increment: 0.25, // +25% XP par niveau
     unlockLevel: 10
+  },
+  [UPGRADES.FULL_HARVEST_SKILL]: {
+    name: "Maîtrise de Récolte",
+    description: "Se débloque automatiquement avec le niveau du joueur",
+    isAutoUnlock: true,
+    baseChance: 0.25 // 0.25% par niveau de compétence
   }
 };
 
