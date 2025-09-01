@@ -1015,9 +1015,9 @@ const FarmGame = () => {
                   <div className="stat-card bg-discord-primary border-discord-accent">
                     <Sparkles className="w-6 h-6 text-discord-green mb-2" />
                     <div className="text-2xl font-bold text-discord-text">
-                      {getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]) >= 1.0 
-                        ? `${Math.floor(getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]))} + ${Math.round((getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]) - Math.floor(getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]))) * 100)}%`
-                        : `${Math.round(getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]) * 100)}%`
+                      {getHarvestChance(gameData.upgrades[UPGRADES.MULTI_HARVEST]) >= 1.0 
+                        ? `${Math.floor(getHarvestChance(gameData.upgrades[UPGRADES.MULTI_HARVEST]))} + ${Math.round((getHarvestChance(gameData.upgrades[UPGRADES.MULTI_HARVEST]) - Math.floor(getHarvestChance(gameData.upgrades[UPGRADES.MULTI_HARVEST]))) * 100)}%`
+                        : `${Math.round(getHarvestChance(gameData.upgrades[UPGRADES.MULTI_HARVEST]) * 100)}%`
                       }
                     </div>
                     <div className="text-sm text-discord-muted">Chance de Récolte Multiple</div>
