@@ -265,6 +265,8 @@ const FarmGame = () => {
     
     setHarvestHistory(prev => [harvestEntry, ...prev.slice(0, 9)]); // Garder seulement les 10 derniers
   };
+
+  const boostGrowth = (rowIndex, colIndex) => {
     const cell = gameData.grid[rowIndex][colIndex];
     
     if (cell.state === WHEAT_STATES.MATURE || cell.boosted || (cell.boostCooldown || 0) > 0) return;
