@@ -928,6 +928,11 @@ const FarmGame = () => {
                     <div className="text-2xl font-bold text-discord-text">{Math.round(getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]) * 100)}%</div>
                     <div className="text-sm text-discord-muted">Chance de Récolte Critique</div>
                   </div>
+                  <div className="stat-card bg-discord-primary border-discord-accent">
+                    <BookOpen className="w-6 h-6 text-discord-blurple mb-2" />
+                    <div className="text-2xl font-bold text-discord-text">x{getExperienceMultiplier(gameData.upgrades[UPGRADES.EXPERIENCE_BOOST]).toFixed(2)}</div>
+                    <div className="text-sm text-discord-muted">Boost d'XP Récolte</div>
+                  </div>
                 </div>
               </TabsContent>
 
