@@ -63,13 +63,45 @@ export const WHEAT_TYPE_INFO = {
     color: '#FF1493',
     bgColor: '#FFF0F5'
   },
+  [WHEAT_TYPES.TRANSCENDENT]: {
+    emoji: '🌾',
+    name: 'Blé Transcendant',
+    value: 2500,
+    rarity: 0.0004, // 1/2500
+    color: '#00CED1',
+    bgColor: '#F0FFFF'
+  },
   [WHEAT_TYPES.DIVINE]: {
     emoji: '🌾',
     name: 'Blé Divin',
-    value: 2000,
-    rarity: 0.0005, // 1/2000
+    value: 10000,
+    rarity: 0.0001, // 1/10000
     color: '#9370DB',
     bgColor: '#E6E6FA'
+  },
+  [WHEAT_TYPES.CELESTIAL]: {
+    emoji: '🌾',
+    name: 'Blé Céleste',
+    value: 50000,
+    rarity: 0.00002, // 1/50000
+    color: '#FF6347',
+    bgColor: '#FFF8DC'
+  },
+  [WHEAT_TYPES.COSMIC]: {
+    emoji: '🌾',
+    name: 'Blé Cosmique',
+    value: 250000,
+    rarity: 0.000004, // 1/250000
+    color: '#8A2BE2',
+    bgColor: '#4B0082'
+  },
+  [WHEAT_TYPES.OMNIPOTENT]: {
+    emoji: '🌾',
+    name: 'Blé Omnipotent',
+    value: 1000000,
+    rarity: 0.0000008, // 1/1250000
+    color: '#FFD700',
+    bgColor: '#2F1B69'
   }
 };
 
