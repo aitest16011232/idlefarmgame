@@ -562,8 +562,8 @@ const FarmGame = () => {
     localStorage.removeItem('farmGameData');
   };
 
-  const xpRequired = getXpRequired(gameData.player.level);
-  const xpProgress = ((gameData.player.xp % xpRequired) / xpRequired) * 100;
+  const levelInfo = calculateLevelFromXp(gameData.player.xp);
+  const xpProgress = (levelInfo.currentLevelXp / levelInfo.xpToNext) * 100;
   const gridSize = Math.sqrt(getGridSize(gameData.upgrades[UPGRADES.GRID_SIZE]));
   const nextGrowthThreshold = getNextGrowthSpeedThreshold(gameData.inventory.totalClicks);
   const rareMultiplier = Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, gameData.upgrades[UPGRADES.RARE_CHANCE]);
