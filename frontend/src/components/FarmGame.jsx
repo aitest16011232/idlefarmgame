@@ -426,9 +426,8 @@ const FarmGame = () => {
 
     // Mise à jour des données
     setGameData(prev => {
-      const newXp = prev.player.xp + xpGained;
-      const xpRequired = getXpRequired(prev.player.level);
-      const newLevel = Math.floor(newXp / xpRequired) + 1;
+      const newTotalXp = prev.player.xp + xpGained;
+      const newLevelInfo = calculateLevelFromXp(newTotalXp);
       
       // Mise à jour des statistiques par rareté
       const newHarvestedByRarity = { ...prev.inventory.harvestedByRarity };
@@ -481,9 +480,9 @@ const FarmGame = () => {
         },
         player: {
           ...prev.player,
-          level: newLevel,
-          xp: newXp,
-          xpToNext: xpRequired
+          level: newLevelInfo.level,
+          xp: newTotalXp,
+          xpToNext: newLevelInfo.xpToNext
         }
       };
     });
