@@ -46,6 +46,13 @@ const FarmGame = () => {
       if (!parsedData.inventory.totalClicks) {
         parsedData.inventory.totalClicks = 0;
       }
+      // Ajouter les statistiques par rareté si elles n'existent pas
+      if (!parsedData.inventory.harvestedByRarity) {
+        parsedData.inventory.harvestedByRarity = {};
+        Object.values(WHEAT_TYPES).forEach(type => {
+          parsedData.inventory.harvestedByRarity[type] = 0;
+        });
+      }
       // Ajouter les nouvelles améliorations si elles n'existent pas
       const newUpgrades = { ...parsedData.upgrades };
       Object.keys(UPGRADES).forEach(key => {
