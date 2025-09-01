@@ -30,7 +30,7 @@
 .farm-grid-idle {
   display: grid;
   gap: 8px;
-  max-width: 400px;
+  max-width: 500px;
   margin: 0 auto;
   padding: 20px;
   background: rgba(139, 69, 19, 0.1);
@@ -52,7 +52,7 @@
   box-shadow: 
     inset 0 2px 4px rgba(255,255,255,0.1),
     0 2px 4px rgba(0,0,0,0.2);
-  min-height: 60px;
+  min-height: 80px;
 }
 
 .farm-cell-idle:hover {
@@ -71,6 +71,14 @@
 
 .farm-cell-idle.harvestable:hover {
   background: linear-gradient(145deg, #32CD32 0%, #7CFC00 50%, #32CD32 100%);
+}
+
+.farm-cell-idle.boosted {
+  border-color: #FFD700;
+  box-shadow: 
+    inset 0 2px 4px rgba(255,255,255,0.2),
+    0 2px 4px rgba(0,0,0,0.2),
+    0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 @keyframes glow-idle {
@@ -97,14 +105,46 @@
   height: 100%;
 }
 
+/* Tailles d'icônes proportionnelles à la grille */
 .wheat-sprite-idle {
-  font-size: 28px;
   transition: transform 0.3s ease;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.wheat-sprite-idle.grid-1 { font-size: 48px; }
+.wheat-sprite-idle.grid-2 { font-size: 36px; }
+.wheat-sprite-idle.grid-3 { font-size: 28px; }
+.wheat-sprite-idle.grid-4 { font-size: 24px; }
 
 .farm-cell-idle:hover .wheat-sprite-idle {
   transform: scale(1.1);
+}
+
+/* Indicateur de boost */
+.boost-indicator {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  z-index: 5;
+}
+
+.boost-glow {
+  font-size: 12px;
+  animation: pulse-glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  from {
+    transform: scale(1);
+    filter: drop-shadow(0 0 3px #FFD700);
+  }
+  to {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 8px #FFD700);
+  }
 }
 
 /* États de croissance */
@@ -124,9 +164,13 @@
   background: linear-gradient(145deg, #DAA520 0%, #FFD700 50%, #DAA520 100%);
 }
 
-/* Animations de récolte */
+/* Animations */
 .farm-cell-idle.harvesting {
   animation: harvest-shake-idle 0.6s ease-in-out;
+}
+
+.farm-cell-idle.boosting {
+  animation: boost-pulse-idle 0.6s ease-in-out;
 }
 
 @keyframes harvest-shake-idle {
@@ -136,7 +180,21 @@
   75% { transform: scale(1.1) rotate(-1deg); }
 }
 
-.harvest-effect-idle {
+@keyframes boost-pulse-idle {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.2);
+  }
+  50% { 
+    transform: scale(1.1);
+    box-shadow: 
+      inset 0 2px 4px rgba(255,255,255,0.2), 
+      0 4px 8px rgba(0,0,0,0.3),
+      0 0 20px rgba(255, 215, 0, 0.8);
+  }
+}
+
+.harvest-effect-idle, .boost-effect-idle {
   position: absolute;
   top: 0;
   left: 0;
@@ -146,20 +204,29 @@
   z-index: 10;
 }
 
-.floating-reward-idle {
+.floating-reward-idle, .floating-boost-idle {
   position: absolute;
   top: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255, 215, 0, 0.95);
-  color: #000;
   padding: 4px 12px;
   border-radius: 16px;
   font-size: 14px;
   font-weight: bold;
-  animation: float-up-idle 0.8s ease-out forwards;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   white-space: nowrap;
+}
+
+.floating-reward-idle {
+  background: rgba(255, 215, 0, 0.95);
+  color: #000;
+  animation: float-up-idle 0.8s ease-out forwards;
+}
+
+.floating-boost-idle {
+  background: rgba(0, 150, 255, 0.95);
+  color: white;
+  animation: float-up-idle 0.8s ease-out forwards;
 }
 
 @keyframes float-up-idle {
@@ -268,12 +335,13 @@
   }
   
   .farm-cell-idle {
-    min-height: 50px;
+    min-height: 60px;
   }
   
-  .wheat-sprite-idle {
-    font-size: 24px;
-  }
+  .wheat-sprite-idle.grid-1 { font-size: 36px; }
+  .wheat-sprite-idle.grid-2 { font-size: 28px; }
+  .wheat-sprite-idle.grid-3 { font-size: 22px; }
+  .wheat-sprite-idle.grid-4 { font-size: 18px; }
   
   .stats-grid {
     grid-template-columns: 1fr;
@@ -317,25 +385,25 @@
 .farm-cell-idle.mature[title*="Cristal"] .wheat-sprite-idle::after {
   content: '';
   position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
   border-radius: 50%;
   animation: rare-glow 2s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
 .farm-cell-idle.mature[title*="Doré"] .wheat-sprite-idle::after {
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
 }
 
 .farm-cell-idle.mature[title*="Diamant"] .wheat-sprite-idle::after {
-  box-shadow: 0 0 10px rgba(185, 242, 255, 0.6);
+  box-shadow: 0 0 15px rgba(185, 242, 255, 0.6);
 }
 
 .farm-cell-idle.mature[title*="Cristal"] .wheat-sprite-idle::after {
-  box-shadow: 0 0 10px rgba(221, 160, 221, 0.6);
+  box-shadow: 0 0 15px rgba(221, 160, 221, 0.6);
 }
 
 @keyframes rare-glow {

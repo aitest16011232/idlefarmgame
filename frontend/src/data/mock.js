@@ -79,7 +79,8 @@ export const UPGRADES = {
   GRID_SIZE: 'gridSize',
   GROWTH_SPEED: 'growthSpeed',
   HARVEST_AMOUNT: 'harvestAmount',
-  RARE_CHANCE: 'rareChance'
+  RARE_CHANCE: 'rareChance',
+  MULTI_HARVEST: 'multiHarvest'
 };
 
 export const UPGRADE_INFO = {
@@ -100,7 +101,7 @@ export const UPGRADE_INFO = {
     description: "Réduit le temps de pousse du blé",
     baseCost: 20,
     maxLevel: 10,
-    baseValue: 30000, // 30 secondes de base
+    baseValue: 10000, // 10 secondes de base
     reduction: 0.15 // 15% de réduction par niveau
   },
   [UPGRADES.HARVEST_AMOUNT]: {
@@ -118,13 +119,22 @@ export const UPGRADE_INFO = {
     maxLevel: 20,
     baseValue: 1,
     multiplier: 1.2 // +20% de chance par niveau
+  },
+  [UPGRADES.MULTI_HARVEST]: {
+    name: "Récolte Multiple",
+    description: "Chance de récolter plusieurs blés simultanément",
+    baseCost: 150,
+    maxLevel: 25,
+    baseChance: 0.1, // 10% de base
+    increment: 0.05, // +5% par niveau
+    unlockLevel: 5 // Déblocké au niveau 5
   }
 };
 
 // État initial du jeu
 export const initialGameData = {
   grid: [
-    [{ id: '0-0', state: WHEAT_STATES.SEED, plantedAt: Date.now(), wheatType: WHEAT_TYPES.COMMON }]
+    [{ id: '0-0', state: WHEAT_STATES.SEED, plantedAt: Date.now(), wheatType: WHEAT_TYPES.COMMON, boosted: false }]
   ],
   inventory: {
     wheat: 0,
@@ -139,7 +149,8 @@ export const initialGameData = {
     [UPGRADES.GRID_SIZE]: 0,
     [UPGRADES.GROWTH_SPEED]: 0,
     [UPGRADES.HARVEST_AMOUNT]: 0,
-    [UPGRADES.RARE_CHANCE]: 0
+    [UPGRADES.RARE_CHANCE]: 0,
+    [UPGRADES.MULTI_HARVEST]: 0
   },
   settings: {
     autoPlant: false,
@@ -166,12 +177,33 @@ export const getRandomWheatType = (rareChanceLevel = 0) => {
 export const getGrowthTime = (growthSpeedLevel = 0) => {
   const baseTime = UPGRADE_INFO[UPGRADES.GROWTH_SPEED].baseValue;
   const reduction = UPGRADE_INFO[UPGRADES.GROWTH_SPEED].reduction;
-  return Math.max(5000, baseTime * Math.pow(1 - reduction, growthSpeedLevel));
+  return Math.max(2000, baseTime * Math.pow(1 - reduction, growthSpeedLevel));
 };
 
 export const getHarvestAmount = (harvestAmountLevel = 0) => {
   return UPGRADE_INFO[UPGRADES.HARVEST_AMOUNT].baseValue + 
          (harvestAmountLevel * UPGRADE_INFO[UPGRADES.HARVEST_AMOUNT].increment);
+};
+
+export const getMultiHarvestChance = (multiHarvestLevel = 0) => {
+  const info = UPGRADE_INFO[UPGRADES.MULTI_HARVEST];
+  return Math.min(1, info.baseChance + (multiHarvestLevel * info.increment));
+};
+
+export const getMultiHarvestAmount = (multiHarvestLevel = 0) => {
+  const chance = getMultiHarvestChance(multiHarvestLevel);
+  
+  // Si on a atteint 100% pour 2 blés, on passe au système de 3 blés
+  if (chance >= 1) {
+    const excessLevels = multiHarvestLevel - Math.ceil((1 - UPGRADE_INFO[UPGRADES.MULTI_HARVEST].baseChance) / UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment);
+    const tripleChance = excessLevels * UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment;
+    
+    if (Math.random() < tripleChance) return 3;
+    return 2; // Toujours au moins 2 si on a 100%
+  }
+  
+  // Sinon, chance normale de 2 blés
+  return Math.random() < chance ? 2 : 1;
 };
 
 export const getUpgradeCost = (upgradeType, currentLevel) => {
@@ -191,4 +223,8 @@ export const canUnlockGridSize = (playerLevel, targetGridLevel) => {
   const gridSizes = Object.values(GRID_SIZES);
   const targetSize = gridSizes.find(g => UPGRADE_INFO[UPGRADES.GRID_SIZE].levels[targetGridLevel]?.value === g.size);
   return targetSize ? playerLevel >= targetSize.level : false;
+};
+
+export const canUnlockMultiHarvest = (playerLevel) => {
+  return playerLevel >= UPGRADE_INFO[UPGRADES.MULTI_HARVEST].unlockLevel;
 };

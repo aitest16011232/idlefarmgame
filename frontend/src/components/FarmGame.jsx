@@ -6,7 +6,7 @@ import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { 
   Sprout, Star, RotateCcw, TrendingUp, Clock, 
-  Zap, Sparkles, ShoppingCart, Lock 
+  Zap, Sparkles, ShoppingCart, Lock, Coins, Gamepad2 
 } from 'lucide-react';
 import { 
   initialGameData, 
@@ -19,9 +19,11 @@ import {
   getRandomWheatType,
   getGrowthTime,
   getHarvestAmount,
+  getMultiHarvestAmount,
   getUpgradeCost,
   getGridSize,
-  canUnlockGridSize
+  canUnlockGridSize,
+  canUnlockMultiHarvest
 } from '../data/mock';
 import './FarmGame.css';
 
@@ -32,6 +34,7 @@ const FarmGame = () => {
   });
   const [harvestAnimations, setHarvestAnimations] = useState({});
   const [soundEffect, setSoundEffect] = useState('');
+  const [boostAnimations, setBoostAnimations] = useState({});
 
   // Sauvegarder automatiquement
   useEffect(() => {
@@ -49,7 +52,8 @@ const FarmGame = () => {
           id: `${i}-${j}`,
           state: WHEAT_STATES.SEED,
           plantedAt: Date.now(),
-          wheatType: WHEAT_TYPES.COMMON
+          wheatType: WHEAT_TYPES.COMMON,
+          boosted: false
         });
       }
       grid.push(row);
@@ -82,7 +86,8 @@ const FarmGame = () => {
             if (cell.state === WHEAT_STATES.MATURE) return cell;
             
             const timeSincePlanted = Date.now() - cell.plantedAt;
-            const stateGrowthTime = growthTime / 4; // Diviser en 4 étapes
+            const effectiveGrowthTime = cell.boosted ? growthTime * 0.5 : growthTime; // 50% plus rapide si boosté
+            const stateGrowthTime = effectiveGrowthTime / 4; // Diviser en 4 étapes
             
             const states = Object.values(WHEAT_STATES);
             const currentIndex = states.indexOf(cell.state);
@@ -91,7 +96,8 @@ const FarmGame = () => {
             if (timeSincePlanted >= requiredTime && currentIndex < states.length - 1) {
               return {
                 ...cell,
-                state: states[currentIndex + 1]
+                state: states[currentIndex + 1],
+                boosted: false // Reset boost après croissance
               };
             }
             
@@ -103,6 +109,43 @@ const FarmGame = () => {
 
     return () => clearInterval(interval);
   }, [gameData.upgrades[UPGRADES.GROWTH_SPEED]]);
+
+  const boostGrowth = (rowIndex, colIndex) => {
+    const cell = gameData.grid[rowIndex][colIndex];
+    
+    if (cell.state === WHEAT_STATES.MATURE || cell.boosted) return;
+
+    // Animation de boost
+    const animationId = `${rowIndex}-${colIndex}`;
+    setBoostAnimations(prev => ({ ...prev, [animationId]: true }));
+    setSoundEffect('boost');
+
+    // Appliquer le boost
+    setGameData(prev => ({
+      ...prev,
+      grid: prev.grid.map((row, rIdx) =>
+        row.map((c, cIdx) => {
+          if (rIdx === rowIndex && cIdx === colIndex) {
+            return {
+              ...c,
+              boosted: true
+            };
+          }
+          return c;
+        })
+      )
+    }));
+
+    // Nettoyer les animations
+    setTimeout(() => {
+      setBoostAnimations(prev => {
+        const newAnims = { ...prev };
+        delete newAnims[animationId];
+        return newAnims;
+      });
+      setSoundEffect('');
+    }, 600);
+  };
 
   const harvestCell = (rowIndex, colIndex) => {
     const cell = gameData.grid[rowIndex][colIndex];
@@ -118,8 +161,9 @@ const FarmGame = () => {
     const wheatType = getRandomWheatType(gameData.upgrades[UPGRADES.RARE_CHANCE]);
     const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
     const harvestAmount = getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]);
-    const totalWheat = wheatValue * harvestAmount;
-    const xpGained = wheatValue * 5; // XP basée sur la rareté
+    const multiHarvestAmount = getMultiHarvestAmount(gameData.upgrades[UPGRADES.MULTI_HARVEST]);
+    const totalWheat = wheatValue * harvestAmount * multiHarvestAmount;
+    const xpGained = wheatValue * 5 * multiHarvestAmount; // XP basée sur la rareté et quantité
 
     // Mise à jour des données
     setGameData(prev => {
@@ -135,7 +179,8 @@ const FarmGame = () => {
                 ...c,
                 state: WHEAT_STATES.SEED,
                 plantedAt: Date.now(),
-                wheatType: WHEAT_TYPES.COMMON
+                wheatType: WHEAT_TYPES.COMMON,
+                boosted: false
               };
             }
             return c;
@@ -144,7 +189,7 @@ const FarmGame = () => {
         inventory: {
           ...prev.inventory,
           wheat: prev.inventory.wheat + totalWheat,
-          totalHarvested: prev.inventory.totalHarvested + harvestAmount
+          totalHarvested: prev.inventory.totalHarvested + (harvestAmount * multiHarvestAmount)
         },
         player: {
           ...prev.player,
@@ -173,9 +218,12 @@ const FarmGame = () => {
     
     if (gameData.inventory.wheat < cost || currentLevel >= maxLevel) return;
 
-    // Vérifier les prérequis pour la taille de grille
+    // Vérifier les prérequis
     if (upgradeType === UPGRADES.GRID_SIZE) {
       if (!canUnlockGridSize(gameData.player.level, currentLevel + 1)) return;
+    }
+    if (upgradeType === UPGRADES.MULTI_HARVEST) {
+      if (!canUnlockMultiHarvest(gameData.player.level)) return;
     }
 
     setGameData(prev => ({
@@ -194,9 +242,34 @@ const FarmGame = () => {
     setTimeout(() => setSoundEffect(''), 300);
   };
 
+  const cheatResources = () => {
+    setGameData(prev => {
+      const newXp = prev.player.xp + 1000;
+      const newLevel = Math.floor(newXp / 100) + 1;
+      
+      return {
+        ...prev,
+        inventory: {
+          ...prev.inventory,
+          wheat: prev.inventory.wheat + 100
+        },
+        player: {
+          ...prev.player,
+          level: newLevel,
+          xp: newXp,
+          xpToNext: newLevel * 100
+        }
+      };
+    });
+
+    setSoundEffect('cheat');
+    setTimeout(() => setSoundEffect(''), 300);
+  };
+
   const resetGame = () => {
     setGameData(initialGameData);
     setHarvestAnimations({});
+    setBoostAnimations({});
     setSoundEffect('');
     localStorage.removeItem('farmGameData');
   };
@@ -224,10 +297,16 @@ const FarmGame = () => {
                 </span>
               </div>
             </div>
-            <Button onClick={resetGame} variant="outline" size="sm">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Reset
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={cheatResources} variant="outline" size="sm" className="bg-yellow-50 border-yellow-300 hover:bg-yellow-100">
+                <Gamepad2 className="w-4 h-4 mr-2" />
+                +100🌾 +1000XP
+              </Button>
+              <Button onClick={resetGame} variant="outline" size="sm">
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Reset
+              </Button>
+            </div>
           </div>
           <div>
             <Progress value={xpProgress} className="h-3" />
@@ -243,6 +322,9 @@ const FarmGame = () => {
         <div className="farm-section">
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-4 text-center">Mon Terrain</h2>
+            <p className="text-sm text-gray-600 mb-4 text-center">
+              Clic gauche: récolter | Clic droit: accélérer la pousse
+            </p>
             <div 
               className="farm-grid-idle"
               style={{
@@ -255,26 +337,43 @@ const FarmGame = () => {
                   const stateInfo = WHEAT_STATE_INFO[cell.state];
                   const wheatInfo = WHEAT_TYPE_INFO[cell.wheatType];
                   const animationId = `${rowIndex}-${colIndex}`;
-                  const isAnimating = harvestAnimations[animationId];
+                  const isHarvesting = harvestAnimations[animationId];
+                  const isBoosting = boostAnimations[animationId];
                   
                   return (
                     <div
                       key={cell.id}
-                      className={`farm-cell-idle ${cell.state} ${isAnimating ? 'harvesting' : ''} ${
+                      className={`farm-cell-idle ${cell.state} ${isHarvesting ? 'harvesting' : ''} ${
+                        isBoosting ? 'boosting' : ''
+                      } ${cell.boosted ? 'boosted' : ''} ${
                         stateInfo.canHarvest ? 'harvestable' : ''
                       }`}
                       onClick={() => harvestCell(rowIndex, colIndex)}
-                      title={`${stateInfo.name} ${stateInfo.canHarvest ? '(Cliquez pour récolter)' : ''}`}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        boostGrowth(rowIndex, colIndex);
+                      }}
+                      title={`${stateInfo.name} ${stateInfo.canHarvest ? '(Clic gauche: récolter)' : '(Clic droit: accélérer)'} ${cell.boosted ? '⚡ Boosté!' : ''}`}
                     >
                       <div className="cell-content-idle">
-                        <span className="wheat-sprite-idle">
+                        <span className={`wheat-sprite-idle grid-${gridSize}`}>
                           {cell.state === WHEAT_STATES.MATURE ? wheatInfo.emoji : stateInfo.emoji}
                         </span>
-                        {isAnimating && (
+                        {isHarvesting && (
                           <div className="harvest-effect-idle">
                             <span className="floating-reward-idle">
-                              +{WHEAT_TYPE_INFO[getRandomWheatType()].value * getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT])}🌾
+                              +{WHEAT_TYPE_INFO[getRandomWheatType()].value * getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]) * getMultiHarvestAmount(gameData.upgrades[UPGRADES.MULTI_HARVEST])}🌾
                             </span>
+                          </div>
+                        )}
+                        {isBoosting && (
+                          <div className="boost-effect-idle">
+                            <span className="floating-boost-idle">⚡ Accéléré!</span>
+                          </div>
+                        )}
+                        {cell.boosted && (
+                          <div className="boost-indicator">
+                            <span className="boost-glow">⚡</span>
                           </div>
                         )}
                       </div>
@@ -301,8 +400,22 @@ const FarmGame = () => {
                   const cost = getUpgradeCost(upgradeType, currentLevel);
                   const canAfford = gameData.inventory.wheat >= cost;
                   const isMaxLevel = currentLevel >= info.maxLevel;
-                  const canUnlock = upgradeType !== UPGRADES.GRID_SIZE || 
-                                  canUnlockGridSize(gameData.player.level, currentLevel + 1);
+                  
+                  let canUnlock = true;
+                  let unlockMessage = '';
+                  
+                  if (upgradeType === UPGRADES.GRID_SIZE) {
+                    canUnlock = canUnlockGridSize(gameData.player.level, currentLevel + 1);
+                    if (!canUnlock) {
+                      const targetLevel = Object.values(UPGRADE_INFO[UPGRADES.GRID_SIZE].levels)[currentLevel + 1];
+                      unlockMessage = `Niveau ${targetLevel?.level || '?'} requis`;
+                    }
+                  } else if (upgradeType === UPGRADES.MULTI_HARVEST) {
+                    canUnlock = canUnlockMultiHarvest(gameData.player.level);
+                    if (!canUnlock) {
+                      unlockMessage = `Niveau ${UPGRADE_INFO[UPGRADES.MULTI_HARVEST].unlockLevel} requis`;
+                    }
+                  }
 
                   return (
                     <div key={upgradeType} className="upgrade-card">
@@ -312,6 +425,11 @@ const FarmGame = () => {
                             <TrendingUp className="w-4 h-4" />
                             <span className="font-semibold">{info.name}</span>
                             <Badge variant="secondary">Niv. {currentLevel}</Badge>
+                            {upgradeType === UPGRADES.MULTI_HARVEST && (
+                              <Badge variant="outline" className="text-purple-600 border-purple-300">
+                                Nouveau!
+                              </Badge>
+                            )}
                           </div>
                           <p className="text-sm text-gray-600 mb-2">{info.description}</p>
                           {upgradeType === UPGRADES.GRID_SIZE && info.levels[currentLevel + 1] && (
@@ -326,11 +444,7 @@ const FarmGame = () => {
                           ) : !canUnlock ? (
                             <div className="flex items-center gap-1 text-red-500">
                               <Lock className="w-4 h-4" />
-                              <span className="text-sm">
-                                Niv. {upgradeType === UPGRADES.GRID_SIZE ? 
-                                  Object.values(UPGRADE_INFO[UPGRADES.GRID_SIZE].levels)[currentLevel + 1]?.cost : 
-                                  gameData.player.level} requis
-                              </span>
+                              <span className="text-sm">{unlockMessage}</span>
                             </div>
                           ) : (
                             <Button
@@ -383,7 +497,9 @@ const FarmGame = () => {
       {soundEffect && (
         <div className="sound-effect-idle">
           <div className="sound-indicator-idle">
-            🔊 {soundEffect === 'harvest' ? 'Récolte!' : 'Amélioration!'}
+            🔊 {soundEffect === 'harvest' ? 'Récolte!' : 
+                soundEffect === 'boost' ? 'Accéléré!' :
+                soundEffect === 'cheat' ? 'Triche activée!' : 'Amélioration!'}
           </div>
         </div>
       )}
