@@ -841,10 +841,25 @@ const FarmGame = () => {
                               Prochain: {nextGrowthThreshold.name} ({gameData.inventory.totalClicks}/{nextGrowthThreshold.clicks} clics)
                             </p>
                           )}
-                          {upgradeType === UPGRADES.AUTO_HARVEST && currentLevel > 0 && (
+                          {upgradeType === UPGRADES.AUTO_HARVEST_CHANCE && currentLevel > 0 && (
                             <p className="text-xs text-discord-green">
-                              Intervalle: {Math.round(UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestInterval(currentLevel) / 1000)}s | 
-                              Récolte: {UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestAmount(currentLevel)} blé(s)
+                              Chance: {Math.round(getAutoHarvestChance(currentLevel) * 100)}% | 
+                              Intervalle: {Math.round(getAutoHarvestInterval(getAutoHarvestSpeedLevel(gameData.inventory.totalAutoHarvested)) / 1000)}s
+                            </p>
+                          )}
+                          {upgradeType === UPGRADES.AUTO_HARVEST_SPEED && (
+                            <p className="text-xs text-discord-green">
+                              Palier: {getAutoHarvestSpeedLevel(gameData.inventory.totalAutoHarvested)}/11 ({gameData.inventory.totalAutoHarvested} récoltés) | 
+                              {(() => {
+                                const nextThreshold = getNextAutoHarvestSpeedThreshold(gameData.inventory.totalAutoHarvested);
+                                return nextThreshold ? `Prochain: ${nextThreshold.harvested}` : 'MAX atteint';
+                              })()}
+                            </p>
+                          )}
+                          {upgradeType === UPGRADES.FULL_HARVEST_SKILL && (
+                            <p className="text-xs text-discord-green">
+                              Niveau compétence: {getFullHarvestSkillLevel(levelInfo.level)} | 
+                              Chance actuelle: {getFullHarvestChance(levelInfo.level).toFixed(2)}%
                             </p>
                           )}
                           {upgradeType === UPGRADES.GROWTH_SPEED && (
