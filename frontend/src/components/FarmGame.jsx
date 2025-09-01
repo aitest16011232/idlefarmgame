@@ -126,12 +126,11 @@ const FarmGame = () => {
               const wheatType = getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]);
               const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
               const harvestAmount = getHarvestAmount(prev.upgrades[UPGRADES.HARVEST_AMOUNT]);
-              const multiHarvestAmount = getMultiHarvestAmount(prev.upgrades[UPGRADES.MULTI_HARVEST]);
               const isCritical = Math.random() < getCriticalHarvestChance(prev.upgrades[UPGRADES.CRITICAL_HARVEST]);
               const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
-              const totalWheat = wheatValue * harvestAmount * multiHarvestAmount * criticalMultiplier;
+              const totalWheat = wheatValue * harvestAmount * criticalMultiplier;
               const xpMultiplier = getExperienceMultiplier(prev.upgrades[UPGRADES.EXPERIENCE_BOOST]);
-              const xpGained = Math.floor(wheatValue * 5 * multiHarvestAmount * xpMultiplier);
+              const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
 
               // Mise à jour de l'inventaire (sera fait après la boucle)
               return {
