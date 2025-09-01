@@ -237,8 +237,8 @@ export const UPGRADE_INFO = {
     unlockLevel: 5 // Déblocké au niveau 5
   },
   [UPGRADES.AUTO_HARVEST_CHANCE]: {
-    name: "Récolte Auto - Chance",
-    description: "Améliore la chance de récolte automatique",
+    name: "Récolte Automatique",
+    description: "Chance de récolte automatique et vitesse basée sur les récoltes",
     baseCost: 300,
     maxLevel: Infinity,
     baseChance: 0.1, // 10% de base
