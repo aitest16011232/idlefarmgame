@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Modifications avancées du jeu de blé : 1) Réduire niveau max terrain à 8, 2) Chance de récolte 10% base + 5% par niveau, avec système 2 blé base à 100%+, 3) XP exponentielle selon paliers terrain, 4) Statistique blé cliqué corrigée, 5) 4 nouveaux paliers de rareté, 6) Total blés récoltés par rareté avec probabilités, 7) Agrandir icônes blé selon taille terrain"
+user_problem_statement: "Corrections demandées : 1) Corriger chance de récolte qui donne 3 blé d'un coup au lieu du système correct (N blé de base + % pour le suivant), 2) Afficher nouvelle compétence dans Améliorations, 3) Séparer récolte automatique en deux améliorations (chance achetable + vitesse basée sur blés récoltés), 4) Nouveaux paliers terrain: 5, 15, 30, 75, 150, 300, 500, 1000, 2000"
 
 frontend:
   - task: "Réduction niveau max terrain à 8"
