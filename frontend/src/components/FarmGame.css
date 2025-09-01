@@ -448,6 +448,10 @@
     grid-template-columns: 1fr;
   }
   
+  .harvest-history-section {
+    order: -2;
+  }
+  
   .upgrades-section {
     order: -1;
   }
