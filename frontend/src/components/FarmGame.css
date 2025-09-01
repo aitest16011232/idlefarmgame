@@ -1,39 +1,45 @@
-/* Styles pour le jeu d'agriculture */
+/* Styles pour le jeu d'agriculture idle/clicker */
 
-.farm-game {
+.farm-game-idle {
   min-height: 100vh;
   background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
   padding: 20px;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .game-header {
   margin-bottom: 20px;
-  max-width: 800px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.farm-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 40px auto;
-  perspective: 1000px;
-}
-
-.farm-grid {
+.game-content {
+  max-width: 1200px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 80px);
-  grid-template-rows: repeat(4, 80px);
-  gap: 8px;
-  transform: rotateX(30deg) rotateY(-15deg);
-  transform-style: preserve-3d;
+  grid-template-columns: 1fr 400px;
+  gap: 20px;
 }
 
-.farm-cell {
-  width: 80px;
-  height: 80px;
+/* Terrain de jeu (vue droite, sans perspective) */
+.farm-section {
+  width: 100%;
+}
+
+.farm-grid-idle {
+  display: grid;
+  gap: 8px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 12px;
+  border: 2px solid #8B4513;
+}
+
+.farm-cell-idle {
+  aspect-ratio: 1;
   background: linear-gradient(145deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
   border: 2px solid #654321;
   border-radius: 8px;
@@ -45,44 +51,44 @@
   position: relative;
   box-shadow: 
     inset 0 2px 4px rgba(255,255,255,0.1),
-    0 4px 8px rgba(0,0,0,0.2);
-  transform-style: preserve-3d;
+    0 2px 4px rgba(0,0,0,0.2);
+  min-height: 60px;
 }
 
-.farm-cell:hover {
-  transform: translateZ(5px) scale(1.05);
+.farm-cell-idle:hover {
+  transform: scale(1.05);
   box-shadow: 
     inset 0 2px 4px rgba(255,255,255,0.2),
-    0 6px 12px rgba(0,0,0,0.3);
+    0 4px 8px rgba(0,0,0,0.3);
 }
 
-.farm-cell.harvestable {
+.farm-cell-idle.harvestable {
   background: linear-gradient(145deg, #228B22 0%, #32CD32 50%, #228B22 100%);
   border-color: #006400;
   cursor: pointer;
-  animation: glow 2s ease-in-out infinite alternate;
+  animation: glow-idle 2s ease-in-out infinite alternate;
 }
 
-.farm-cell.harvestable:hover {
+.farm-cell-idle.harvestable:hover {
   background: linear-gradient(145deg, #32CD32 0%, #7CFC00 50%, #32CD32 100%);
 }
 
-@keyframes glow {
+@keyframes glow-idle {
   from {
     box-shadow: 
       inset 0 2px 4px rgba(255,255,255,0.1),
-      0 4px 8px rgba(0,0,0,0.2),
-      0 0 10px rgba(124,252,0,0.3);
+      0 2px 4px rgba(0,0,0,0.2),
+      0 0 5px rgba(124,252,0,0.3);
   }
   to {
     box-shadow: 
       inset 0 2px 4px rgba(255,255,255,0.2),
-      0 6px 12px rgba(0,0,0,0.3),
-      0 0 20px rgba(124,252,0,0.6);
+      0 4px 8px rgba(0,0,0,0.3),
+      0 0 15px rgba(124,252,0,0.6);
   }
 }
 
-.cell-content {
+.cell-content-idle {
   position: relative;
   display: flex;
   align-items: center;
@@ -91,46 +97,46 @@
   height: 100%;
 }
 
-.wheat-sprite {
-  font-size: 32px;
+.wheat-sprite-idle {
+  font-size: 28px;
   transition: transform 0.3s ease;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
-.farm-cell:hover .wheat-sprite {
+.farm-cell-idle:hover .wheat-sprite-idle {
   transform: scale(1.1);
 }
 
 /* États de croissance */
-.farm-cell.seed {
+.farm-cell-idle.seed {
   background: linear-gradient(145deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
 }
 
-.farm-cell.sprout {
+.farm-cell-idle.sprout {
   background: linear-gradient(145deg, #6B8E23 0%, #9ACD32 50%, #6B8E23 100%);
 }
 
-.farm-cell.growing {
+.farm-cell-idle.growing {
   background: linear-gradient(145deg, #228B22 0%, #32CD32 50%, #228B22 100%);
 }
 
-.farm-cell.mature {
+.farm-cell-idle.mature {
   background: linear-gradient(145deg, #DAA520 0%, #FFD700 50%, #DAA520 100%);
 }
 
 /* Animations de récolte */
-.farm-cell.harvesting {
-  animation: harvest-shake 0.6s ease-in-out;
+.farm-cell-idle.harvesting {
+  animation: harvest-shake-idle 0.6s ease-in-out;
 }
 
-@keyframes harvest-shake {
-  0%, 100% { transform: translateZ(0) scale(1); }
-  25% { transform: translateZ(10px) scale(1.1) rotate(-2deg); }
-  50% { transform: translateZ(15px) scale(1.15) rotate(2deg); }
-  75% { transform: translateZ(10px) scale(1.1) rotate(-1deg); }
+@keyframes harvest-shake-idle {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1) rotate(-2deg); }
+  50% { transform: scale(1.15) rotate(2deg); }
+  75% { transform: scale(1.1) rotate(-1deg); }
 }
 
-.harvest-effect {
+.harvest-effect-idle {
   position: absolute;
   top: 0;
   left: 0;
@@ -140,108 +146,91 @@
   z-index: 10;
 }
 
-.floating-reward {
+.floating-reward-idle {
   position: absolute;
-  top: -20px;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255, 215, 0, 0.9);
+  background: rgba(255, 215, 0, 0.95);
   color: #000;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 14px;
   font-weight: bold;
-  animation: float-up 0.6s ease-out forwards;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  animation: float-up-idle 0.8s ease-out forwards;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  white-space: nowrap;
 }
 
-.floating-reward.seeds {
-  top: -40px;
-  background: rgba(144, 238, 144, 0.9);
-  animation-delay: 0.1s;
-}
-
-@keyframes float-up {
+@keyframes float-up-idle {
   0% {
     opacity: 1;
     transform: translateX(-50%) translateY(0) scale(0.8);
   }
   50% {
     opacity: 1;
-    transform: translateX(-50%) translateY(-30px) scale(1.1);
+    transform: translateX(-50%) translateY(-40px) scale(1.1);
   }
   100% {
     opacity: 0;
-    transform: translateX(-50%) translateY(-60px) scale(0.9);
+    transform: translateX(-50%) translateY(-80px) scale(0.9);
   }
 }
 
-.harvest-particles {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* Section des améliorations */
+.upgrades-section {
+  width: 100%;
 }
 
-.particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: #FFD700;
-  border-radius: 50%;
-  animation: particle-explosion 0.6s ease-out forwards;
+.upgrade-card {
+  transition: all 0.2s ease;
 }
 
-.particle:nth-child(1) {
-  animation-delay: 0s;
-  transform: rotate(0deg) translateX(0px);
+.upgrade-card:hover {
+  transform: translateY(-2px);
 }
 
-.particle:nth-child(2) {
-  animation-delay: 0.1s;
-  transform: rotate(90deg) translateX(0px);
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
-.particle:nth-child(3) {
-  animation-delay: 0.2s;
-  transform: rotate(180deg) translateX(0px);
+.stat-card {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
 }
 
-.particle:nth-child(4) {
-  animation-delay: 0.3s;
-  transform: rotate(270deg) translateX(0px);
-}
-
-@keyframes particle-explosion {
-  0% {
-    opacity: 1;
-    transform: rotate(var(--rotation, 0deg)) translateX(0px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: rotate(var(--rotation, 0deg)) translateX(40px) scale(0.5);
-  }
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* Effet sonore simulé */
-.sound-effect {
+.sound-effect-idle {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 1000;
 }
 
-.sound-indicator {
-  background: rgba(0, 0, 0, 0.8);
+.sound-indicator-idle {
+  background: rgba(0, 0, 0, 0.85);
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 16px;
   font-weight: bold;
-  animation: sound-pop 0.6s ease-out;
+  animation: sound-pop-idle 0.6s ease-out;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-@keyframes sound-pop {
+@keyframes sound-pop-idle {
   0% {
     opacity: 0;
     transform: scale(0.5) translateY(-10px);
@@ -256,36 +245,106 @@
   }
 }
 
-/* Instructions */
-.game-instructions {
-  max-width: 400px;
-  margin: 40px auto 0;
+/* Curseur personnalisé pour les cellules récoltables */
+.farm-cell-idle.harvestable {
+  cursor: pointer;
 }
 
-/* Curseur personnalisé style Hayday */
-.farm-cell.harvestable {
-  cursor: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="%23FFD700" stroke="%23FFA500" stroke-width="2"/><text x="16" y="21" text-anchor="middle" fill="%23000" font-size="16">🌾</text></svg>'), auto;
+/* Responsive design */
+@media (max-width: 1024px) {
+  .game-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .upgrades-section {
+    order: -1;
+  }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .farm-grid {
-    grid-template-columns: repeat(4, 60px);
-    grid-template-rows: repeat(4, 60px);
-    gap: 6px;
+  .farm-grid-idle {
+    max-width: 300px;
+    padding: 15px;
   }
   
-  .farm-cell {
-    width: 60px;
-    height: 60px;
+  .farm-cell-idle {
+    min-height: 50px;
   }
   
-  .wheat-sprite {
+  .wheat-sprite-idle {
     font-size: 24px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
   
   .game-header .flex {
     flex-direction: column;
     gap: 12px;
+    align-items: stretch;
+  }
+}
+
+/* Animations d'entrée */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.farm-section,
+.upgrades-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.upgrades-section {
+  animation-delay: 0.2s;
+}
+
+/* Effets de particules pour les blés rares */
+.farm-cell-idle.mature .wheat-sprite-idle {
+  position: relative;
+}
+
+.farm-cell-idle.mature[title*="Doré"] .wheat-sprite-idle::after,
+.farm-cell-idle.mature[title*="Diamant"] .wheat-sprite-idle::after,
+.farm-cell-idle.mature[title*="Cristal"] .wheat-sprite-idle::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  animation: rare-glow 2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.farm-cell-idle.mature[title*="Doré"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+}
+
+.farm-cell-idle.mature[title*="Diamant"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 10px rgba(185, 242, 255, 0.6);
+}
+
+.farm-cell-idle.mature[title*="Cristal"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 10px rgba(221, 160, 221, 0.6);
+}
+
+@keyframes rare-glow {
+  from {
+    opacity: 0.3;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0.8;
+    transform: scale(1.1);
   }
 }
