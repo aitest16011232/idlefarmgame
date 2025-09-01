@@ -33,7 +33,7 @@
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 300px 1fr 400px;
   gap: 20px;
 }
 
