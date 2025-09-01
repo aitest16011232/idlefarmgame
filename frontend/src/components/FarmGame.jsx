@@ -473,19 +473,19 @@ const FarmGame = () => {
                   const isBoosting = boostAnimations[animationId];
                   const hasCooldown = (cell.boostCooldown || 0) > 0;
                   
+                  // Classe CSS pour la rareté
+                  const rarityClass = cell.state === WHEAT_STATES.MATURE && cell.wheatType !== WHEAT_TYPES.COMMON 
+                    ? `rarity-${cell.wheatType}` 
+                    : '';
+                  
                   return (
                     <div
                       key={cell.id}
-                      className={`farm-cell-idle ${cell.state} ${isHarvesting ? 'harvesting' : ''} ${
+                      className={`farm-cell-idle ${cell.state} ${rarityClass} ${isHarvesting ? 'harvesting' : ''} ${
                         isBoosting ? 'boosting' : ''
                       } ${cell.boosted ? 'boosted' : ''} ${
                         stateInfo.canHarvest ? 'harvestable' : ''
                       } ${hasCooldown ? 'cooldown' : ''}`}
-                      style={{
-                        backgroundColor: cell.state === WHEAT_STATES.MATURE && cell.wheatType !== WHEAT_TYPES.COMMON 
-                          ? wheatInfo.bgColor 
-                          : undefined
-                      }}
                       onClick={() => harvestCell(rowIndex, colIndex)}
                       onContextMenu={(e) => {
                         e.preventDefault();
