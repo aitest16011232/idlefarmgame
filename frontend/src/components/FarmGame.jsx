@@ -395,7 +395,7 @@ const FarmGame = () => {
                 ...c,
                 state: WHEAT_STATES.SEED,
                 plantedAt: Date.now(),
-                wheatType: wheatType, // Utiliser le type généré
+                wheatType: getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]),
                 boosted: false,
                 boostCooldown: 0
               };
