@@ -891,7 +891,12 @@ const FarmGame = () => {
                   </div>
                   <div className="stat-card bg-discord-primary border-discord-accent">
                     <Sparkles className="w-6 h-6 text-discord-green mb-2" />
-                    <div className="text-2xl font-bold text-discord-text">{Math.round(getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]) * 100)}%</div>
+                    <div className="text-2xl font-bold text-discord-text">
+                      {getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]) >= 1.0 
+                        ? `2 + ${Math.round((getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]) - 1.0) * 100)}%`
+                        : `${Math.round(getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]) * 100)}%`
+                      }
+                    </div>
                     <div className="text-sm text-discord-muted">Chance de Récolte Multiple</div>
                   </div>
                   <div className="stat-card bg-discord-primary border-discord-accent">
