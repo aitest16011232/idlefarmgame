@@ -7,7 +7,11 @@ export const WHEAT_TYPES = {
   EPIC: 'epic',
   LEGENDARY: 'legendary',
   MYTHIC: 'mythic',
-  DIVINE: 'divine'
+  TRANSCENDENT: 'transcendent',
+  DIVINE: 'divine',
+  CELESTIAL: 'celestial',
+  COSMIC: 'cosmic',
+  OMNIPOTENT: 'omnipotent'
 };
 
 export const WHEAT_TYPE_INFO = {
