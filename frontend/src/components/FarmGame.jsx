@@ -254,7 +254,7 @@ const FarmGame = () => {
     }, harvestInterval);
 
     return () => clearInterval(interval);
-  }, [gameData.upgrades[UPGRADES.AUTO_HARVEST]]);
+  }, [gameData.upgrades[UPGRADES.AUTO_HARVEST_CHANCE], gameData.inventory.totalAutoHarvested]);
 
   // Système de croissance automatique
   useEffect(() => {
