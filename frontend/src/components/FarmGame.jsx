@@ -324,6 +324,9 @@ const FarmGame = () => {
     const xpMultiplier = getExperienceMultiplier(gameData.upgrades[UPGRADES.EXPERIENCE_BOOST]);
     const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
 
+    // Ajouter à l'historique
+    addToHarvestHistory(wheatType, totalWheat, xpGained, isCritical, false);
+
     // Chance de récolte bonus : chercher un autre blé mature au hasard
     let bonusHarvest = 0;
     const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
