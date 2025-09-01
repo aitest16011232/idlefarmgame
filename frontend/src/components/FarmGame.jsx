@@ -348,11 +348,26 @@ const FarmGame = () => {
     // Ajouter à l'historique
     addToHarvestHistory(wheatType, totalWheat, xpGained, isCritical, false);
 
+    // Vérifier la chance de récolte complète
+    const fullHarvestChance = getFullHarvestChance(levelInfo.level);
+    const isFullHarvest = Math.random() < (fullHarvestChance / 100); // Convertir le pourcentage
+    
     // Nouveau système de chance de récolte
     let bonusHarvest = 0;
     let bonusWheatCount = 0;
     let harvestedCells = [];
     
+    if (isFullHarvest) {
+      // Récolter toutes les cellules matures du terrain
+      for (let r = 0; r < gameData.grid.length; r++) {
+        for (let c = 0; c < gameData.grid[r].length; c++) {
+          if ((r !== rowIndex || c !== colIndex) && gameData.grid[r][c].state === WHEAT_STATES.MATURE) {
+            harvestedCells.push({ row: r, col: c });
+          }
+        }
+      }
+    } else {
+      // Système normal de récolte multiple
     const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
     
     if (harvestChance >= 1.0) {
