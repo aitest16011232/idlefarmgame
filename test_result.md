@@ -222,9 +222,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Test visual des couleurs de raretés"
-    - "Test de la chance de récolte avec plusieurs blés matures"
-    - "Test de la récolte automatique avec niveaux"
+    - "Test du nouveau système XP exponentiel"
+    - "Test du système chance de récolte 100%+ avec 2 blé base"
+    - "Test des nouveaux paliers de rareté"
+    - "Test de l'onglet statistiques par rareté"
+    - "Test des icônes agrandies selon taille terrain"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
