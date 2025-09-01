@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Correction de bugs du jeu de blé : 1) Couleurs des fonds mal adaptées pour les raretés de blés, 2) Chance de récolte ne fonctionne pas correctement, 3) Récolte automatique récolte trop de blés, 4) Ajout de niveaux multiples pour récolte automatique avec prix exponentiel"
+user_problem_statement: "Modifications avancées du jeu de blé : 1) Réduire niveau max terrain à 8, 2) Chance de récolte 10% base + 5% par niveau, avec système 2 blé base à 100%+, 3) XP exponentielle selon paliers terrain, 4) Statistique blé cliqué corrigée, 5) 4 nouveaux paliers de rareté, 6) Total blés récoltés par rareté avec probabilités, 7) Agrandir icônes blé selon taille terrain"
 
 frontend:
   - task: "Correction des couleurs de fond pour les raretés de blés"
