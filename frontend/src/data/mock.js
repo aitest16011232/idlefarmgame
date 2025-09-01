@@ -2,9 +2,12 @@
 
 export const WHEAT_TYPES = {
   COMMON: 'common',
-  GOLD: 'gold',
-  DIAMOND: 'diamond',
-  CRYSTAL: 'crystal'
+  UNCOMMON: 'uncommon',
+  RARE: 'rare',
+  EPIC: 'epic',
+  LEGENDARY: 'legendary',
+  MYTHIC: 'mythic',
+  DIVINE: 'divine'
 };
 
 export const WHEAT_TYPE_INFO = {
@@ -13,28 +16,56 @@ export const WHEAT_TYPE_INFO = {
     name: 'Blé Commun',
     value: 1,
     rarity: 1,
-    color: '#DAA520'
+    color: '#DAA520',
+    bgColor: '#F5F5DC'
   },
-  [WHEAT_TYPES.GOLD]: {
+  [WHEAT_TYPES.UNCOMMON]: {
+    emoji: '🌽',
+    name: 'Blé Peu Commun',
+    value: 3,
+    rarity: 0.2, // 1/5
+    color: '#228B22',
+    bgColor: '#F0FFF0'
+  },
+  [WHEAT_TYPES.RARE]: {
     emoji: '✨',
-    name: 'Blé Doré',
-    value: 10,
+    name: 'Blé Rare',
+    value: 8,
     rarity: 0.1, // 1/10
-    color: '#FFD700'
+    color: '#4169E1',
+    bgColor: '#E6F3FF'
   },
-  [WHEAT_TYPES.DIAMOND]: {
+  [WHEAT_TYPES.EPIC]: {
+    emoji: '🔥',
+    name: 'Blé Épique',
+    value: 25,
+    rarity: 0.05, // 1/20
+    color: '#8A2BE2',
+    bgColor: '#F3E5F5'
+  },
+  [WHEAT_TYPES.LEGENDARY]: {
     emoji: '💎',
-    name: 'Blé Diamant',
+    name: 'Blé Légendaire',
     value: 100,
     rarity: 0.01, // 1/100
-    color: '#B9F2FF'
+    color: '#FFD700',
+    bgColor: '#FFFACD'
   },
-  [WHEAT_TYPES.CRYSTAL]: {
+  [WHEAT_TYPES.MYTHIC]: {
+    emoji: '🌟',
+    name: 'Blé Mythique',
+    value: 500,
+    rarity: 0.002, // 1/500
+    color: '#FF1493',
+    bgColor: '#FFF0F5'
+  },
+  [WHEAT_TYPES.DIVINE]: {
     emoji: '🔮',
-    name: 'Blé Cristal',
-    value: 1000,
-    rarity: 0.001, // 1/1000
-    color: '#DDA0DD'
+    name: 'Blé Divin',
+    value: 2000,
+    rarity: 0.0005, // 1/2000
+    color: '#9370DB',
+    bgColor: '#E6E6FA'
   }
 };
 
@@ -72,7 +103,10 @@ export const GRID_SIZES = {
   1: { size: 1, level: 1, name: "Petit Terrain" },
   4: { size: 4, level: 5, name: "Terrain Moyen" },
   9: { size: 9, level: 15, name: "Grand Terrain" },
-  16: { size: 16, level: 30, name: "Énorme Terrain" }
+  16: { size: 16, level: 30, name: "Énorme Terrain" },
+  25: { size: 25, level: 50, name: "Terrain Massif" },
+  36: { size: 36, level: 75, name: "Terrain Gigantesque" },
+  49: { size: 49, level: 100, name: "Terrain Colossal" }
 };
 
 export const UPGRADES = {
@@ -83,32 +117,47 @@ export const UPGRADES = {
   MULTI_HARVEST: 'multiHarvest'
 };
 
+export const GROWTH_SPEED_THRESHOLDS = [
+  { clicks: 0, level: 0, name: "Vitesse Normale" },
+  { clicks: 5, level: 1, name: "Vitesse Améliorée" },
+  { clicks: 50, level: 2, name: "Vitesse Rapide" },
+  { clicks: 250, level: 3, name: "Vitesse Très Rapide" },
+  { clicks: 1000, level: 4, name: "Vitesse Ultra" },
+  { clicks: 5000, level: 5, name: "Vitesse Turbo" },
+  { clicks: 25000, level: 6, name: "Vitesse Supersonique" },
+  { clicks: 100000, level: 7, name: "Vitesse Hypersonique" },
+  { clicks: 500000, level: 8, name: "Vitesse Lumière" },
+  { clicks: 1000000, level: 9, name: "Vitesse Quantique" }
+];
+
 export const UPGRADE_INFO = {
   [UPGRADES.GRID_SIZE]: {
     name: "Taille du Terrain",
     description: "Augmente le nombre de cases cultivables",
     baseCost: 50,
-    maxLevel: 4,
+    maxLevel: 7,
     levels: [
-      { cost: 0, value: 1, description: "1 case" },
-      { cost: 50, value: 4, description: "4 cases" },
-      { cost: 200, value: 9, description: "9 cases" },
-      { cost: 500, value: 16, description: "16 cases" }
+      { cost: 0, value: 1, description: "1 case", reqLevel: 1 },
+      { cost: 50, value: 4, description: "4 cases", reqLevel: 5 },
+      { cost: 200, value: 9, description: "9 cases", reqLevel: 15 },
+      { cost: 500, value: 16, description: "16 cases", reqLevel: 30 },
+      { cost: 1200, value: 25, description: "25 cases", reqLevel: 50 },
+      { cost: 3000, value: 36, description: "36 cases", reqLevel: 75 },
+      { cost: 7500, value: 49, description: "49 cases", reqLevel: 100 }
     ]
   },
   [UPGRADES.GROWTH_SPEED]: {
     name: "Vitesse de Croissance",
-    description: "Réduit le temps de pousse du blé",
-    baseCost: 20,
-    maxLevel: 10,
-    baseValue: 10000, // 10 secondes de base
-    reduction: 0.15 // 15% de réduction par niveau
+    description: "Se débloque automatiquement en cliquant des blés",
+    isAutoUnlock: true,
+    baseValue: 8000, // 8 secondes de base
+    reduction: 0.12 // 12% de réduction par niveau
   },
   [UPGRADES.HARVEST_AMOUNT]: {
     name: "Récolte Abondante",
     description: "Augmente le nombre de blé récolté",
     baseCost: 30,
-    maxLevel: 15,
+    maxLevel: Infinity,
     baseValue: 1,
     increment: 1 // +1 blé par niveau
   },
@@ -116,9 +165,9 @@ export const UPGRADE_INFO = {
     name: "Chance de Rareté",
     description: "Améliore les chances de blé rare",
     baseCost: 100,
-    maxLevel: 20,
+    maxLevel: Infinity,
     baseValue: 1,
-    multiplier: 1.2 // +20% de chance par niveau
+    multiplier: 1.15 // +15% de chance par niveau
   },
   [UPGRADES.MULTI_HARVEST]: {
     name: "Récolte Multiple",
@@ -126,7 +175,7 @@ export const UPGRADE_INFO = {
     baseCost: 150,
     maxLevel: 25,
     baseChance: 0.1, // 10% de base
-    increment: 0.05, // +5% par niveau
+    increment: 0.04, // +4% par niveau
     unlockLevel: 5 // Déblocké au niveau 5
   }
 };
@@ -134,11 +183,12 @@ export const UPGRADE_INFO = {
 // État initial du jeu
 export const initialGameData = {
   grid: [
-    [{ id: '0-0', state: WHEAT_STATES.SEED, plantedAt: Date.now(), wheatType: WHEAT_TYPES.COMMON, boosted: false }]
+    [{ id: '0-0', state: WHEAT_STATES.SEED, plantedAt: Date.now(), wheatType: WHEAT_TYPES.COMMON, boosted: false, boostCooldown: 0 }]
   ],
   inventory: {
     wheat: 0,
-    totalHarvested: 0
+    totalHarvested: 0, // Valeur réelle avec facteurs de rareté
+    totalClicks: 0 // Nombre de clics sans facteur
   },
   player: {
     level: 1,
@@ -163,21 +213,35 @@ export const getRandomWheatType = (rareChanceLevel = 0) => {
   const rareMultiplier = Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, rareChanceLevel);
   const random = Math.random();
   
-  // Calculer les chances ajustées
-  const crystalChance = WHEAT_TYPE_INFO[WHEAT_TYPES.CRYSTAL].rarity * rareMultiplier;
-  const diamondChance = WHEAT_TYPE_INFO[WHEAT_TYPES.DIAMOND].rarity * rareMultiplier;
-  const goldChance = WHEAT_TYPE_INFO[WHEAT_TYPES.GOLD].rarity * rareMultiplier;
+  // Calculer les chances ajustées (du plus rare au plus commun)
+  const types = Object.values(WHEAT_TYPES).reverse(); // Commencer par le plus rare
   
-  if (random < crystalChance) return WHEAT_TYPES.CRYSTAL;
-  if (random < diamondChance) return WHEAT_TYPES.DIAMOND;
-  if (random < goldChance) return WHEAT_TYPES.GOLD;
+  for (const type of types) {
+    const adjustedChance = WHEAT_TYPE_INFO[type].rarity * rareMultiplier;
+    if (random < adjustedChance) {
+      return type;
+    }
+  }
+  
   return WHEAT_TYPES.COMMON;
+};
+
+export const getGrowthSpeedLevel = (totalClicks) => {
+  let level = 0;
+  for (const threshold of GROWTH_SPEED_THRESHOLDS) {
+    if (totalClicks >= threshold.clicks) {
+      level = threshold.level;
+    } else {
+      break;
+    }
+  }
+  return level;
 };
 
 export const getGrowthTime = (growthSpeedLevel = 0) => {
   const baseTime = UPGRADE_INFO[UPGRADES.GROWTH_SPEED].baseValue;
   const reduction = UPGRADE_INFO[UPGRADES.GROWTH_SPEED].reduction;
-  return Math.max(2000, baseTime * Math.pow(1 - reduction, growthSpeedLevel));
+  return Math.max(1000, baseTime * Math.pow(1 - reduction, growthSpeedLevel));
 };
 
 export const getHarvestAmount = (harvestAmountLevel = 0) => {
@@ -211,7 +275,10 @@ export const getUpgradeCost = (upgradeType, currentLevel) => {
   if (upgradeType === UPGRADES.GRID_SIZE) {
     return info.levels[currentLevel + 1]?.cost || Infinity;
   }
-  return Math.floor(info.baseCost * Math.pow(1.5, currentLevel));
+  if (upgradeType === UPGRADES.GROWTH_SPEED) {
+    return 0; // Gratuit, auto-déblocké
+  }
+  return Math.floor(info.baseCost * Math.pow(1.4, currentLevel));
 };
 
 export const getGridSize = (gridSizeLevel) => {
@@ -220,11 +287,19 @@ export const getGridSize = (gridSizeLevel) => {
 };
 
 export const canUnlockGridSize = (playerLevel, targetGridLevel) => {
-  const gridSizes = Object.values(GRID_SIZES);
-  const targetSize = gridSizes.find(g => UPGRADE_INFO[UPGRADES.GRID_SIZE].levels[targetGridLevel]?.value === g.size);
-  return targetSize ? playerLevel >= targetSize.level : false;
+  const level = UPGRADE_INFO[UPGRADES.GRID_SIZE].levels[targetGridLevel];
+  return level ? playerLevel >= level.reqLevel : false;
 };
 
 export const canUnlockMultiHarvest = (playerLevel) => {
   return playerLevel >= UPGRADE_INFO[UPGRADES.MULTI_HARVEST].unlockLevel;
+};
+
+export const getNextGrowthSpeedThreshold = (totalClicks) => {
+  for (const threshold of GROWTH_SPEED_THRESHOLDS) {
+    if (totalClicks < threshold.clicks) {
+      return threshold;
+    }
+  }
+  return null; // Max niveau atteint
 };

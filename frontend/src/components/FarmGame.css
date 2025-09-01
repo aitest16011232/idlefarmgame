@@ -1,10 +1,25 @@
-/* Styles pour le jeu d'agriculture idle/clicker */
+/* Couleurs Discord */
+:root {
+  --discord-primary: #36393f;
+  --discord-secondary: #2f3136;
+  --discord-tertiary: #202225;
+  --discord-accent: #4f545c;
+  --discord-muted: #72767d;
+  --discord-text: #ffffff;
+  --discord-blurple: #5865f2;
+  --discord-green: #57f287;
+  --discord-yellow: #fee75c;
+  --discord-red: #ed4245;
+  --discord-link: #00aff4;
+}
 
-.farm-game-idle {
+/* Styles pour le jeu d'agriculture idle/clicker avec thème Discord */
+.farm-game-idle.discord-theme {
   min-height: 100vh;
-  background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+  background: linear-gradient(135deg, var(--discord-tertiary) 0%, var(--discord-primary) 100%);
   padding: 20px;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: var(--discord-text);
 }
 
 .game-header {
@@ -33,9 +48,9 @@
   max-width: 500px;
   margin: 0 auto;
   padding: 20px;
-  background: rgba(139, 69, 19, 0.1);
+  background: rgba(47, 49, 54, 0.8);
   border-radius: 12px;
-  border: 2px solid #8B4513;
+  border: 2px solid var(--discord-accent);
 }
 
 .farm-cell-idle {
@@ -51,7 +66,7 @@
   position: relative;
   box-shadow: 
     inset 0 2px 4px rgba(255,255,255,0.1),
-    0 2px 4px rgba(0,0,0,0.2);
+    0 2px 4px rgba(0,0,0,0.4);
   min-height: 80px;
 }
 
@@ -59,40 +74,45 @@
   transform: scale(1.05);
   box-shadow: 
     inset 0 2px 4px rgba(255,255,255,0.2),
-    0 4px 8px rgba(0,0,0,0.3);
+    0 4px 8px rgba(0,0,0,0.5);
 }
 
 .farm-cell-idle.harvestable {
-  background: linear-gradient(145deg, #228B22 0%, #32CD32 50%, #228B22 100%);
-  border-color: #006400;
+  background: linear-gradient(145deg, var(--discord-green) 0%, #45d670 50%, var(--discord-green) 100%);
+  border-color: #3ba55c;
   cursor: pointer;
   animation: glow-idle 2s ease-in-out infinite alternate;
 }
 
 .farm-cell-idle.harvestable:hover {
-  background: linear-gradient(145deg, #32CD32 0%, #7CFC00 50%, #32CD32 100%);
+  background: linear-gradient(145deg, #45d670 0%, #66e087 50%, #45d670 100%);
 }
 
 .farm-cell-idle.boosted {
-  border-color: #FFD700;
+  border-color: var(--discord-yellow);
   box-shadow: 
     inset 0 2px 4px rgba(255,255,255,0.2),
-    0 2px 4px rgba(0,0,0,0.2),
-    0 0 15px rgba(255, 215, 0, 0.4);
+    0 2px 4px rgba(0,0,0,0.4),
+    0 0 15px rgba(254, 231, 92, 0.6);
+}
+
+.farm-cell-idle.cooldown {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @keyframes glow-idle {
   from {
     box-shadow: 
       inset 0 2px 4px rgba(255,255,255,0.1),
-      0 2px 4px rgba(0,0,0,0.2),
-      0 0 5px rgba(124,252,0,0.3);
+      0 2px 4px rgba(0,0,0,0.4),
+      0 0 5px rgba(87, 242, 135, 0.4);
   }
   to {
     box-shadow: 
       inset 0 2px 4px rgba(255,255,255,0.2),
-      0 4px 8px rgba(0,0,0,0.3),
-      0 0 15px rgba(124,252,0,0.6);
+      0 4px 8px rgba(0,0,0,0.5),
+      0 0 15px rgba(87, 242, 135, 0.8);
   }
 }
 
@@ -108,7 +128,7 @@
 /* Tailles d'icônes proportionnelles à la grille */
 .wheat-sprite-idle {
   transition: transform 0.3s ease;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,13 +138,16 @@
 .wheat-sprite-idle.grid-2 { font-size: 36px; }
 .wheat-sprite-idle.grid-3 { font-size: 28px; }
 .wheat-sprite-idle.grid-4 { font-size: 24px; }
+.wheat-sprite-idle.grid-5 { font-size: 20px; }
+.wheat-sprite-idle.grid-6 { font-size: 18px; }
+.wheat-sprite-idle.grid-7 { font-size: 16px; }
 
 .farm-cell-idle:hover .wheat-sprite-idle {
   transform: scale(1.1);
 }
 
-/* Indicateur de boost */
-.boost-indicator {
+/* Indicateurs */
+.boost-indicator, .cooldown-indicator {
   position: absolute;
   top: -5px;
   right: -5px;
@@ -136,20 +159,32 @@
   animation: pulse-glow 1s ease-in-out infinite alternate;
 }
 
+.cooldown-timer {
+  font-size: 10px;
+  color: var(--discord-red);
+  animation: pulse-timer 1s ease-in-out infinite;
+}
+
 @keyframes pulse-glow {
   from {
     transform: scale(1);
-    filter: drop-shadow(0 0 3px #FFD700);
+    filter: drop-shadow(0 0 3px var(--discord-yellow));
   }
   to {
     transform: scale(1.2);
-    filter: drop-shadow(0 0 8px #FFD700);
+    filter: drop-shadow(0 0 8px var(--discord-yellow));
   }
 }
 
-/* États de croissance */
+@keyframes pulse-timer {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+/* États de croissance avec nouvelles couleurs */
 .farm-cell-idle.seed {
-  background: linear-gradient(145deg, #8B4513 0%, #A0522D 50%, #8B4513 100%);
+  background: linear-gradient(145deg, var(--discord-accent) 0%, var(--discord-secondary) 50%, var(--discord-accent) 100%);
+  border-color: var(--discord-muted);
 }
 
 .farm-cell-idle.sprout {
@@ -161,7 +196,7 @@
 }
 
 .farm-cell-idle.mature {
-  background: linear-gradient(145deg, #DAA520 0%, #FFD700 50%, #DAA520 100%);
+  background: linear-gradient(145deg, #DAA520 0%, var(--discord-yellow) 50%, #DAA520 100%);
 }
 
 /* Animations */
@@ -183,14 +218,14 @@
 @keyframes boost-pulse-idle {
   0%, 100% { 
     transform: scale(1);
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.4);
   }
   50% { 
     transform: scale(1.1);
     box-shadow: 
       inset 0 2px 4px rgba(255,255,255,0.2), 
-      0 4px 8px rgba(0,0,0,0.3),
-      0 0 20px rgba(255, 215, 0, 0.8);
+      0 4px 8px rgba(0,0,0,0.5),
+      0 0 20px rgba(254, 231, 92, 0.8);
   }
 }
 
@@ -213,18 +248,18 @@
   border-radius: 16px;
   font-size: 14px;
   font-weight: bold;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
   white-space: nowrap;
 }
 
 .floating-reward-idle {
-  background: rgba(255, 215, 0, 0.95);
-  color: #000;
+  background: rgba(254, 231, 92, 0.95);
+  color: var(--discord-primary);
   animation: float-up-idle 0.8s ease-out forwards;
 }
 
 .floating-boost-idle {
-  background: rgba(0, 150, 255, 0.95);
+  background: rgba(88, 101, 242, 0.95);
   color: white;
   animation: float-up-idle 0.8s ease-out forwards;
 }
@@ -244,7 +279,7 @@
   }
 }
 
-/* Section des améliorations */
+/* Section des améliorations avec thème Discord */
 .upgrades-section {
   width: 100%;
 }
@@ -265,18 +300,41 @@
 
 .stat-card {
   padding: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--discord-accent);
   border-radius: 8px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--discord-primary);
   transition: all 0.2s ease;
 }
 
 .stat-card:hover {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--discord-secondary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
+
+/* Couleurs Discord pour les composants */
+.discord-theme .bg-discord-primary { background-color: var(--discord-primary); }
+.discord-theme .bg-discord-secondary { background-color: var(--discord-secondary); }
+.discord-theme .bg-discord-tertiary { background-color: var(--discord-tertiary); }
+.discord-theme .bg-discord-accent { background-color: var(--discord-accent); }
+.discord-theme .bg-discord-blurple { background-color: var(--discord-blurple); }
+.discord-theme .bg-discord-green { background-color: var(--discord-green); }
+.discord-theme .bg-discord-yellow { background-color: var(--discord-yellow); }
+.discord-theme .bg-discord-red { background-color: var(--discord-red); }
+
+.discord-theme .text-discord-text { color: var(--discord-text); }
+.discord-theme .text-discord-muted { color: var(--discord-muted); }
+.discord-theme .text-discord-blurple { color: var(--discord-blurple); }
+.discord-theme .text-discord-green { color: var(--discord-green); }
+.discord-theme .text-discord-yellow { color: var(--discord-yellow); }
+.discord-theme .text-discord-red { color: var(--discord-red); }
+
+.discord-theme .border-discord-accent { border-color: var(--discord-accent); }
+.discord-theme .border-discord-blurple { border-color: var(--discord-blurple); }
+.discord-theme .border-discord-green { border-color: var(--discord-green); }
+.discord-theme .border-discord-yellow { border-color: var(--discord-yellow); }
+.discord-theme .border-discord-red { border-color: var(--discord-red); }
 
 /* Effet sonore simulé */
 .sound-effect-idle {
@@ -287,14 +345,15 @@
 }
 
 .sound-indicator-idle {
-  background: rgba(0, 0, 0, 0.85);
-  color: white;
+  background: var(--discord-primary);
+  color: var(--discord-text);
+  border: 1px solid var(--discord-accent);
   padding: 10px 20px;
   border-radius: 25px;
   font-size: 16px;
   font-weight: bold;
   animation: sound-pop-idle 0.6s ease-out;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
 @keyframes sound-pop-idle {
@@ -342,6 +401,9 @@
   .wheat-sprite-idle.grid-2 { font-size: 28px; }
   .wheat-sprite-idle.grid-3 { font-size: 22px; }
   .wheat-sprite-idle.grid-4 { font-size: 18px; }
+  .wheat-sprite-idle.grid-5 { font-size: 16px; }
+  .wheat-sprite-idle.grid-6 { font-size: 14px; }
+  .wheat-sprite-idle.grid-7 { font-size: 12px; }
   
   .stats-grid {
     grid-template-columns: 1fr;
@@ -375,14 +437,17 @@
   animation-delay: 0.2s;
 }
 
-/* Effets de particules pour les blés rares */
+/* Effets de particules pour les blés rares avec nouvelles couleurs */
 .farm-cell-idle.mature .wheat-sprite-idle {
   position: relative;
 }
 
-.farm-cell-idle.mature[title*="Doré"] .wheat-sprite-idle::after,
-.farm-cell-idle.mature[title*="Diamant"] .wheat-sprite-idle::after,
-.farm-cell-idle.mature[title*="Cristal"] .wheat-sprite-idle::after {
+.farm-cell-idle.mature[title*="Peu Commun"] .wheat-sprite-idle::after,
+.farm-cell-idle.mature[title*="Rare"] .wheat-sprite-idle::after,
+.farm-cell-idle.mature[title*="Épique"] .wheat-sprite-idle::after,
+.farm-cell-idle.mature[title*="Légendaire"] .wheat-sprite-idle::after,
+.farm-cell-idle.mature[title*="Mythique"] .wheat-sprite-idle::after,
+.farm-cell-idle.mature[title*="Divin"] .wheat-sprite-idle::after {
   content: '';
   position: absolute;
   top: -10px;
@@ -394,16 +459,28 @@
   pointer-events: none;
 }
 
-.farm-cell-idle.mature[title*="Doré"] .wheat-sprite-idle::after {
+.farm-cell-idle.mature[title*="Peu Commun"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 15px rgba(34, 139, 34, 0.6);
+}
+
+.farm-cell-idle.mature[title*="Rare"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 15px rgba(65, 105, 225, 0.6);
+}
+
+.farm-cell-idle.mature[title*="Épique"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+}
+
+.farm-cell-idle.mature[title*="Légendaire"] .wheat-sprite-idle::after {
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
 }
 
-.farm-cell-idle.mature[title*="Diamant"] .wheat-sprite-idle::after {
-  box-shadow: 0 0 15px rgba(185, 242, 255, 0.6);
+.farm-cell-idle.mature[title*="Mythique"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
 }
 
-.farm-cell-idle.mature[title*="Cristal"] .wheat-sprite-idle::after {
-  box-shadow: 0 0 15px rgba(221, 160, 221, 0.6);
+.farm-cell-idle.mature[title*="Divin"] .wheat-sprite-idle::after {
+  box-shadow: 0 0 15px rgba(147, 112, 219, 0.6);
 }
 
 @keyframes rare-glow {
