@@ -22,7 +22,7 @@ import {
   getGrowthTime,
   getGrowthSpeedLevel,
   getHarvestAmount,
-  getMultiHarvestAmount,
+  getHarvestChance,
   getCriticalHarvestChance,
   getExperienceMultiplier,
   getUpgradeCost,
