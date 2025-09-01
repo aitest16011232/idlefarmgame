@@ -365,8 +365,40 @@ export const getHarvestAmount = (harvestAmountLevel = 0) => {
 
 export const getHarvestChance = (harvestChanceLevel = 0) => {
   if (harvestChanceLevel === 0) return 0;
-  const info = UPGRADE_INFO[UPGRADES.HARVEST_CHANCE];
+  const info = UPGRADE_INFO[UPGRADES.MULTI_HARVEST];
   return info.baseChance + ((harvestChanceLevel - 1) * info.increment);
+};
+
+export const getAutoHarvestChance = (autoHarvestChanceLevel = 0) => {
+  if (autoHarvestChanceLevel === 0) return 0;
+  const info = UPGRADE_INFO[UPGRADES.AUTO_HARVEST_CHANCE];
+  return info.baseChance + ((autoHarvestChanceLevel - 1) * info.increment);
+};
+
+export const getAutoHarvestSpeedLevel = (totalAutoHarvested) => {
+  let level = 0;
+  for (const threshold of AUTO_HARVEST_SPEED_THRESHOLDS) {
+    if (totalAutoHarvested >= threshold.harvested) {
+      level = threshold.level;
+    } else {
+      break;
+    }
+  }
+  return level;
+};
+
+export const getAutoHarvestInterval = (speedLevel) => {
+  const info = UPGRADE_INFO[UPGRADES.AUTO_HARVEST_SPEED];
+  return Math.max(1000, info.baseInterval - (speedLevel * info.reduction));
+};
+
+export const getNextAutoHarvestSpeedThreshold = (totalAutoHarvested) => {
+  for (const threshold of AUTO_HARVEST_SPEED_THRESHOLDS) {
+    if (totalAutoHarvested < threshold.harvested) {
+      return threshold;
+    }
+  }
+  return null; // Max niveau atteint
 };
 
 // Nouvelle fonction pour calculer le multiplicateur XP selon les paliers de terrain atteints
