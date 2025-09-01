@@ -901,6 +901,64 @@ const FarmGame = () => {
                   </div>
                 </div>
               </TabsContent>
+
+              <TabsContent value="rarity" className="space-y-4">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-center text-discord-text">
+                    <span className="mr-2">🏆</span>
+                    Total des Blés Récoltés par Rareté
+                  </h3>
+                  <div className="space-y-2">
+                    {Object.values(WHEAT_TYPES)
+                      .reverse() // Afficher du plus rare au moins rare
+                      .filter(wheatType => (gameData.inventory.harvestedByRarity?.[wheatType] || 0) > 0)
+                      .map(wheatType => {
+                        const wheatInfo = WHEAT_TYPE_INFO[wheatType];
+                        const count = gameData.inventory.harvestedByRarity?.[wheatType] || 0;
+                        const probability = formatProbability(wheatInfo.rarity);
+                        
+                        return (
+                          <div key={wheatType} className="flex items-center justify-between p-3 border border-discord-accent rounded-lg bg-discord-primary">
+                            <div className="flex items-center gap-3">
+                              <span className="text-2xl">🌾</span>
+                              <div>
+                                <div className={`font-semibold ${
+                                  wheatType === WHEAT_TYPES.COMMON ? 'text-discord-text' :
+                                  wheatType === WHEAT_TYPES.UNCOMMON ? 'text-green-400' :
+                                  wheatType === WHEAT_TYPES.RARE ? 'text-blue-400' :
+                                  wheatType === WHEAT_TYPES.EPIC ? 'text-purple-400' :
+                                  wheatType === WHEAT_TYPES.LEGENDARY ? 'text-yellow-400' :
+                                  wheatType === WHEAT_TYPES.MYTHIC ? 'text-pink-400' :
+                                  wheatType === WHEAT_TYPES.TRANSCENDENT ? 'text-cyan-400' :
+                                  wheatType === WHEAT_TYPES.DIVINE ? 'text-indigo-400' :
+                                  wheatType === WHEAT_TYPES.CELESTIAL ? 'text-red-400' :
+                                  wheatType === WHEAT_TYPES.COSMIC ? 'text-violet-400' :
+                                  wheatType === WHEAT_TYPES.OMNIPOTENT ? 'text-amber-400' :
+                                  'text-gray-400'
+                                }`}>
+                                  {wheatInfo.name}
+                                </div>
+                                <div className="text-xs text-discord-muted">
+                                  Probabilité: {probability} | Valeur: {wheatInfo.value}🌾
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-discord-text">{count.toLocaleString()}</div>
+                              <div className="text-sm text-discord-muted">récoltés</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    {Object.values(WHEAT_TYPES).every(wheatType => (gameData.inventory.harvestedByRarity?.[wheatType] || 0) === 0) && (
+                      <div className="text-center text-discord-muted py-8">
+                        <p>Aucun blé récolté encore.</p>
+                        <p className="text-sm mt-2">Commencez à récolter pour voir vos statistiques !</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </TabsContent>
             </Tabs>
           </Card>
         </div>
