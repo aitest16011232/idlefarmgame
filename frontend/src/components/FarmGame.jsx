@@ -152,7 +152,8 @@ const FarmGame = () => {
 
   // Mise à jour automatique du niveau de compétence de récolte complète
   useEffect(() => {
-    const newFullHarvestSkillLevel = getFullHarvestSkillLevel(levelInfo.level);
+    const currentLevel = calculateLevelFromXp(gameData.player.xp).level;
+    const newFullHarvestSkillLevel = getFullHarvestSkillLevel(currentLevel);
     if (newFullHarvestSkillLevel !== gameData.upgrades[UPGRADES.FULL_HARVEST_SKILL]) {
       setGameData(prev => ({
         ...prev,
@@ -162,7 +163,7 @@ const FarmGame = () => {
         }
       }));
     }
-  }, [levelInfo.level, gameData.upgrades[UPGRADES.FULL_HARVEST_SKILL]]);
+  }, [gameData.player.xp, gameData.upgrades[UPGRADES.FULL_HARVEST_SKILL]]);
 
   // Système de récolte automatique
   useEffect(() => {
