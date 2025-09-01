@@ -373,51 +373,55 @@ const FarmGame = () => {
       if (harvestChance >= 1.0) {
         // À 100%+, on récolte 2 blés de base + chance pour les suivants
         const baseHarvests = 2;
-      const extraChance = harvestChance - 1.0; // Chance pour le 3ème, 4ème, etc.
-      
-      // Collecter tous les autres blés matures
-      const otherMatureCells = [];
-      for (let r = 0; r < gameData.grid.length; r++) {
-        for (let c = 0; c < gameData.grid[r].length; c++) {
-          if ((r !== rowIndex || c !== colIndex) && gameData.grid[r][c].state === WHEAT_STATES.MATURE) {
-            otherMatureCells.push({ row: r, col: c });
+        const extraChance = harvestChance - 1.0; // Chance pour le 3ème, 4ème, etc.
+        
+        // Collecter tous les autres blés matures
+        const otherMatureCells = [];
+        for (let r = 0; r < gameData.grid.length; r++) {
+          for (let c = 0; c < gameData.grid[r].length; c++) {
+            if ((r !== rowIndex || c !== colIndex) && gameData.grid[r][c].state === WHEAT_STATES.MATURE) {
+              otherMatureCells.push({ row: r, col: c });
+            }
           }
         }
-      }
-      
-      if (otherMatureCells.length > 0) {
-        // Mélanger les cellules
-        const shuffledCells = [...otherMatureCells].sort(() => Math.random() - 0.5);
         
-        // Récolter les 2 premiers (base) + chance pour les suivants
-        for (let i = 0; i < Math.min(shuffledCells.length, baseHarvests); i++) {
-          harvestedCells.push(shuffledCells[i]);
-        }
-        
-        // Pour les suivants, utiliser la chance restante
-        let currentChance = extraChance;
-        for (let i = baseHarvests; i < shuffledCells.length && currentChance > 0; i++) {
-          if (Math.random() < currentChance) {
+        if (otherMatureCells.length > 0) {
+          // Mélanger les cellules
+          const shuffledCells = [...otherMatureCells].sort(() => Math.random() - 0.5);
+          
+          // Récolter les 2 premiers (base) + chance pour les suivants
+          for (let i = 0; i < Math.min(shuffledCells.length, baseHarvests); i++) {
             harvestedCells.push(shuffledCells[i]);
-            currentChance = Math.max(0, currentChance - 1.0); // Diminuer la chance
-          } else {
-            break;
+          }
+          
+          // Pour les suivants, utiliser la chance restante
+          let currentChance = extraChance;
+          for (let i = baseHarvests; i < shuffledCells.length && currentChance > 0; i++) {
+            if (Math.random() < currentChance) {
+              harvestedCells.push(shuffledCells[i]);
+              currentChance = Math.max(0, currentChance - 1.0); // Diminuer la chance
+            } else {
+              break;
+            }
           }
         }
-      }
-    } else if (harvestChance > 0) {
-      // Système normal < 100%
-      const otherMatureCells = [];
-      for (let r = 0; r < gameData.grid.length; r++) {
-        for (let c = 0; c < gameData.grid[r].length; c++) {
-          if ((r !== rowIndex || c !== colIndex) && gameData.grid[r][c].state === WHEAT_STATES.MATURE) {
-            otherMatureCells.push({ row: r, col: c });
+      } else if (harvestChance > 0) {
+        // Système normal < 100%
+        const otherMatureCells = [];
+        for (let r = 0; r < gameData.grid.length; r++) {
+          for (let c = 0; c < gameData.grid[r].length; c++) {
+            if ((r !== rowIndex || c !== colIndex) && gameData.grid[r][c].state === WHEAT_STATES.MATURE) {
+              otherMatureCells.push({ row: r, col: c });
+            }
           }
         }
+        
+        if (otherMatureCells.length > 0 && Math.random() < harvestChance) {
+          const randomIndex = Math.floor(Math.random() * otherMatureCells.length);
+          harvestedCells.push(otherMatureCells[randomIndex]);
+        }
       }
-      
-      if (otherMatureCells.length > 0 && Math.random() < harvestChance) {
-        const randomIndex = Math.floor(Math.random() * otherMatureCells.length);
+    }
         harvestedCells.push(otherMatureCells[randomIndex]);
       }
     }
