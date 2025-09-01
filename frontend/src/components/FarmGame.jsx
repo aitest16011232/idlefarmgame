@@ -639,7 +639,12 @@ const FarmGame = () => {
                               entry.wheatType === WHEAT_TYPES.EPIC ? 'text-purple-400' :
                               entry.wheatType === WHEAT_TYPES.LEGENDARY ? 'text-yellow-400' :
                               entry.wheatType === WHEAT_TYPES.MYTHIC ? 'text-pink-400' :
-                              'text-indigo-400'
+                              entry.wheatType === WHEAT_TYPES.TRANSCENDENT ? 'text-cyan-400' :
+                              entry.wheatType === WHEAT_TYPES.DIVINE ? 'text-indigo-400' :
+                              entry.wheatType === WHEAT_TYPES.CELESTIAL ? 'text-red-400' :
+                              entry.wheatType === WHEAT_TYPES.COSMIC ? 'text-violet-400' :
+                              entry.wheatType === WHEAT_TYPES.OMNIPOTENT ? 'text-amber-400' :
+                              'text-gray-400'
                             }`}>
                               {wheatInfo.name}
                               {entry.isBonus && <span className="text-discord-green ml-1">(Bonus)</span>}
