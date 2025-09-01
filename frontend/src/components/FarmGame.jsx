@@ -842,16 +842,28 @@ const FarmGame = () => {
                               {nextGrowthThreshold && ` | Prochain niveau: ${Math.round(getGrowthTime(nextGrowthThreshold.level) / 1000)}s`}
                             </p>
                           )}
-                          {upgradeType === UPGRADES.RARE_CHANCE && currentLevel > 0 && (
+                          {upgradeType === UPGRADES.HARVEST_AMOUNT && (
+                            <p className="text-xs text-discord-green">
+                              Blé par récolte: {getHarvestAmount(currentLevel)} | 
+                              Prochain niveau: {getHarvestAmount(currentLevel + 1)}
+                            </p>
+                          )}
+                          {upgradeType === UPGRADES.RARE_CHANCE && (
                             <p className="text-xs text-discord-green">
                               Multiplicateur actuel: x{Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, currentLevel).toFixed(2)} | 
                               Prochain niveau: x{Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, currentLevel + 1).toFixed(2)}
                             </p>
                           )}
-                          {upgradeType === UPGRADES.CRITICAL_HARVEST && currentLevel > 0 && (
+                          {upgradeType === UPGRADES.CRITICAL_HARVEST && (
                             <p className="text-xs text-discord-green">
                               Critique actuel: {Math.round(getCriticalHarvestChance(currentLevel) * 100)}% | 
                               Prochain niveau: {Math.round(getCriticalHarvestChance(currentLevel + 1) * 100)}%
+                            </p>
+                          )}
+                          {upgradeType === UPGRADES.EXPERIENCE_BOOST && (
+                            <p className="text-xs text-discord-green">
+                              Multiplicateur actuel: x{getExperienceMultiplier(currentLevel).toFixed(2)} | 
+                              Prochain niveau: x{getExperienceMultiplier(currentLevel + 1).toFixed(2)}
                             </p>
                           )}
                         </div>
