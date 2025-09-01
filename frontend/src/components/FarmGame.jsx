@@ -32,6 +32,7 @@ import {
   getNextGrowthSpeedThreshold,
   getXpMultiplier,
   getXpRequired,
+  calculateLevelFromXp,
   getWheatTypeProbability,
   formatProbability
 } from '../data/mock';
