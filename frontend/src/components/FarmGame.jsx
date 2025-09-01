@@ -947,6 +947,11 @@ const FarmGame = () => {
                     <div className="text-2xl font-bold text-discord-text">x{getExperienceMultiplier(gameData.upgrades[UPGRADES.EXPERIENCE_BOOST]).toFixed(2)}</div>
                     <div className="text-sm text-discord-muted">Boost d'XP Récolte</div>
                   </div>
+                  <div className="stat-card bg-discord-primary border-discord-accent">
+                    <Target className="w-6 h-6 text-discord-green mb-2" />
+                    <div className="text-2xl font-bold text-discord-text">{getFullHarvestChance(levelInfo.level).toFixed(2)}%</div>
+                    <div className="text-sm text-discord-muted">Chance Récolte Complète (Niv. {getFullHarvestSkillLevel(levelInfo.level)})</div>
+                  </div>
                 </div>
               </TabsContent>
 
