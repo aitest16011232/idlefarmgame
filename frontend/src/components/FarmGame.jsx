@@ -942,7 +942,7 @@ const FarmGame = () => {
                               Prochain niveau: x{getExperienceMultiplier(currentLevel + 1).toFixed(2)}
                             </p>
                           )}
-                          {upgradeType === UPGRADES.HARVEST_CHANCE && (
+                          {upgradeType === UPGRADES.MULTI_HARVEST && (
                             <p className="text-xs text-discord-green">
                               Probabilité actuelle: {getHarvestChance(currentLevel) >= 1.0 
                                 ? `${Math.floor(getHarvestChance(currentLevel))} base + ${Math.round((getHarvestChance(currentLevel) - Math.floor(getHarvestChance(currentLevel))) * 100)}%`
