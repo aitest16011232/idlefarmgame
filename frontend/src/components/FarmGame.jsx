@@ -880,7 +880,7 @@ const FarmGame = () => {
                   <div className="stat-card bg-discord-primary border-discord-accent">
                     <Zap className="w-6 h-6 text-discord-red mb-2" />
                     <div className="text-2xl font-bold text-discord-text">{getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT])}</div>
-                    <div className="text-sm text-discord-muted">Blé par Récolte</div>
+                    <div className="text-sm text-discord-muted">Blé par Récolte (Niv. {gameData.upgrades[UPGRADES.HARVEST_AMOUNT]})</div>
                   </div>
                   <div className="stat-card bg-discord-primary border-discord-accent">
                     <Sparkles className="w-6 h-6 text-discord-green mb-2" />
