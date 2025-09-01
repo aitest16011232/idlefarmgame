@@ -287,12 +287,52 @@ const FarmGame = () => {
     const wheatType = getRandomWheatType(gameData.upgrades[UPGRADES.RARE_CHANCE]);
     const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
     const harvestAmount = getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]);
-    const multiHarvestAmount = getMultiHarvestAmount(gameData.upgrades[UPGRADES.MULTI_HARVEST]);
     const isCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
     const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
-    const totalWheat = wheatValue * harvestAmount * multiHarvestAmount * criticalMultiplier;
+    const totalWheat = wheatValue * harvestAmount * criticalMultiplier;
     const xpMultiplier = getExperienceMultiplier(gameData.upgrades[UPGRADES.EXPERIENCE_BOOST]);
-    const xpGained = Math.floor(wheatValue * 5 * multiHarvestAmount * xpMultiplier);
+    const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
+
+    // Chance de récolte bonus : chercher un autre blé mature
+    let bonusHarvest = 0;
+    const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
+    if (harvestChance > 0 && Math.random() < harvestChance) {
+      // Chercher un autre blé mature
+      for (let r = 0; r < gameData.grid.length; r++) {
+        for (let c = 0; c < gameData.grid[r].length; c++) {
+          if ((r !== rowIndex || c !== colIndex) && gameData.grid[r][c].state === WHEAT_STATES.MATURE) {
+            // Récolter ce blé supplémentaire
+            const bonusWheatType = getRandomWheatType(gameData.upgrades[UPGRADES.RARE_CHANCE]);
+            const bonusWheatValue = WHEAT_TYPE_INFO[bonusWheatType].value;
+            const bonusIsCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
+            const bonusCriticalMultiplier = bonusIsCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
+            bonusHarvest = bonusWheatValue * harvestAmount * bonusCriticalMultiplier;
+            
+            // Marquer cette cellule pour réinitialisation
+            setGameData(prevData => ({
+              ...prevData,
+              grid: prevData.grid.map((row, rIdx) =>
+                row.map((cell, cIdx) => {
+                  if (rIdx === r && cIdx === c) {
+                    return {
+                      ...cell,
+                      state: WHEAT_STATES.SEED,
+                      plantedAt: Date.now(),
+                      wheatType: bonusWheatType,
+                      boosted: false,
+                      boostCooldown: 0
+                    };
+                  }
+                  return cell;
+                })
+              )
+            }));
+            break;
+          }
+        }
+        if (bonusHarvest > 0) break;
+      }
+    }
 
     // Mise à jour des données
     setGameData(prev => {
