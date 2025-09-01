@@ -839,7 +839,7 @@ const FarmGame = () => {
                           {upgradeType === UPGRADES.GROWTH_SPEED && (
                             <p className="text-xs text-discord-green">
                               Temps de repousse: {Math.round(getGrowthTime(currentLevel) / 1000)}s
-                              {nextGrowthThreshold && ` | Prochain niveau: ${nextGrowthThreshold.name}`}
+                              {nextGrowthThreshold && ` | Prochain niveau: ${Math.round(getGrowthTime(nextGrowthThreshold.level) / 1000)}s`}
                             </p>
                           )}
                           {upgradeType === UPGRADES.RARE_CHANCE && currentLevel > 0 && (
