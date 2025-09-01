@@ -172,9 +172,9 @@ export const UPGRADE_INFO = {
     baseValue: 1,
     multiplier: 1.15 // +15% de chance par niveau
   },
-  [UPGRADES.MULTI_HARVEST]: {
-    name: "Récolte Multiple",
-    description: "Chance de récolter plusieurs blés simultanément",
+  [UPGRADES.HARVEST_CHANCE]: {
+    name: "Chance de Récolte",
+    description: "Chance de récolter un blé mature supplémentaire",
     baseCost: 150,
     maxLevel: 25,
     baseChance: 0.1, // 10% de base
