@@ -314,8 +314,8 @@ const FarmGame = () => {
     setHarvestAnimations(prev => ({ ...prev, [animationId]: true }));
     setSoundEffect('harvest');
 
-    // Déterminer le type de blé récolté
-    const wheatType = getRandomWheatType(gameData.upgrades[UPGRADES.RARE_CHANCE]);
+    // Déterminer le type de blé récolté (utiliser le type stocké dans la cellule)
+    const wheatType = cell.wheatType;
     const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
     const harvestAmount = getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]);
     const isCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
