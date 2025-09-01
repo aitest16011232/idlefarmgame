@@ -371,6 +371,15 @@ export const getXpMultiplier = (playerLevel) => {
 // Fonction pour calculer l'XP requise pour passer au niveau suivant
 export const getXpRequired = (currentLevel) => {
   const baseXp = 100;
+  
+  // Système XP plus facile pour les niveaux 1-15
+  if (currentLevel <= 15) {
+    // Progression plus douce pour les premiers niveaux
+    const easyXp = 25 + (currentLevel - 1) * 15; // 25, 40, 55, 70, 85, etc.
+    return easyXp;
+  }
+  
+  // Pour les niveaux au-dessus de 15, utiliser le système normal avec multiplicateur
   const multiplier = getXpMultiplier(currentLevel);
   return baseXp * multiplier;
 };
