@@ -251,7 +251,20 @@ const FarmGame = () => {
     return () => clearInterval(interval);
   }, [gameData.upgrades[UPGRADES.GROWTH_SPEED]]);
 
-  const boostGrowth = (rowIndex, colIndex) => {
+  // Fonction pour ajouter à l'historique des récoltes
+  const addToHarvestHistory = (wheatType, totalWheat, xpGained, isCritical, isBonus = false) => {
+    const harvestEntry = {
+      id: Date.now() + Math.random(),
+      wheatType,
+      totalWheat,
+      xpGained,
+      isCritical,
+      isBonus,
+      timestamp: new Date().toLocaleTimeString()
+    };
+    
+    setHarvestHistory(prev => [harvestEntry, ...prev.slice(0, 9)]); // Garder seulement les 10 derniers
+  };
     const cell = gameData.grid[rowIndex][colIndex];
     
     if (cell.state === WHEAT_STATES.MATURE || cell.boosted || (cell.boostCooldown || 0) > 0) return;
