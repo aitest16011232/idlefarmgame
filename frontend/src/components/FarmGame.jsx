@@ -291,8 +291,8 @@ const FarmGame = () => {
           <Card className="p-6">
             <Tabs defaultValue="upgrades" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="upgrades">Améliorations</TabsTrigger>
-                <TabsTrigger value="stats">Statistiques</TabsTrigger>
+                <TabsTrigger value="upgrades" className="data-[state=active]:bg-green-100">Améliorations</TabsTrigger>
+                <TabsTrigger value="stats" className="data-[state=active]:bg-blue-100">Statistiques</TabsTrigger>
               </TabsList>
               
               <TabsContent value="upgrades" className="space-y-4">
