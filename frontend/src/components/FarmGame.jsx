@@ -819,7 +819,7 @@ const FarmGame = () => {
                             <Badge variant="secondary" className="bg-discord-accent text-discord-text">
                               Niv. {currentLevel}
                             </Badge>
-                            {(upgradeType === UPGRADES.HARVEST_CHANCE || upgradeType === UPGRADES.AUTO_HARVEST || upgradeType === UPGRADES.CRITICAL_HARVEST || upgradeType === UPGRADES.EXPERIENCE_BOOST) && (
+                            {(upgradeType === UPGRADES.HARVEST_CHANCE || upgradeType === UPGRADES.AUTO_HARVEST_CHANCE || upgradeType === UPGRADES.CRITICAL_HARVEST || upgradeType === UPGRADES.EXPERIENCE_BOOST || upgradeType === UPGRADES.FULL_HARVEST_SKILL) && (
                               <Badge variant="outline" className="text-discord-green border-discord-green">
                                 Nouveau!
                               </Badge>
