@@ -346,10 +346,18 @@ const FarmGame = () => {
     // Ajouter à l'historique
     addToHarvestHistory(wheatType, totalWheat, xpGained, isCritical, false);
 
-    // Chance de récolte bonus : chercher un autre blé mature au hasard
+    // Nouveau système de chance de récolte
     let bonusHarvest = 0;
+    let bonusWheatCount = 0;
+    let harvestedCells = [];
+    
     const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
-    if (harvestChance > 0 && Math.random() < harvestChance) {
+    
+    if (harvestChance >= 1.0) {
+      // À 100%+, on récolte 2 blés de base + chance pour les suivants
+      const baseHarvests = 2;
+      const extraChance = harvestChance - 1.0; // Chance pour le 3ème, 4ème, etc.
+      
       // Collecter tous les autres blés matures
       const otherMatureCells = [];
       for (let r = 0; r < gameData.grid.length; r++) {
@@ -360,56 +368,98 @@ const FarmGame = () => {
         }
       }
       
-      // Choisir un blé au hasard parmi les disponibles
       if (otherMatureCells.length > 0) {
+        // Mélanger les cellules
+        const shuffledCells = [...otherMatureCells].sort(() => Math.random() - 0.5);
+        
+        // Récolter les 2 premiers (base) + chance pour les suivants
+        for (let i = 0; i < Math.min(shuffledCells.length, baseHarvests); i++) {
+          harvestedCells.push(shuffledCells[i]);
+        }
+        
+        // Pour les suivants, utiliser la chance restante
+        let currentChance = extraChance;
+        for (let i = baseHarvests; i < shuffledCells.length && currentChance > 0; i++) {
+          if (Math.random() < currentChance) {
+            harvestedCells.push(shuffledCells[i]);
+            currentChance = Math.max(0, currentChance - 1.0); // Diminuer la chance
+          } else {
+            break;
+          }
+        }
+      }
+    } else if (harvestChance > 0) {
+      // Système normal < 100%
+      const otherMatureCells = [];
+      for (let r = 0; r < gameData.grid.length; r++) {
+        for (let c = 0; c < gameData.grid[r].length; c++) {
+          if ((r !== rowIndex || c !== colIndex) && gameData.grid[r][c].state === WHEAT_STATES.MATURE) {
+            otherMatureCells.push({ row: r, col: c });
+          }
+        }
+      }
+      
+      if (otherMatureCells.length > 0 && Math.random() < harvestChance) {
         const randomIndex = Math.floor(Math.random() * otherMatureCells.length);
-        const selectedCell = otherMatureCells[randomIndex];
-        const r = selectedCell.row;
-        const c = selectedCell.col;
-        
-        // Récolter ce blé supplémentaire
-        const bonusWheatType = getRandomWheatType(gameData.upgrades[UPGRADES.RARE_CHANCE]);
-        const bonusWheatValue = WHEAT_TYPE_INFO[bonusWheatType].value;
-        const bonusIsCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
-        const bonusCriticalMultiplier = bonusIsCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
-        bonusHarvest = bonusWheatValue * harvestAmount * bonusCriticalMultiplier;
-        
-        // Ajouter la récolte bonus à l'historique
-        const bonusXpGained = Math.floor(bonusWheatValue * 5 * xpMultiplier);
-        addToHarvestHistory(bonusWheatType, bonusHarvest, bonusXpGained, bonusIsCritical, true);
-        
-        // Marquer cette cellule pour réinitialisation
-        setGameData(prevData => ({
-          ...prevData,
-          grid: prevData.grid.map((row, rIdx) =>
-            row.map((cell, cIdx) => {
-              if (rIdx === r && cIdx === c) {
-                return {
-                  ...cell,
-                  state: WHEAT_STATES.SEED,
-                  plantedAt: Date.now(),
-                  wheatType: bonusWheatType,
-                  boosted: false,
-                  boostCooldown: 0
-                };
-              }
-              return cell;
-            })
-          )
-        }));
+        harvestedCells.push(otherMatureCells[randomIndex]);
       }
     }
+
+    // Traiter toutes les cellules récoltées en bonus
+    harvestedCells.forEach(selectedCell => {
+      const r = selectedCell.row;
+      const c = selectedCell.col;
+      
+      const bonusWheatType = gameData.grid[r][c].wheatType;
+      const bonusWheatValue = WHEAT_TYPE_INFO[bonusWheatType].value;
+      const bonusIsCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
+      const bonusCriticalMultiplier = bonusIsCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
+      const cellBonusHarvest = bonusWheatValue * harvestAmount * bonusCriticalMultiplier;
+      
+      bonusHarvest += cellBonusHarvest;
+      bonusWheatCount++;
+      
+      // Ajouter la récolte bonus à l'historique
+      const bonusXpGained = Math.floor(bonusWheatValue * 5 * xpMultiplier);
+      addToHarvestHistory(bonusWheatType, cellBonusHarvest, bonusXpGained, bonusIsCritical, true);
+    });
 
     // Mise à jour des données
     setGameData(prev => {
       const newXp = prev.player.xp + xpGained;
-      const newLevel = Math.floor(newXp / 100) + 1;
+      const xpRequired = getXpRequired(prev.player.level);
+      const newLevel = Math.floor(newXp / xpRequired) + 1;
+      
+      // Mise à jour des statistiques par rareté
+      const newHarvestedByRarity = { ...prev.inventory.harvestedByRarity };
+      newHarvestedByRarity[wheatType] = (newHarvestedByRarity[wheatType] || 0) + 1;
+      
+      // Compter les blés bonus aussi
+      harvestedCells.forEach(selectedCell => {
+        const r = selectedCell.row;
+        const c = selectedCell.col;
+        const bonusWheatType = prev.grid[r][c].wheatType;
+        newHarvestedByRarity[bonusWheatType] = (newHarvestedByRarity[bonusWheatType] || 0) + 1;
+      });
       
       return {
         ...prev,
         grid: prev.grid.map((row, rIdx) =>
           row.map((c, cIdx) => {
+            // Réinitialiser la cellule principale
             if (rIdx === rowIndex && cIdx === colIndex) {
+              return {
+                ...c,
+                state: WHEAT_STATES.SEED,
+                plantedAt: Date.now(),
+                wheatType: getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]),
+                boosted: false,
+                boostCooldown: 0
+              };
+            }
+            // Réinitialiser les cellules bonus
+            const shouldResetBonus = harvestedCells.some(cell => cell.row === rIdx && cell.col === cIdx);
+            if (shouldResetBonus) {
               return {
                 ...c,
                 state: WHEAT_STATES.SEED,
@@ -426,13 +476,14 @@ const FarmGame = () => {
           ...prev.inventory,
           wheat: prev.inventory.wheat + totalWheat + bonusHarvest,
           totalHarvested: prev.inventory.totalHarvested + totalWheat + bonusHarvest,
-          totalClicks: prev.inventory.totalClicks + 1
+          totalClicks: prev.inventory.totalClicks + 1 + bonusWheatCount,
+          harvestedByRarity: newHarvestedByRarity
         },
         player: {
           ...prev.player,
           level: newLevel,
           xp: newXp,
-          xpToNext: newLevel * 100
+          xpToNext: xpRequired
         }
       };
     });
