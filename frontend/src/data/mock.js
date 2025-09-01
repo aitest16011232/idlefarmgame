@@ -282,29 +282,10 @@ export const getHarvestAmount = (harvestAmountLevel = 0) => {
          (harvestAmountLevel * UPGRADE_INFO[UPGRADES.HARVEST_AMOUNT].increment);
 };
 
-export const getMultiHarvestChance = (multiHarvestLevel = 0) => {
-  if (multiHarvestLevel === 0) return 0;
-  const info = UPGRADE_INFO[UPGRADES.MULTI_HARVEST];
-  return Math.min(1, info.baseChance + ((multiHarvestLevel - 1) * info.increment));
-};
-
-export const getMultiHarvestAmount = (multiHarvestLevel = 0) => {
-  if (multiHarvestLevel === 0) return 1;
-  
-  const chance = getMultiHarvestChance(multiHarvestLevel);
-  
-  // Si on a atteint 100% pour 2 blés, on passe au système de 3 blés
-  if (chance >= 1) {
-    const maxLevelsFor2 = Math.ceil((1 - UPGRADE_INFO[UPGRADES.MULTI_HARVEST].baseChance) / UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment) + 1;
-    const excessLevels = multiHarvestLevel - maxLevelsFor2;
-    const tripleChance = Math.max(0, excessLevels * UPGRADE_INFO[UPGRADES.MULTI_HARVEST].increment);
-    
-    if (Math.random() < tripleChance) return 3;
-    return 2; // Toujours au moins 2 si on a 100%
-  }
-  
-  // Sinon, chance normale de 2 blés
-  return Math.random() < chance ? 2 : 1;
+export const getHarvestChance = (harvestChanceLevel = 0) => {
+  if (harvestChanceLevel === 0) return 0;
+  const info = UPGRADE_INFO[UPGRADES.HARVEST_CHANCE];
+  return Math.min(1, info.baseChance + ((harvestChanceLevel - 1) * info.increment));
 };
 
 export const getCriticalHarvestChance = (criticalHarvestLevel = 0) => {
