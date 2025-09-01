@@ -602,7 +602,7 @@ const FarmGame = () => {
           <div>
             <Progress value={xpProgress} className="h-3 bg-discord-primary" />
             <p className="text-xs text-discord-muted mt-1">
-              XP: {gameData.player.xp} / {xpRequired} (Multiplicateur: x{getXpMultiplier(gameData.player.level)})
+              XP: {levelInfo.currentLevelXp} / {levelInfo.xpToNext} (Multiplicateur: x{getXpMultiplier(levelInfo.level)})
             </p>
           </div>
         </Card>
