@@ -105,43 +105,7 @@
 user_problem_statement: "Modifications avancées du jeu de blé : 1) Réduire niveau max terrain à 8, 2) Chance de récolte 10% base + 5% par niveau, avec système 2 blé base à 100%+, 3) XP exponentielle selon paliers terrain, 4) Statistique blé cliqué corrigée, 5) 4 nouveaux paliers de rareté, 6) Total blés récoltés par rareté avec probabilités, 7) Agrandir icônes blé selon taille terrain"
 
 frontend:
-  - task: "Correction des couleurs de fond pour les raretés de blés"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/FarmGame.css"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Ajout de classes CSS spécifiques pour chaque rareté avec !important pour écraser les styles de base. Classes rarity-uncommon, rarity-rare, rarity-epic, rarity-legendary, rarity-mythic, rarity-divine ajoutées"
-
-  - task: "Modification du système de chance de récolte"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/FarmGame.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main"
-        comment: "Remplacement du système MULTI_HARVEST par HARVEST_CHANCE. Nouvelle logique : lors de la récolte d'un blé, cherche un autre blé mature et le récolte avec une certaine probabilité"
-
-  - task: "Correction du système de récolte automatique"
-    implemented: true
-    working: true
-    file: "/app/frontend/src/components/FarmGame.jsx"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: false
-    status_history:
-      - working: true
-        agent: "main" 
-        comment: "Modification pour ne récolter qu'un nombre limité de blés selon le niveau (au lieu de tous les blés matures). Implémentation du système de niveaux avec intervalles dégressifs et augmentation du nombre de blés récoltés"
-
-  - task: "Ajout des niveaux multiples pour récolte automatique"
+  - task: "Réduction niveau max terrain à 8"
     implemented: true
     working: true
     file: "/app/frontend/src/data/mock.js"
@@ -151,7 +115,79 @@ frontend:
     status_history:
       - working: true
         agent: "main"
-        comment: "Système de niveaux infinis implémenté : Niveau 1-6 : intervalle diminue de 0.5s par niveau, à partir du niveau 6 : +1 blé récolté et remise du cooldown. Prix exponentiel x1.5"
+        comment: "Modification de GRID_SIZES et UPGRADE_INFO[GRID_SIZE] pour ne garder que 8 niveaux maximum au lieu de 11"
+
+  - task: "Nouveau système chance de récolte 10% base + 5% par niveau"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/data/mock.js, /app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Modifié increment de 0.04 à 0.05, supprimé maxLevel. À 100%+, système 2 blé base + % pour supplémentaires implémenté"
+
+  - task: "XP exponentielle selon paliers de terrain"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/data/mock.js, /app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Nouvelles fonctions getXpMultiplier et getXpRequired. Multiplie XP par 4 à chaque palier de terrain atteint"
+
+  - task: "Correction statistique blé cliqué"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "TotalClicks maintenant compte les blés de récolte multiple et automatique correctement"
+
+  - task: "4 nouveaux paliers de rareté"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/data/mock.js, /app/frontend/src/components/FarmGame.css"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Ajout de TRANSCENDENT (entre Mythic et Divine), CELESTIAL, COSMIC, OMNIPOTENT avec couleurs CSS et valeurs appropriées"
+
+  - task: "Total blés récoltés par rareté avec probabilités"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/data/mock.js, /app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Nouvel onglet Raretés avec harvestedByRarity, tri du plus rare au moins rare, format probabilité 1/X"
+
+  - task: "Agrandir icônes blé selon taille terrain"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FarmGame.css"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Augmenté tailles d'icônes dans wheat-sprite-idle pour tous les grid sizes. Grid-1: 56px, Grid-8: 18px"
 
   - task: "Migration des données sauvegardées"
     implemented: true
@@ -163,7 +199,7 @@ frontend:
     status_history:
       - working: true
         agent: "main"
-        comment: "Migration automatique de multiHarvest vers harvestChance pour préserver les données des joueurs existants"
+        comment: "Migration automatique pour harvestedByRarity et nouveaux types de blé pour préserver les données existantes"
 
 backend:
   - task: "Aucune modification backend requise"
