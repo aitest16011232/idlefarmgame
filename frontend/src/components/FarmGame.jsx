@@ -529,9 +529,8 @@ const FarmGame = () => {
 
   const cheatResources = () => {
     setGameData(prev => {
-      const newXp = prev.player.xp + 1000;
-      const xpRequired = getXpRequired(prev.player.level);
-      const newLevel = Math.floor(newXp / xpRequired) + 1;
+      const newTotalXp = prev.player.xp + 1000;
+      const newLevelInfo = calculateLevelFromXp(newTotalXp);
       
       return {
         ...prev,
@@ -541,9 +540,9 @@ const FarmGame = () => {
         },
         player: {
           ...prev.player,
-          level: newLevel,
-          xp: newXp,
-          xpToNext: xpRequired
+          level: newLevelInfo.level,
+          xp: newTotalXp,
+          xpToNext: newLevelInfo.xpToNext
         }
       };
     });
