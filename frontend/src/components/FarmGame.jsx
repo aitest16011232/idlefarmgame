@@ -536,6 +536,59 @@ const FarmGame = () => {
       </div>
 
       <div className="game-content">
+        {/* Historique des récoltes */}
+        <div className="harvest-history-section">
+          <Card className="p-4 bg-discord-secondary border-discord-accent">
+            <h3 className="text-lg font-bold mb-3 text-center text-discord-text">
+              <span className="mr-2">📊</span>
+              Historique des Récoltes
+            </h3>
+            <div className="harvest-history-list">
+              {harvestHistory.length === 0 ? (
+                <p className="text-discord-muted text-sm text-center">Aucune récolte encore</p>
+              ) : (
+                harvestHistory.map((entry) => {
+                  const wheatInfo = WHEAT_TYPE_INFO[entry.wheatType];
+                  return (
+                    <div 
+                      key={entry.id} 
+                      className={`harvest-entry p-2 mb-2 rounded border ${
+                        entry.isBonus ? 'border-discord-green bg-discord-green/10' : 'border-discord-accent bg-discord-primary'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">🌾</span>
+                          <div>
+                            <div className={`font-semibold ${
+                              entry.wheatType === WHEAT_TYPES.COMMON ? 'text-discord-text' :
+                              entry.wheatType === WHEAT_TYPES.UNCOMMON ? 'text-green-400' :
+                              entry.wheatType === WHEAT_TYPES.RARE ? 'text-blue-400' :
+                              entry.wheatType === WHEAT_TYPES.EPIC ? 'text-purple-400' :
+                              entry.wheatType === WHEAT_TYPES.LEGENDARY ? 'text-yellow-400' :
+                              entry.wheatType === WHEAT_TYPES.MYTHIC ? 'text-pink-400' :
+                              'text-indigo-400'
+                            }`}>
+                              {wheatInfo.name}
+                              {entry.isBonus && <span className="text-discord-green ml-1">(Bonus)</span>}
+                              {entry.isCritical && <span className="text-discord-red ml-1">⚡</span>}
+                            </div>
+                            <div className="text-discord-muted text-xs">{entry.timestamp}</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-discord-text font-semibold">+{entry.totalWheat}🌾</div>
+                          <div className="text-discord-blurple text-xs">+{entry.xpGained}XP</div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </Card>
+        </div>
+
         {/* Terrain de jeu */}
         <div className="farm-section">
           <Card className="p-6 bg-discord-secondary border-discord-accent">
