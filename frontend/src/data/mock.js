@@ -175,7 +175,7 @@ export const UPGRADE_INFO = {
     name: "Taille du Terrain",
     description: "Augmente le nombre de cases cultivables",
     baseCost: 50,
-    maxLevel: 11,
+    maxLevel: 8,
     levels: [
       { cost: 0, value: 1, description: "1 case", reqLevel: 1 },
       { cost: 50, value: 4, description: "4 cases", reqLevel: 5 },
@@ -184,10 +184,7 @@ export const UPGRADE_INFO = {
       { cost: 1200, value: 25, description: "25 cases", reqLevel: 50 },
       { cost: 3000, value: 36, description: "36 cases", reqLevel: 75 },
       { cost: 7500, value: 49, description: "49 cases", reqLevel: 100 },
-      { cost: 18000, value: 64, description: "64 cases", reqLevel: 130 },
-      { cost: 45000, value: 81, description: "81 cases", reqLevel: 170 },
-      { cost: 110000, value: 100, description: "100 cases", reqLevel: 220 },
-      { cost: 275000, value: 121, description: "121 cases", reqLevel: 280 }
+      { cost: 18000, value: 64, description: "64 cases", reqLevel: 130 }
     ]
   },
   [UPGRADES.GROWTH_SPEED]: {
