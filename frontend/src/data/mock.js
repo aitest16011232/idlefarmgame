@@ -140,10 +140,10 @@ export const GRID_SIZES = {
   4: { size: 4, level: 5, name: "Terrain Moyen" },
   9: { size: 9, level: 15, name: "Grand Terrain" },
   16: { size: 16, level: 30, name: "Énorme Terrain" },
-  25: { size: 25, level: 50, name: "Terrain Massif" },
-  36: { size: 36, level: 75, name: "Terrain Gigantesque" },
-  49: { size: 49, level: 100, name: "Terrain Colossal" },
-  64: { size: 64, level: 130, name: "Terrain Titanesque" }
+  25: { size: 25, level: 75, name: "Terrain Massif" },
+  36: { size: 36, level: 150, name: "Terrain Gigantesque" },
+  49: { size: 49, level: 300, name: "Terrain Colossal" },
+  64: { size: 64, level: 500, name: "Terrain Titanesque" }
 };
 
 export const UPGRADES = {
