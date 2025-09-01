@@ -137,8 +137,12 @@ const FarmGame = () => {
 
         if (matureCells.length === 0) return prev;
 
-        // Récolter le nombre de blés selon le niveau (minimum 1, maximum le nombre disponible)
-        const cellsToHarvest = matureCells.slice(0, Math.min(harvestAmount, matureCells.length));
+        // Récolter le nombre de blés selon le niveau (sélection aléatoire)
+        const cellsToHarvest = [];
+        const shuffledCells = [...matureCells].sort(() => Math.random() - 0.5);
+        for (let i = 0; i < Math.min(harvestAmount, shuffledCells.length); i++) {
+          cellsToHarvest.push(shuffledCells[i]);
+        }
         
         let totalAutoWheat = 0;
         let totalAutoXp = 0;
