@@ -261,7 +261,6 @@ export const UPGRADE_INFO = {
   }
 };
 
-// État initial du jeu
 export const initialGameData = {
   grid: [
     [{ id: '0-0', state: WHEAT_STATES.SEED, plantedAt: Date.now(), wheatType: WHEAT_TYPES.COMMON, boosted: false, boostCooldown: 0 }]
@@ -269,7 +268,20 @@ export const initialGameData = {
   inventory: {
     wheat: 0,
     totalHarvested: 0, // Valeur réelle avec facteurs de rareté
-    totalClicks: 0 // Nombre de clics sans facteur
+    totalClicks: 0, // Nombre de clics avec récolte multiple et auto
+    harvestedByRarity: {
+      [WHEAT_TYPES.COMMON]: 0,
+      [WHEAT_TYPES.UNCOMMON]: 0,
+      [WHEAT_TYPES.RARE]: 0,
+      [WHEAT_TYPES.EPIC]: 0,
+      [WHEAT_TYPES.LEGENDARY]: 0,
+      [WHEAT_TYPES.MYTHIC]: 0,
+      [WHEAT_TYPES.TRANSCENDENT]: 0,
+      [WHEAT_TYPES.DIVINE]: 0,
+      [WHEAT_TYPES.CELESTIAL]: 0,
+      [WHEAT_TYPES.COSMIC]: 0,
+      [WHEAT_TYPES.OMNIPOTENT]: 0
+    }
   },
   player: {
     level: 1,
