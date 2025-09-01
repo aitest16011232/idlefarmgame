@@ -411,3 +411,20 @@ export const getNextGrowthSpeedThreshold = (totalClicks) => {
   }
   return null; // Max niveau atteint
 };
+
+// Fonction pour calculer la probabilité d'obtenir chaque type de blé
+export const getWheatTypeProbability = (wheatType, rareChanceLevel = 0) => {
+  const rareMultiplier = Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, rareChanceLevel);
+  const baseRarity = WHEAT_TYPE_INFO[wheatType].rarity;
+  const adjustedRarity = baseRarity * rareMultiplier;
+  
+  // Calculer la probabilité réelle en tenant compte des autres raretés
+  return Math.min(1, adjustedRarity);
+};
+
+// Fonction pour formater la probabilité en format "1/X"
+export const formatProbability = (probability) => {
+  if (probability >= 1) return "1/1";
+  const ratio = Math.round(1 / probability);
+  return `1/${ratio}`;
+};
