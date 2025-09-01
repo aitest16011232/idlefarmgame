@@ -471,3 +471,20 @@ export const formatProbability = (probability) => {
   const ratio = Math.round(1 / probability);
   return `1/${ratio}`;
 };
+
+// Fonction pour calculer le niveau de compétence de récolte complète basé sur le niveau du joueur
+export const getFullHarvestSkillLevel = (playerLevel) => {
+  const levelString = playerLevel.toString();
+  const digitCount = levelString.length;
+  
+  if (digitCount === 1) return 0; // Lvl 1-9 = niveau 0
+  if (digitCount === 2) return 1; // Lvl 10-99 = niveau 1
+  if (digitCount === 3) return 2; // Lvl 100-999 = niveau 2
+  return Math.min(3, digitCount - 1); // Maximum niveau 3
+};
+
+// Fonction pour calculer le pourcentage de chance de récolte complète
+export const getFullHarvestChance = (playerLevel) => {
+  const skillLevel = getFullHarvestSkillLevel(playerLevel);
+  return skillLevel * 0.25; // 0.25% par niveau de compétence
+};
