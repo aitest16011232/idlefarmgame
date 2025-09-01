@@ -331,6 +331,25 @@
   width: 100%;
 }
 
+/* Historique des récoltes */
+.harvest-history-section {
+  width: 100%;
+}
+
+.harvest-history-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.harvest-entry {
+  transition: all 0.2s ease;
+}
+
+.harvest-entry:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
 .upgrade-card {
   transition: all 0.2s ease;
 }
