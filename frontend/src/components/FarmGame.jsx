@@ -355,6 +355,10 @@ const FarmGame = () => {
         const bonusCriticalMultiplier = bonusIsCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
         bonusHarvest = bonusWheatValue * harvestAmount * bonusCriticalMultiplier;
         
+        // Ajouter la récolte bonus à l'historique
+        const bonusXpGained = Math.floor(bonusWheatValue * 5 * xpMultiplier);
+        addToHarvestHistory(bonusWheatType, bonusHarvest, bonusXpGained, bonusIsCritical, true);
+        
         // Marquer cette cellule pour réinitialisation
         setGameData(prevData => ({
           ...prevData,
