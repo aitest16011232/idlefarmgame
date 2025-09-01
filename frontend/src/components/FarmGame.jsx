@@ -804,12 +804,14 @@ const FarmGame = () => {
                           <div className="flex items-center gap-2 mb-1">
                             {upgradeType === UPGRADES.GROWTH_SPEED ? (
                               <Target className="w-4 h-4 text-discord-green" />
-                            ) : upgradeType === UPGRADES.AUTO_HARVEST ? (
+                            ) : upgradeType === UPGRADES.AUTO_HARVEST_CHANCE ? (
                               <Clock className="w-4 h-4 text-discord-blurple" />
                             ) : upgradeType === UPGRADES.CRITICAL_HARVEST ? (
                               <Flame className="w-4 h-4 text-discord-red" />
                             ) : upgradeType === UPGRADES.EXPERIENCE_BOOST ? (
                               <BookOpen className="w-4 h-4 text-discord-yellow" />
+                            ) : upgradeType === UPGRADES.FULL_HARVEST_SKILL ? (
+                              <Target className="w-4 h-4 text-discord-green" />
                             ) : (
                               <TrendingUp className="w-4 h-4 text-discord-blurple" />
                             )}
