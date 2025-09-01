@@ -137,7 +137,7 @@
   height: 100%;
 }
 
-/* Tailles d'icônes proportionnelles à la grille */
+/* Tailles d'icônes proportionnelles à la grille - PLUS GRANDES */
 .wheat-sprite-idle {
   transition: transform 0.3s ease;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
@@ -146,17 +146,14 @@
   justify-content: center;
 }
 
-.wheat-sprite-idle.grid-1 { font-size: 48px; }
-.wheat-sprite-idle.grid-2 { font-size: 36px; }
-.wheat-sprite-idle.grid-3 { font-size: 28px; }
-.wheat-sprite-idle.grid-4 { font-size: 24px; }
-.wheat-sprite-idle.grid-5 { font-size: 20px; }
-.wheat-sprite-idle.grid-6 { font-size: 18px; }
-.wheat-sprite-idle.grid-7 { font-size: 16px; }
-.wheat-sprite-idle.grid-8 { font-size: 14px; }
-.wheat-sprite-idle.grid-9 { font-size: 12px; }
-.wheat-sprite-idle.grid-10 { font-size: 11px; }
-.wheat-sprite-idle.grid-11 { font-size: 10px; }
+.wheat-sprite-idle.grid-1 { font-size: 56px; }
+.wheat-sprite-idle.grid-2 { font-size: 44px; }
+.wheat-sprite-idle.grid-3 { font-size: 34px; }
+.wheat-sprite-idle.grid-4 { font-size: 30px; }
+.wheat-sprite-idle.grid-5 { font-size: 26px; }
+.wheat-sprite-idle.grid-6 { font-size: 22px; }
+.wheat-sprite-idle.grid-7 { font-size: 20px; }
+.wheat-sprite-idle.grid-8 { font-size: 18px; }
 
 .farm-cell-idle:hover .wheat-sprite-idle {
   transform: scale(1.1);
