@@ -214,9 +214,9 @@ export const UPGRADE_INFO = {
     name: "Chance de Récolte",
     description: "Chance de récolter un blé mature supplémentaire",
     baseCost: 150,
-    maxLevel: 25,
+    maxLevel: Infinity,
     baseChance: 0.1, // 10% de base
-    increment: 0.04, // +4% par niveau
+    increment: 0.05, // +5% par niveau
     unlockLevel: 5 // Déblocké au niveau 5
   },
   [UPGRADES.AUTO_HARVEST]: {
