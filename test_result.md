@@ -174,13 +174,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Test du nouveau système XP exponentiel"
-    - "Test du système chance de récolte 100%+ avec 2 blé base"
-    - "Test des nouveaux paliers de rareté"
-    - "Test de l'onglet statistiques par rareté"
-    - "Test des icônes agrandies selon taille terrain"
+    - "Test du système chance de récolte corrigé (N base + % pour suivant)"
+    - "Test des nouveaux paliers de terrain (5, 15, 30, 75, 150, 300, 500, 1000, 2000)"
+    - "Test affichage FULL_HARVEST_SKILL dans améliorations"
+    - "Test récolte automatique avec deux propriétés (chance achetable + vitesse auto)"
   stuck_tasks: []
-  test_all: false
+  test_all: true
   test_priority: "high_first"
 
 agent_communication:
