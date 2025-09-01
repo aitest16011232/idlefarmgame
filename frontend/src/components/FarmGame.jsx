@@ -192,7 +192,14 @@ const FarmGame = () => {
 
         if (totalAutoWheat > 0) {
           const newXp = prev.player.xp + totalAutoXp;
-          const newLevel = Math.floor(newXp / 100) + 1;
+          const xpRequired = getXpRequired(prev.player.level);
+          const newLevel = Math.floor(newXp / xpRequired) + 1;
+
+          // Mise à jour des statistiques par rareté
+          const newHarvestedByRarity = { ...prev.inventory.harvestedByRarity };
+          cellsToHarvest.forEach(({ cell }) => {
+            newHarvestedByRarity[cell.wheatType] = (newHarvestedByRarity[cell.wheatType] || 0) + 1;
+          });
 
           return {
             ...prev,
@@ -201,13 +208,14 @@ const FarmGame = () => {
               ...prev.inventory,
               wheat: prev.inventory.wheat + totalAutoWheat,
               totalHarvested: prev.inventory.totalHarvested + totalAutoWheat,
-              totalClicks: prev.inventory.totalClicks + cellsToHarvest.length
+              totalClicks: prev.inventory.totalClicks + cellsToHarvest.length,
+              harvestedByRarity: newHarvestedByRarity
             },
             player: {
               ...prev.player,
               level: newLevel,
               xp: newXp,
-              xpToNext: newLevel * 100
+              xpToNext: xpRequired
             }
           };
         }
