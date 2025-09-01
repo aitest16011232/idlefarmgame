@@ -234,3 +234,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Toutes les modifications avancées demandées ont été implémentées avec succès : 1) Niveau max terrain réduit à 8, 2) Nouveau système chance de récolte 10% base + 5% par niveau avec 2 blé base à 100%+, 3) XP exponentielle multipliée par 4 à chaque palier terrain, 4) Statistique blé cliqué corrigée pour compter récolte multiple/auto, 5) 4 nouveaux paliers de rareté ajout pour 11 au total, 6) Nouvel onglet Raretés avec tri et probabilités, 7) Icônes blé agrandies selon taille terrain. Prêt pour tests complets."
+  - agent: "main"
+    message: "Nouvelles améliorations d'affichage des bonus implémentées : 1) Récolte automatique : affiche intervalle et nombre de blé récolté, 2) Récolte multiple : affiche probabilité et quantité, 3) Vitesse de croissance : affiche temps de repousse et niveau suivant, 4) Chance de rareté : affiche multiplicateur actuel et niveau suivant, 5) Récolte critique : affiche % actuel et niveau suivant, 6) Statistiques : ajout du boost d'XP actuel. Tous les bonus affichent maintenant leurs spécificités détaillées."
