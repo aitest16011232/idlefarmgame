@@ -114,7 +114,7 @@ export const UPGRADES = {
   GROWTH_SPEED: 'growthSpeed',
   HARVEST_AMOUNT: 'harvestAmount',
   RARE_CHANCE: 'rareChance',
-  MULTI_HARVEST: 'multiHarvest',
+  HARVEST_CHANCE: 'harvestChance',
   AUTO_HARVEST: 'autoHarvest',
   CRITICAL_HARVEST: 'criticalHarvest',
   EXPERIENCE_BOOST: 'experienceBoost'
