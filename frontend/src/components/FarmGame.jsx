@@ -376,9 +376,9 @@ const FarmGame = () => {
       const harvestChance = getHarvestChance(gameData.upgrades[UPGRADES.HARVEST_CHANCE]);
       
       if (harvestChance >= 1.0) {
-        // À 100%+, on récolte 2 blés de base + chance pour les suivants
-        const baseHarvests = 2;
-        const extraChance = harvestChance - 1.0; // Chance pour le 3ème, 4ème, etc.
+        // À 100%+, on calcule le nombre de blés de base garanti + chance pour les suivants
+        const baseHarvests = Math.floor(harvestChance); // Nombre de blés garantis (1 à 100%, 2 à 200%, etc.)
+        const extraChance = harvestChance - Math.floor(harvestChance); // Chance pour le suivant
         
         // Collecter tous les autres blés matures
         const otherMatureCells = [];
@@ -394,20 +394,14 @@ const FarmGame = () => {
           // Mélanger les cellules
           const shuffledCells = [...otherMatureCells].sort(() => Math.random() - 0.5);
           
-          // Récolter les 2 premiers (base) + chance pour les suivants
+          // Récolter le nombre de base garanti
           for (let i = 0; i < Math.min(shuffledCells.length, baseHarvests); i++) {
             harvestedCells.push(shuffledCells[i]);
           }
           
-          // Pour les suivants, utiliser la chance restante
-          let currentChance = extraChance;
-          for (let i = baseHarvests; i < shuffledCells.length && currentChance > 0; i++) {
-            if (Math.random() < currentChance) {
-              harvestedCells.push(shuffledCells[i]);
-              currentChance = Math.max(0, currentChance - 1.0); // Diminuer la chance
-            } else {
-              break;
-            }
+          // Pour le suivant, utiliser la chance restante
+          if (baseHarvests < shuffledCells.length && extraChance > 0 && Math.random() < extraChance) {
+            harvestedCells.push(shuffledCells[baseHarvests]);
           }
         }
       } else if (harvestChance > 0) {
