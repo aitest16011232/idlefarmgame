@@ -846,14 +846,6 @@ const FarmGame = () => {
                               Récolte: {UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestAmount(currentLevel)} blé(s)
                             </p>
                           )}
-                          {upgradeType === UPGRADES.HARVEST_CHANCE && currentLevel > 0 && (
-                            <p className="text-xs text-discord-green">
-                              Probabilité: {getHarvestChance(currentLevel) >= 1.0 
-                                ? `2 base + ${Math.round((getHarvestChance(currentLevel) - 1.0) * 100)}%`
-                                : `${Math.round(getHarvestChance(currentLevel) * 100)}%`
-                              } | Blé récolté: {getHarvestChance(currentLevel) >= 1.0 ? '2+' : '1'}
-                            </p>
-                          )}
                           {upgradeType === UPGRADES.GROWTH_SPEED && (
                             <p className="text-xs text-discord-green">
                               Temps de repousse: {Math.round(getGrowthTime(currentLevel) / 1000)}s
