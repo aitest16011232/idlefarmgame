@@ -358,9 +358,9 @@ const FarmGame = () => {
         ),
         inventory: {
           ...prev.inventory,
-          wheat: prev.inventory.wheat + totalWheat,
-          totalHarvested: prev.inventory.totalHarvested + totalWheat, // Avec facteur de rareté
-          totalClicks: prev.inventory.totalClicks + 1 // +1 clic sans facteur
+          wheat: prev.inventory.wheat + totalWheat + bonusHarvest,
+          totalHarvested: prev.inventory.totalHarvested + totalWheat + bonusHarvest,
+          totalClicks: prev.inventory.totalClicks + 1
         },
         player: {
           ...prev.player,
