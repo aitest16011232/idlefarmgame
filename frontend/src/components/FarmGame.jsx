@@ -652,6 +652,11 @@ const FarmGame = () => {
                               Prochain: {info.levels[currentLevel + 1].description} (Niv. {info.levels[currentLevel + 1].reqLevel})
                             </p>
                           )}
+                          {upgradeType === UPGRADES.GROWTH_SPEED && nextGrowthThreshold && (
+                            <p className="text-xs text-discord-green">
+                              Prochain: {nextGrowthThreshold.name} ({gameData.inventory.totalClicks}/{nextGrowthThreshold.clicks} clics)
+                            </p>
+                          )}
                           {upgradeType === UPGRADES.AUTO_HARVEST && currentLevel > 0 && (
                             <p className="text-xs text-discord-green">
                               Intervalle: {Math.round(UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestInterval(currentLevel) / 1000)}s | 
