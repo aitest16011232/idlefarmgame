@@ -584,7 +584,7 @@ const FarmGame = () => {
               <div className="flex items-center gap-2">
                 <Star className="w-5 h-5 text-discord-blurple" />
                 <span className="font-semibold text-discord-text">
-                  Niveau {gameData.player.level}
+                  Niveau {levelInfo.level}
                 </span>
               </div>
             </div>
