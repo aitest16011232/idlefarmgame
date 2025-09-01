@@ -828,6 +828,32 @@ const FarmGame = () => {
                               Récolte: {UPGRADE_INFO[UPGRADES.AUTO_HARVEST].getHarvestAmount(currentLevel)} blé(s)
                             </p>
                           )}
+                          {upgradeType === UPGRADES.HARVEST_CHANCE && currentLevel > 0 && (
+                            <p className="text-xs text-discord-green">
+                              Probabilité: {getHarvestChance(currentLevel) >= 1.0 
+                                ? `2 base + ${Math.round((getHarvestChance(currentLevel) - 1.0) * 100)}%`
+                                : `${Math.round(getHarvestChance(currentLevel) * 100)}%`
+                              } | Blé récolté: {getHarvestChance(currentLevel) >= 1.0 ? '2+' : '1'}
+                            </p>
+                          )}
+                          {upgradeType === UPGRADES.GROWTH_SPEED && (
+                            <p className="text-xs text-discord-green">
+                              Temps de repousse: {Math.round(getGrowthTime(currentLevel) / 1000)}s
+                              {nextGrowthThreshold && ` | Prochain niveau: ${nextGrowthThreshold.name}`}
+                            </p>
+                          )}
+                          {upgradeType === UPGRADES.RARE_CHANCE && currentLevel > 0 && (
+                            <p className="text-xs text-discord-green">
+                              Multiplicateur actuel: x{Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, currentLevel).toFixed(2)} | 
+                              Prochain niveau: x{Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, currentLevel + 1).toFixed(2)}
+                            </p>
+                          )}
+                          {upgradeType === UPGRADES.CRITICAL_HARVEST && currentLevel > 0 && (
+                            <p className="text-xs text-discord-green">
+                              Critique actuel: {Math.round(getCriticalHarvestChance(currentLevel) * 100)}% | 
+                              Prochain niveau: {Math.round(getCriticalHarvestChance(currentLevel + 1) * 100)}%
+                            </p>
+                          )}
                         </div>
                         <div className="text-right">
                           {isAutoUnlock ? (
