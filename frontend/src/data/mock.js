@@ -151,10 +151,12 @@ export const UPGRADES = {
   GROWTH_SPEED: 'growthSpeed',
   HARVEST_AMOUNT: 'harvestAmount',
   RARE_CHANCE: 'rareChance',
-  HARVEST_CHANCE: 'harvestChance',
-  AUTO_HARVEST: 'autoHarvest',
+  MULTI_HARVEST: 'multiHarvest', // Renommé de HARVEST_CHANCE
+  AUTO_HARVEST_CHANCE: 'autoHarvestChance', // Nouvelle amélioration achetable
+  AUTO_HARVEST_SPEED: 'autoHarvestSpeed', // Nouvelle amélioration basée sur récoltes
   CRITICAL_HARVEST: 'criticalHarvest',
-  EXPERIENCE_BOOST: 'experienceBoost'
+  EXPERIENCE_BOOST: 'experienceBoost',
+  FULL_HARVEST_SKILL: 'fullHarvestSkill' // Nouvelle compétence
 };
 
 export const GROWTH_SPEED_THRESHOLDS = [
