@@ -287,6 +287,7 @@ export const initialGameData = {
     wheat: 0,
     totalHarvested: 0, // Valeur réelle avec facteurs de rareté
     totalClicks: 0, // Nombre de clics avec récolte multiple et auto
+    totalAutoHarvested: 0, // Nouveau : nombre total de blés récoltés automatiquement
     harvestedByRarity: {
       [WHEAT_TYPES.COMMON]: 0,
       [WHEAT_TYPES.UNCOMMON]: 0,
