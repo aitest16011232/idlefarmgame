@@ -233,4 +233,4 @@ test_plan:
 
 agent_communication:
   - agent: "main"
-    message: "Toutes les corrections demandées ont été implémentées avec succès. Les tests visuels montrent que les couleurs de raretés s'affichent correctement, le système de chance de récolte a remplacé la récolte multiple, et la récolte automatique fonctionne avec le nouveau système de niveaux. Prêt pour tests complets si nécessaire."
+    message: "Toutes les modifications avancées demandées ont été implémentées avec succès : 1) Niveau max terrain réduit à 8, 2) Nouveau système chance de récolte 10% base + 5% par niveau avec 2 blé base à 100%+, 3) XP exponentielle multipliée par 4 à chaque palier terrain, 4) Statistique blé cliqué corrigée pour compter récolte multiple/auto, 5) 4 nouveaux paliers de rareté ajout pour 11 au total, 6) Nouvel onglet Raretés avec tri et probabilités, 7) Icônes blé agrandies selon taille terrain. Prêt pour tests complets."
