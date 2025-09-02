@@ -370,7 +370,7 @@ export const UPGRADE_INFO = {
 
 export const initialGameData = {
   grid: [
-    [{ id: '0-0', state: WHEAT_STATES.SEED, plantedAt: Date.now(), wheatType: WHEAT_TYPES.COMMON, boosted: false, boostCooldown: 0 }]
+    [{ id: '0-0', state: WHEAT_STATES.SEED, plantedAt: Date.now(), wheatType: WHEAT_TYPES.COMMON, grade: WHEAT_GRADES.NONE, boosted: false, boostCooldown: 0 }]
   ],
   inventory: {
     wheat: 0,
@@ -389,6 +389,13 @@ export const initialGameData = {
       [WHEAT_TYPES.CELESTIAL]: 0,
       [WHEAT_TYPES.COSMIC]: 0,
       [WHEAT_TYPES.OMNIPOTENT]: 0
+    },
+    // Nouvelles statistiques pour les grades
+    harvestedByGrade: {
+      [WHEAT_GRADES.GOLD]: 0,
+      [WHEAT_GRADES.DIAMOND]: 0,
+      [WHEAT_GRADES.RAINBOW]: 0,
+      [WHEAT_GRADES.VOID]: 0
     }
   },
   player: {
