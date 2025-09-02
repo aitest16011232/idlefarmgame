@@ -110,6 +110,7 @@ const FarmGame = () => {
           state: WHEAT_STATES.SEED,
           plantedAt: Date.now(),
           wheatType: WHEAT_TYPES.COMMON,
+          grade: WHEAT_GRADES.NONE,
           boosted: false,
           boostCooldown: 0
         });
