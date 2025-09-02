@@ -1291,6 +1291,95 @@ const FarmGame = () => {
                   </div>
                 </div>
               </TabsContent>
+
+              <TabsContent value="grades" className="space-y-4">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-bold text-center text-discord-text">
+                    <span className="mr-2">⭐</span>
+                    Statistiques des Blés Gradés
+                  </h3>
+                  <div className="space-y-2">
+                    {Object.values(WHEAT_GRADES)
+                      .filter(grade => grade !== WHEAT_GRADES.NONE)
+                      .reverse() // Afficher du plus rare au moins rare (Void -> Or)
+                      .map(grade => {
+                        const gradeInfo = WHEAT_GRADE_INFO[grade];
+                        const count = gameData.inventory.harvestedByGrade?.[grade] || 0;
+                        const probability = formatProbability(gradeInfo.probability);
+                        
+                        return (
+                          <div key={grade} className="flex items-center justify-between p-3 border border-discord-accent rounded-lg bg-discord-primary">
+                            <div className="flex items-center gap-3">
+                              <div className="relative">
+                                <span className="text-2xl">🌾</span>
+                                <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-xs font-bold" 
+                                     style={{ 
+                                       backgroundColor: gradeInfo.starColor.includes('gradient') ? undefined : gradeInfo.starColor,
+                                       background: gradeInfo.starColor.includes('gradient') ? gradeInfo.starColor : undefined,
+                                       color: 'white',
+                                       textShadow: '0 0 2px rgba(0,0,0,0.8)'
+                                     }}>
+                                  ⭐
+                                </div>
+                              </div>
+                              <div>
+                                <div className="font-semibold text-discord-text" style={{ color: gradeInfo.starColor.includes('gradient') ? '#fff' : gradeInfo.starColor }}>
+                                  {gradeInfo.name}
+                                </div>
+                                <div className="text-xs text-discord-muted">
+                                  Probabilité: {probability} | Multiplicateur: x{gradeInfo.multiplier}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-discord-text">{count.toLocaleString()}</div>
+                              <div className="text-sm text-discord-muted">obtenus</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    {Object.values(WHEAT_GRADES).filter(grade => grade !== WHEAT_GRADES.NONE).every(grade => (gameData.inventory.harvestedByGrade?.[grade] || 0) === 0) && (
+                      <div className="text-center text-discord-muted py-8">
+                        <p>Aucun blé gradé obtenu encore.</p>
+                        <p className="text-sm mt-2">Les blés gradés sont très rares - continuez à récolter !</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Section des probabilités actuelles */}
+                  <div className="mt-6">
+                    <h4 className="text-md font-bold text-center text-discord-text mb-3">
+                      <span className="mr-2">🎲</span>
+                      Probabilités Actuelles
+                    </h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      {Object.values(WHEAT_GRADES)
+                        .filter(grade => grade !== WHEAT_GRADES.NONE)
+                        .map(grade => {
+                          const gradeInfo = WHEAT_GRADE_INFO[grade];
+                          const upgradeType = getGradeBoostUpgradeType(grade);
+                          const boostLevel = upgradeType ? gameData.upgrades[upgradeType] : 0;
+                          const currentProbability = getGradeProbability(grade, boostLevel);
+                          
+                          return (
+                            <div key={grade} className="p-3 border border-discord-accent rounded-lg bg-discord-primary">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span style={{ color: gradeInfo.starColor.includes('gradient') ? '#fff' : gradeInfo.starColor }}>⭐</span>
+                                <span className="font-semibold text-discord-text">{gradeInfo.name}</span>
+                              </div>
+                              <div className="text-xs text-discord-muted">
+                                Base: {formatProbability(gradeInfo.probability)}
+                              </div>
+                              <div className="text-xs text-discord-green">
+                                Actuel: {formatProbability(currentProbability)} {boostLevel > 0 && `(Niv. ${boostLevel})`}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
             </Tabs>
           </Card>
         </div>
