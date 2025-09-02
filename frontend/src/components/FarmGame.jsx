@@ -264,11 +264,21 @@ const FarmGame = () => {
               totalAutoWheat += wheatHarvested;
               totalAutoXp += xpGained;
 
+              const newWheat = generateRandomWheat(
+                prev.upgrades[UPGRADES.RARE_CHANCE],
+                {
+                  [UPGRADES.GOLD_GRADE_BOOST]: prev.upgrades[UPGRADES.GOLD_GRADE_BOOST],
+                  [UPGRADES.DIAMOND_GRADE_BOOST]: prev.upgrades[UPGRADES.DIAMOND_GRADE_BOOST],
+                  [UPGRADES.RAINBOW_GRADE_BOOST]: prev.upgrades[UPGRADES.RAINBOW_GRADE_BOOST],
+                  [UPGRADES.VOID_GRADE_BOOST]: prev.upgrades[UPGRADES.VOID_GRADE_BOOST]
+                }
+              );
               return {
                 ...cell,
                 state: WHEAT_STATES.SEED,
                 plantedAt: Date.now(),
-                wheatType: getRandomWheatType(prev.upgrades[UPGRADES.RARE_CHANCE]),
+                wheatType: newWheat.wheatType,
+                grade: newWheat.grade,
                 boosted: false,
                 boostCooldown: 0
               };
