@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { 
   Sprout, Star, RotateCcw, TrendingUp, Clock, 
   Zap, Sparkles, ShoppingCart, Lock, Coins, Gamepad2, Target, 
-  Flame, Trophy, BookOpen
+  Flame, Trophy, BookOpen, ChevronDown, ChevronRight
 } from 'lucide-react';
 import { 
   initialGameData, 
