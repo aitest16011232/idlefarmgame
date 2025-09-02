@@ -1098,8 +1098,16 @@ const FarmGame = () => {
                                 )}
                                 {upgradeType === UPGRADES.AUTO_HARVEST_CHANCE && currentLevel > 0 && (
                                   <p className="text-xs text-discord-green">
-                                    Chance: {Math.round(getAutoHarvestChance(currentLevel) * 100)}% | 
-                                    Intervalle: {Math.round(getAutoHarvestInterval(getAutoHarvestSpeedLevel(gameData.inventory.totalAutoHarvested)) / 1000)}s
+                                    {(() => {
+                                      const chance = getAutoHarvestChance(currentLevel);
+                                      if (chance >= 1.0) {
+                                        const baseHarvests = Math.floor(chance);
+                                        const extraChance = Math.round((chance - baseHarvests) * 100);
+                                        return `${baseHarvests} blé(s) garanti(s) + ${extraChance}% pour le suivant`;
+                                      } else {
+                                        return `${Math.round(chance * 100)}% de chance`;
+                                      }
+                                    })()} | Toutes les 10s
                                   </p>
                                 )}
                                 {upgradeType === UPGRADES.AUTO_HARVEST_SPEED && (
