@@ -413,7 +413,12 @@ export const initialGameData = {
     [UPGRADES.AUTO_HARVEST_SPEED]: 0,
     [UPGRADES.CRITICAL_HARVEST]: 0,
     [UPGRADES.EXPERIENCE_BOOST]: 0,
-    [UPGRADES.FULL_HARVEST_SKILL]: 0
+    [UPGRADES.FULL_HARVEST_SKILL]: 0,
+    // Nouvelles améliorations pour les grades
+    [UPGRADES.GOLD_GRADE_BOOST]: 0,
+    [UPGRADES.DIAMOND_GRADE_BOOST]: 0,
+    [UPGRADES.RAINBOW_GRADE_BOOST]: 0,
+    [UPGRADES.VOID_GRADE_BOOST]: 0
   },
   settings: {
     autoPlant: false,
