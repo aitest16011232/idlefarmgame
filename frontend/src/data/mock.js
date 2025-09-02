@@ -487,7 +487,15 @@ export const getHarvestChance = (harvestChanceLevel = 0) => {
 export const getAutoHarvestChance = (autoHarvestChanceLevel = 0) => {
   if (autoHarvestChanceLevel === 0) return 0;
   const info = UPGRADE_INFO[UPGRADES.AUTO_HARVEST_CHANCE];
-  return info.baseChance + ((autoHarvestChanceLevel - 1) * info.increment);
+  
+  // Nouveau système : 1 blé de base (100%) + 10% de base pour le second + 5% par niveau
+  // Niveau 1: 1 blé + 10% pour un 2ème
+  // Niveau 2: 1 blé + 15% pour un 2ème  
+  // Niveau 20: 1 blé + 105% = 2 blés + 5% pour un 3ème
+  const baseSecondChance = 0.1; // 10% de base pour le deuxième blé
+  const totalChance = info.baseChance + baseSecondChance + ((autoHarvestChanceLevel - 1) * info.increment);
+  
+  return totalChance;
 };
 
 export const getAutoHarvestSpeedLevel = (totalAutoHarvested) => {
