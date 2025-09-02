@@ -871,6 +871,33 @@ const FarmGame = () => {
                         <span className={`wheat-sprite-idle grid-${gridSize}`}>
                           {cell.state === WHEAT_STATES.MATURE ? '🌾' : stateInfo.emoji}
                         </span>
+                        {/* Affichage de l'étoile pour les grades */}
+                        {cell.grade && cell.grade !== WHEAT_GRADES.NONE && cell.state === WHEAT_STATES.MATURE && (
+                          <div className="grade-star" style={{
+                            position: 'absolute',
+                            top: '2px',
+                            right: '2px',
+                            fontSize: '12px',
+                            background: WHEAT_GRADE_INFO[cell.grade].starColor.includes('gradient') 
+                              ? WHEAT_GRADE_INFO[cell.grade].starColor 
+                              : undefined,
+                            backgroundColor: !WHEAT_GRADE_INFO[cell.grade].starColor.includes('gradient') 
+                              ? WHEAT_GRADE_INFO[cell.grade].starColor 
+                              : undefined,
+                            color: 'white',
+                            borderRadius: '50%',
+                            width: '16px',
+                            height: '16px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 'bold',
+                            textShadow: '0 0 2px rgba(0,0,0,0.8)',
+                            zIndex: 10
+                          }}>
+                            ⭐
+                          </div>
+                        )}
                         {isHarvesting && (
                           <div className="harvest-effect-idle">
                             <span className="floating-reward-idle">
