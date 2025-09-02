@@ -444,6 +444,17 @@ export const getRandomWheatType = (rareChanceLevel = 0) => {
   return WHEAT_TYPES.COMMON;
 };
 
+// Nouvelle fonction pour générer un blé complet avec type et grade
+export const generateRandomWheat = (rareChanceLevel = 0, gradeBoostLevels = {}) => {
+  const wheatType = getRandomWheatType(rareChanceLevel);
+  const grade = getRandomWheatGrade(gradeBoostLevels);
+  
+  return {
+    wheatType,
+    grade
+  };
+};
+
 export const getGrowthSpeedLevel = (totalClicks) => {
   let level = 0;
   for (const threshold of GROWTH_SPEED_THRESHOLDS) {
