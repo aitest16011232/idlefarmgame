@@ -543,12 +543,22 @@ const FarmGame = () => {
       const newHarvestedByRarity = { ...prev.inventory.harvestedByRarity };
       newHarvestedByRarity[wheatType] = (newHarvestedByRarity[wheatType] || 0) + 1;
       
+      // Mise à jour des statistiques par grade
+      const newHarvestedByGrade = { ...prev.inventory.harvestedByGrade };
+      if (wheatGrade !== WHEAT_GRADES.NONE) {
+        newHarvestedByGrade[wheatGrade] = (newHarvestedByGrade[wheatGrade] || 0) + 1;
+      }
+      
       // Compter les blés bonus aussi
       harvestedCells.forEach(selectedCell => {
         const r = selectedCell.row;
         const c = selectedCell.col;
         const bonusWheatType = prev.grid[r][c].wheatType;
+        const bonusWheatGrade = prev.grid[r][c].grade || WHEAT_GRADES.NONE;
         newHarvestedByRarity[bonusWheatType] = (newHarvestedByRarity[bonusWheatType] || 0) + 1;
+        if (bonusWheatGrade !== WHEAT_GRADES.NONE) {
+          newHarvestedByGrade[bonusWheatGrade] = (newHarvestedByGrade[bonusWheatGrade] || 0) + 1;
+        }
       });
       
       return {
