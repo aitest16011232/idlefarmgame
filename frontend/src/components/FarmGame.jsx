@@ -432,11 +432,13 @@ const FarmGame = () => {
 
     // Déterminer le type de blé récolté (utiliser le type stocké dans la cellule)
     const wheatType = cell.wheatType;
+    const wheatGrade = cell.grade || WHEAT_GRADES.NONE;
     const wheatValue = WHEAT_TYPE_INFO[wheatType].value;
+    const gradeMultiplier = WHEAT_GRADE_INFO[wheatGrade].multiplier;
     const harvestAmount = getHarvestAmount(gameData.upgrades[UPGRADES.HARVEST_AMOUNT]);
     const isCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
     const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
-    const totalWheat = wheatValue * harvestAmount * criticalMultiplier;
+    const totalWheat = wheatValue * gradeMultiplier * harvestAmount * criticalMultiplier;
     const xpMultiplier = getExperienceMultiplier(gameData.upgrades[UPGRADES.EXPERIENCE_BOOST]);
     const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
 
