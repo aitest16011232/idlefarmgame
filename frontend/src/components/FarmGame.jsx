@@ -716,6 +716,35 @@ const FarmGame = () => {
   const nextGrowthThreshold = getNextGrowthSpeedThreshold(gameData.inventory.totalClicks);
   const rareMultiplier = Math.pow(UPGRADE_INFO[UPGRADES.RARE_CHANCE].multiplier, gameData.upgrades[UPGRADES.RARE_CHANCE]);
 
+  // Organisation des améliorations par catégories
+  const upgradeCategories = {
+    production: {
+      name: "Production",
+      icon: "🌾",
+      upgrades: [UPGRADES.HARVEST_AMOUNT, UPGRADES.RARE_CHANCE, UPGRADES.CRITICAL_HARVEST, UPGRADES.EXPERIENCE_BOOST]
+    },
+    automation: {
+      name: "Automatisation",
+      icon: "⚙️",
+      upgrades: [UPGRADES.GROWTH_SPEED, UPGRADES.AUTO_HARVEST_CHANCE, UPGRADES.AUTO_HARVEST_SPEED]
+    },
+    terrain: {
+      name: "Terrain",
+      icon: "🗺️",
+      upgrades: [UPGRADES.GRID_SIZE]
+    },
+    special: {
+      name: "Spécial",
+      icon: "✨",
+      upgrades: [UPGRADES.MULTI_HARVEST, UPGRADES.FULL_HARVEST_SKILL]
+    },
+    grades: {
+      name: "Grades",
+      icon: "⭐",
+      upgrades: [UPGRADES.GOLD_GRADE_BOOST, UPGRADES.DIAMOND_GRADE_BOOST, UPGRADES.RAINBOW_GRADE_BOOST, UPGRADES.VOID_GRADE_BOOST]
+    }
+  };
+
   return (
     <div className="farm-game-idle discord-theme">
       {/* En-tête du jeu */}
