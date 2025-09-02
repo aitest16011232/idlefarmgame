@@ -14,6 +14,53 @@ export const WHEAT_TYPES = {
   OMNIPOTENT: 'omnipotent'
 };
 
+// Système de grades pour les blés
+export const WHEAT_GRADES = {
+  NONE: 'none',
+  GOLD: 'gold',
+  DIAMOND: 'diamond',
+  RAINBOW: 'rainbow',
+  VOID: 'void'
+};
+
+export const WHEAT_GRADE_INFO = {
+  [WHEAT_GRADES.NONE]: {
+    name: 'Aucun',
+    multiplier: 1,
+    probability: 0,
+    starColor: '',
+    starIcon: ''
+  },
+  [WHEAT_GRADES.GOLD]: {
+    name: 'Or',
+    multiplier: 20,
+    probability: 0.01, // 1/100
+    starColor: '#FFD700',
+    starIcon: '⭐'
+  },
+  [WHEAT_GRADES.DIAMOND]: {
+    name: 'Diamant',
+    multiplier: 50,
+    probability: 0.001, // 1/1000
+    starColor: '#00FFFF',
+    starIcon: '💎'
+  },
+  [WHEAT_GRADES.RAINBOW]: {
+    name: 'Arc-En-Ciel',
+    multiplier: 100,
+    probability: 0.0001, // 1/10000
+    starColor: 'linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080)',
+    starIcon: '🌈'
+  },
+  [WHEAT_GRADES.VOID]: {
+    name: 'Void',
+    multiplier: 500,
+    probability: 0.00002, // 1/50000
+    starColor: '#4B0082',
+    starIcon: '🌌'
+  }
+};
+
 export const WHEAT_TYPE_INFO = {
   [WHEAT_TYPES.COMMON]: {
     emoji: '🌾',
