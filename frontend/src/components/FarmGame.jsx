@@ -368,10 +368,11 @@ const FarmGame = () => {
   }, [gameData.upgrades[UPGRADES.GROWTH_SPEED]]);
 
   // Fonction pour ajouter à l'historique des récoltes
-  const addToHarvestHistory = (wheatType, totalWheat, xpGained, isCritical, isBonus = false) => {
+  const addToHarvestHistory = (wheatType, wheatGrade, totalWheat, xpGained, isCritical, isBonus = false) => {
     const harvestEntry = {
       id: Date.now() + Math.random(),
       wheatType,
+      wheatGrade: wheatGrade || WHEAT_GRADES.NONE,
       totalWheat,
       xpGained,
       isCritical,
