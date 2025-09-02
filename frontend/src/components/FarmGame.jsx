@@ -547,7 +547,7 @@ const FarmGame = () => {
       bonusWheatCount++;
       
       // Ajouter la récolte bonus à l'historique
-      const bonusXpGained = Math.floor(bonusWheatValue * 5 * xpMultiplier);
+      const bonusXpGained = Math.floor(bonusWheatValue * bonusGradeMultiplier * 5 * xpMultiplier);
       addToHarvestHistory(bonusWheatType, bonusWheatGrade, cellBonusHarvest, bonusXpGained, bonusIsCritical, true);
     });
 
