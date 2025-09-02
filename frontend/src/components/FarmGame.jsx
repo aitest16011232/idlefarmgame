@@ -1173,6 +1173,7 @@ const FarmGame = () => {
                                   <div className="text-xs text-discord-green space-y-1">
                                     <p>Grade: {WHEAT_GRADE_INFO[info.gradeType].name} (x{WHEAT_GRADE_INFO[info.gradeType].multiplier})</p>
                                     <p>Probabilité base: {formatProbability(WHEAT_GRADE_INFO[info.gradeType].probability)}</p>
+                                    <p>Multiplicateur actuel: x{currentLevel > 0 ? (1 + currentLevel * 0.5).toFixed(1) : '1.0'}</p>
                                     <p>Probabilité actuelle: {formatProbability(getGradeProbability(info.gradeType, currentLevel))}</p>
                                     {currentLevel > 0 && (
                                       <p>Blés obtenus: {gameData.inventory.harvestedByGrade[info.gradeType] || 0}</p>
