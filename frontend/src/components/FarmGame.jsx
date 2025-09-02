@@ -456,7 +456,7 @@ const FarmGame = () => {
     const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
     const totalWheat = wheatValue * gradeMultiplier * harvestAmount * criticalMultiplier;
     const xpMultiplier = getExperienceMultiplier(gameData.upgrades[UPGRADES.EXPERIENCE_BOOST]);
-    const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
+    const xpGained = Math.floor(wheatValue * gradeMultiplier * 5 * xpMultiplier);
 
     // Ajouter à l'historique
     addToHarvestHistory(wheatType, wheatGrade, totalWheat, xpGained, isCritical, false);
