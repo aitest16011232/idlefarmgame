@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Corrections demandées : 1) Corriger chance de récolte qui donne 3 blé d'un coup au lieu du système correct (N blé de base + % pour le suivant), 2) Afficher nouvelle compétence dans Améliorations, 3) Séparer récolte automatique en deux améliorations (chance achetable + vitesse basée sur blés récoltés), 4) Nouveaux paliers terrain: 5, 15, 30, 75, 150, 300, 500, 1000, 2000"
+user_problem_statement: "Nouveau système de grades pour les blés : 1) Système de grades (Or 1/100, Diamant 1/1000, Arc-En-Ciel 1/10000, Void 1/50000) avec multiplicateurs (Or x20, Diamant x50, Arc-En-Ciel x100, Void x500), 2) Étoiles colorées sur les blés gradés, 3) Améliorations organisées par catégories, 4) Nouvelles améliorations pour augmenter probabilités de grades (débloquage par obtention), 5) Section statistiques pour les grades obtenus"
 
 frontend:
   - task: "Correction système chance de récolte"
