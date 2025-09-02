@@ -268,7 +268,7 @@ const FarmGame = () => {
               const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
               const wheatHarvested = wheatValue * gradeMultiplier * harvestAmountValue * criticalMultiplier;
               const xpMultiplier = getExperienceMultiplier(prev.upgrades[UPGRADES.EXPERIENCE_BOOST]);
-              const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
+              const xpGained = Math.floor(wheatValue * gradeMultiplier * 5 * xpMultiplier);
 
               totalAutoWheat += wheatHarvested;
               totalAutoXp += xpGained;
