@@ -796,6 +796,11 @@ const FarmGame = () => {
                               'text-gray-400'
                             }`}>
                               {wheatInfo.name}
+                              {entry.wheatGrade && entry.wheatGrade !== WHEAT_GRADES.NONE && (
+                                <span className="ml-1" style={{ color: WHEAT_GRADE_INFO[entry.wheatGrade].starColor }}>
+                                  {WHEAT_GRADE_INFO[entry.wheatGrade].starIcon}
+                                </span>
+                              )}
                               {entry.isBonus && <span className="text-discord-green ml-1">(Bonus)</span>}
                               {entry.isCritical && <span className="text-discord-red ml-1">⚡</span>}
                             </div>
