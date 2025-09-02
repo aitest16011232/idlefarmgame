@@ -986,11 +986,23 @@ const FarmGame = () => {
               <TabsContent value="upgrades" className="space-y-4">
                 {Object.entries(upgradeCategories).map(([categoryKey, category]) => (
                   <div key={categoryKey} className="mb-6">
-                    <h3 className="text-lg font-bold mb-3 text-discord-text flex items-center gap-2">
-                      <span>{category.icon}</span>
-                      {category.name}
-                    </h3>
-                    <div className="space-y-3">
+                    <div 
+                      className="flex items-center gap-2 p-3 bg-discord-primary border border-discord-accent rounded-lg cursor-pointer hover:bg-discord-secondary transition-colors"
+                      onClick={() => toggleCategory(categoryKey)}
+                    >
+                      {openCategories[categoryKey] ? (
+                        <ChevronDown className="w-5 h-5 text-discord-text" />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-discord-text" />
+                      )}
+                      <span className="text-xl">{category.icon}</span>
+                      <h3 className="text-lg font-bold text-discord-text flex-1">{category.name}</h3>
+                      <Badge variant="secondary" className="bg-discord-accent text-discord-text">
+                        {category.upgrades.length}
+                      </Badge>
+                    </div>
+                    {openCategories[categoryKey] && (
+                      <div className="mt-3 space-y-3 pl-4 border-l-2 border-discord-accent">
                       {category.upgrades.map(upgradeType => {
                         const info = UPGRADE_INFO[upgradeType];
                         if (!info) return null;
