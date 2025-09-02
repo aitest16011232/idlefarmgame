@@ -290,11 +290,11 @@ export const UPGRADE_INFO = {
   },
   [UPGRADES.AUTO_HARVEST_CHANCE]: {
     name: "Récolte Automatique",
-    description: "Chance de récolte automatique et vitesse basée sur les récoltes",
+    description: "Récolte toutes les 10 secondes avec chance d'obtenir des blés supplémentaires",
     baseCost: 300,
     maxLevel: Infinity,
-    baseChance: 0.1, // 10% de base
-    increment: 0.05, // +5% par niveau
+    baseChance: 1.0, // 100% de base (1 blé garanti)
+    increment: 0.05, // +5% par niveau pour le blé suivant
     unlockLevel: 20
   },
   [UPGRADES.AUTO_HARVEST_SPEED]: {
