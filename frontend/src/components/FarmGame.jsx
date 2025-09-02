@@ -529,10 +529,12 @@ const FarmGame = () => {
       const c = selectedCell.col;
       
       const bonusWheatType = gameData.grid[r][c].wheatType;
+      const bonusWheatGrade = gameData.grid[r][c].grade || WHEAT_GRADES.NONE;
       const bonusWheatValue = WHEAT_TYPE_INFO[bonusWheatType].value;
+      const bonusGradeMultiplier = WHEAT_GRADE_INFO[bonusWheatGrade].multiplier;
       const bonusIsCritical = Math.random() < getCriticalHarvestChance(gameData.upgrades[UPGRADES.CRITICAL_HARVEST]);
       const bonusCriticalMultiplier = bonusIsCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
-      const cellBonusHarvest = bonusWheatValue * harvestAmount * bonusCriticalMultiplier;
+      const cellBonusHarvest = bonusWheatValue * bonusGradeMultiplier * harvestAmount * bonusCriticalMultiplier;
       
       bonusHarvest += cellBonusHarvest;
       bonusWheatCount++;
