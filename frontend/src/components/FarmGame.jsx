@@ -71,6 +71,24 @@ const FarmGame = () => {
           parsedData.inventory.harvestedByRarity[type] = 0;
         });
       }
+      // Ajouter les statistiques par grade si elles n'existent pas
+      if (!parsedData.inventory.harvestedByGrade) {
+        parsedData.inventory.harvestedByGrade = {};
+        Object.values(WHEAT_GRADES).forEach(grade => {
+          if (grade !== WHEAT_GRADES.NONE) {
+            parsedData.inventory.harvestedByGrade[grade] = 0;
+          }
+        });
+      }
+      // Ajouter les grades aux cellules existantes si elles n'en ont pas
+      if (parsedData.grid && parsedData.grid.length > 0) {
+        parsedData.grid = parsedData.grid.map(row =>
+          row.map(cell => ({
+            ...cell,
+            grade: cell.grade || WHEAT_GRADES.NONE
+          }))
+        );
+      }
       // Ajouter les nouvelles améliorations si elles n'existent pas
       const newUpgrades = { ...parsedData.upgrades };
       Object.keys(UPGRADES).forEach(key => {
