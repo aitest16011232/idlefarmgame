@@ -512,7 +512,7 @@ export const getAutoHarvestSpeedLevel = (totalAutoHarvested) => {
 
 export const getAutoHarvestInterval = (speedLevel) => {
   const info = UPGRADE_INFO[UPGRADES.AUTO_HARVEST_SPEED];
-  return Math.max(1000, info.baseInterval - (speedLevel * info.reduction));
+  return info.baseInterval; // Toujours 10 secondes
 };
 
 export const getNextAutoHarvestSpeedThreshold = (totalAutoHarvested) => {
