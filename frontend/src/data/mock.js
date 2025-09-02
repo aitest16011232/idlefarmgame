@@ -203,7 +203,12 @@ export const UPGRADES = {
   AUTO_HARVEST_SPEED: 'autoHarvestSpeed', // Nouvelle amélioration basée sur récoltes
   CRITICAL_HARVEST: 'criticalHarvest',
   EXPERIENCE_BOOST: 'experienceBoost',
-  FULL_HARVEST_SKILL: 'fullHarvestSkill' // Nouvelle compétence
+  FULL_HARVEST_SKILL: 'fullHarvestSkill', // Nouvelle compétence
+  // Nouvelles améliorations pour les grades
+  GOLD_GRADE_BOOST: 'goldGradeBoost',
+  DIAMOND_GRADE_BOOST: 'diamondGradeBoost',
+  RAINBOW_GRADE_BOOST: 'rainbowGradeBoost',
+  VOID_GRADE_BOOST: 'voidGradeBoost'
 };
 
 export const GROWTH_SPEED_THRESHOLDS = [
