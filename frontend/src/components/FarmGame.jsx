@@ -962,10 +962,11 @@ const FarmGame = () => {
         <div className="upgrades-section">
           <Card className="p-6 bg-discord-secondary border-discord-accent">
             <Tabs defaultValue="upgrades" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-discord-primary">
+              <TabsList className="grid w-full grid-cols-4 bg-discord-primary">
                 <TabsTrigger value="upgrades" className="data-[state=active]:bg-discord-green data-[state=active]:text-white">Améliorations</TabsTrigger>
                 <TabsTrigger value="stats" className="data-[state=active]:bg-discord-blurple data-[state=active]:text-white">Statistiques</TabsTrigger>
                 <TabsTrigger value="rarity" className="data-[state=active]:bg-discord-yellow data-[state=active]:text-white">Raretés</TabsTrigger>
+                <TabsTrigger value="grades" className="data-[state=active]:bg-discord-red data-[state=active]:text-white">Grades</TabsTrigger>
               </TabsList>
               
               <TabsContent value="upgrades" className="space-y-4">
