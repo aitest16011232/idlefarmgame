@@ -444,7 +444,7 @@ const FarmGame = () => {
     const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
 
     // Ajouter à l'historique
-    addToHarvestHistory(wheatType, totalWheat, xpGained, isCritical, false);
+    addToHarvestHistory(wheatType, wheatGrade, totalWheat, xpGained, isCritical, false);
 
     // Vérifier la chance de récolte complète
     const fullHarvestChance = getFullHarvestChance(levelInfo.level);
