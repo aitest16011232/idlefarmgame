@@ -639,3 +639,101 @@ export const getFullHarvestChance = (playerLevel) => {
   const skillLevel = getFullHarvestSkillLevel(playerLevel);
   return skillLevel * 0.25; // 0.25% par niveau de compétence
 };
+
+// ===== FONCTIONS POUR LE SYSTÈME DE GRADES =====
+
+// Fonction pour déterminer le grade d'un blé
+export const getRandomWheatGrade = (gradeBoostLevels = {}) => {
+  const random = Math.random();
+  
+  // Vérifier chaque grade du plus rare au moins rare
+  const grades = [
+    WHEAT_GRADES.VOID,
+    WHEAT_GRADES.RAINBOW,
+    WHEAT_GRADES.DIAMOND,
+    WHEAT_GRADES.GOLD
+  ];
+  
+  for (const grade of grades) {
+    const boostLevel = gradeBoostLevels[getGradeBoostUpgradeType(grade)] || 0;
+    const adjustedProbability = getGradeProbability(grade, boostLevel);
+    
+    if (random < adjustedProbability) {
+      return grade;
+    }
+  }
+  
+  return WHEAT_GRADES.NONE;
+};
+
+// Fonction pour calculer la probabilité ajustée d'un grade
+export const getGradeProbability = (grade, boostLevel = 0) => {
+  const baseInfo = WHEAT_GRADE_INFO[grade];
+  if (!baseInfo || grade === WHEAT_GRADES.NONE) return 0;
+  
+  let probability = baseInfo.probability;
+  
+  if (boostLevel > 0) {
+    // Niveau 1: x1.5, Niveau 2: x2.0
+    const multiplier = 1 + (boostLevel * 0.5);
+    probability = probability * multiplier;
+  }
+  
+  return probability;
+};
+
+// Fonction pour obtenir le type d'amélioration correspondant à un grade
+export const getGradeBoostUpgradeType = (grade) => {
+  switch (grade) {
+    case WHEAT_GRADES.GOLD: return UPGRADES.GOLD_GRADE_BOOST;
+    case WHEAT_GRADES.DIAMOND: return UPGRADES.DIAMOND_GRADE_BOOST;
+    case WHEAT_GRADES.RAINBOW: return UPGRADES.RAINBOW_GRADE_BOOST;
+    case WHEAT_GRADES.VOID: return UPGRADES.VOID_GRADE_BOOST;
+    default: return null;
+  }
+};
+
+// Fonction pour vérifier si une amélioration de grade peut être débloquée
+export const canUnlockGradeUpgrade = (upgradeType, gradeStats) => {
+  const info = UPGRADE_INFO[upgradeType];
+  if (!info || !info.gradeType) return false;
+  
+  const gradeCount = gradeStats[info.gradeType] || 0;
+  
+  // Doit avoir obtenu au moins 1 blé de ce grade
+  return gradeCount > 0;
+};
+
+// Fonction pour calculer le coût d'une amélioration de grade
+export const getGradeUpgradeCost = (upgradeType, currentLevel) => {
+  const info = UPGRADE_INFO[upgradeType];
+  if (!info) return Infinity;
+  
+  return Math.floor(info.baseCost * Math.pow(1.5, currentLevel));
+};
+
+// Fonction pour obtenir le palier requis pour le prochain niveau d'amélioration de grade
+export const getNextGradeThreshold = (upgradeType, currentLevel) => {
+  const info = UPGRADE_INFO[upgradeType];
+  if (!info || !info.requiredGrades) return null;
+  
+  if (currentLevel >= info.requiredGrades.length) {
+    // Après les paliers fixes, utiliser la formule x1.15
+    const baseThreshold = info.requiredGrades[info.requiredGrades.length - 1];
+    const additionalLevels = currentLevel - info.requiredGrades.length + 1;
+    return Math.floor(baseThreshold * Math.pow(1.15, additionalLevels));
+  }
+  
+  return info.requiredGrades[currentLevel];
+};
+
+// Fonction pour vérifier si on peut acheter le prochain niveau d'amélioration de grade
+export const canBuyGradeUpgrade = (upgradeType, currentLevel, gradeStats) => {
+  const info = UPGRADE_INFO[upgradeType];
+  if (!info || !info.gradeType) return false;
+  
+  const gradeCount = gradeStats[info.gradeType] || 0;
+  const requiredCount = getNextGradeThreshold(upgradeType, currentLevel);
+  
+  return requiredCount !== null && gradeCount >= requiredCount;
+};
