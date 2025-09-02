@@ -299,10 +299,10 @@ export const UPGRADE_INFO = {
   },
   [UPGRADES.AUTO_HARVEST_SPEED]: {
     name: "Récolte Auto - Vitesse",
-    description: "Se débloque automatiquement avec les récoltes automatiques",
+    description: "Récolte automatique toutes les 10 secondes (fixe)",
     isAutoUnlock: true,
-    baseInterval: 10000, // 10 secondes de base
-    reduction: 500 // -0.5 secondes par niveau
+    baseInterval: 10000, // 10 secondes fixe
+    reduction: 0 // Pas de réduction - toujours 10 secondes
   },
   [UPGRADES.CRITICAL_HARVEST]: {
     name: "Récolte Critique",
