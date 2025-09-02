@@ -693,7 +693,11 @@ export const getGradeProbability = (grade, boostLevel = 0) => {
   let probability = baseInfo.probability;
   
   if (boostLevel > 0) {
-    // Niveau 1: x1.5, Niveau 2: x2.0
+    // Nouvelle formule : X + (niveau × 0.5)X/Y
+    // X = 1, Y = dépend de la rareté du grade
+    // Niveau 1: 1 + 0.5 = 1.5 multiplier
+    // Niveau 2: 1 + 1.0 = 2.0 multiplier
+    // Niveau 3: 1 + 1.5 = 2.5 multiplier, etc.
     const multiplier = 1 + (boostLevel * 0.5);
     probability = probability * multiplier;
   }
