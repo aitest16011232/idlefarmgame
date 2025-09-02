@@ -105,31 +105,19 @@
 user_problem_statement: "Nouveau système de grades pour les blés : 1) Système de grades (Or 1/100, Diamant 1/1000, Arc-En-Ciel 1/10000, Void 1/50000) avec multiplicateurs (Or x20, Diamant x50, Arc-En-Ciel x100, Void x500), 2) Étoiles colorées sur les blés gradés, 3) Améliorations organisées par catégories, 4) Nouvelles améliorations pour augmenter probabilités de grades (débloquage par obtention), 5) Section statistiques pour les grades obtenus"
 
 frontend:
-  - task: "Correction système chance de récolte"
+  - task: "Système de grades pour les blés"
     implemented: true
     working: false
-    file: "/app/frontend/src/components/FarmGame.jsx, /app/frontend/src/data/mock.js"
+    file: "/app/frontend/src/data/mock.js, /app/frontend/src/components/FarmGame.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: false
         agent: "main"
-        comment: "Modifié système pour calculer dynamiquement blés de base (Math.floor) + chance pour suivant. Corrigé affichage pour refléter N base + X%"
+        comment: "Implémenté système complet de grades (Or, Diamant, Arc-En-Ciel, Void) avec probabilités et multiplicateurs. Ajouté génération aléatoire de grades, calcul des valeurs avec multiplicateurs, affichage d'étoiles colorées"
 
-  - task: "Nouveaux paliers terrain (5, 15, 30, 75, 150, 300, 500, 1000, 2000)"
-    implemented: true
-    working: false
-    file: "/app/frontend/src/data/mock.js"
-    stuck_count: 0
-    priority: "high"
-    needs_retesting: true
-    status_history:
-      - working: false
-        agent: "main"
-        comment: "Modifié GRID_SIZES et UPGRADE_INFO niveaux requis selon nouvelles spécifications"
-
-  - task: "Affichage compétence FULL_HARVEST_SKILL dans améliorations"
+  - task: "Améliorations organisées par catégories"
     implemented: true
     working: false
     file: "/app/frontend/src/components/FarmGame.jsx"
@@ -139,19 +127,43 @@ frontend:
     status_history:
       - working: false
         agent: "main"
-        comment: "Ajouté icône, badge Nouveau et affichage détails pour FULL_HARVEST_SKILL. Ajouté useEffect pour mise à jour automatique"
+        comment: "Réorganisé améliorations en catégories : Production, Automatisation, Terrain, Spécial, Grades. Interface plus claire et organisée"
 
-  - task: "Récolte automatique séparée en deux améliorations"
+  - task: "Nouvelles améliorations pour les grades"
     implemented: true
     working: false
-    file: "/app/frontend/src/components/FarmGame.jsx, /app/frontend/src/data/mock.js"
+    file: "/app/frontend/src/data/mock.js, /app/frontend/src/components/FarmGame.jsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: false
         agent: "main"
-        comment: "Modifié AUTO_HARVEST_CHANCE avec système chance comme récolte normale, AUTO_HARVEST_SPEED basé sur totalAutoHarvested, paliers corrigés, tracking ajouté"
+        comment: "Ajouté améliorations GOLD_GRADE_BOOST, DIAMOND_GRADE_BOOST, etc. avec système de paliers (5, 25, 50, 75, 100 puis x1.15). Débloquage conditionnel par obtention de grades"
+
+  - task: "Section statistiques des grades"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Ajouté nouvel onglet 'Grades' avec statistiques détaillées, compteurs par grade, probabilités actuelles et affichage des étoiles"
+
+  - task: "Affichage visuel des étoiles sur les blés"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/components/FarmGame.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Ajouté étoiles colorées en haut à droite des cellules matures avec grades. Couleurs spécifiques selon le grade (Or=jaune, Diamant=cyan, etc.)"
 
 backend:
   - task: "Aucune modification backend requise"
