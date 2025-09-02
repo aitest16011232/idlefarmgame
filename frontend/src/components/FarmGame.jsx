@@ -1200,7 +1200,8 @@ const FarmGame = () => {
                           </div>
                         );
                       })}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </TabsContent>
