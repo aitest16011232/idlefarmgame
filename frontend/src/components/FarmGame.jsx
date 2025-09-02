@@ -253,11 +253,13 @@ const FarmGame = () => {
             if (shouldHarvest) {
               // Auto-récolte avec les mêmes calculs que la récolte manuelle
               const cellWheatType = cell.wheatType;
+              const cellWheatGrade = cell.grade || WHEAT_GRADES.NONE;
               const wheatValue = WHEAT_TYPE_INFO[cellWheatType].value;
+              const gradeMultiplier = WHEAT_GRADE_INFO[cellWheatGrade].multiplier;
               const harvestAmountValue = getHarvestAmount(prev.upgrades[UPGRADES.HARVEST_AMOUNT]);
               const isCritical = Math.random() < getCriticalHarvestChance(prev.upgrades[UPGRADES.CRITICAL_HARVEST]);
               const criticalMultiplier = isCritical ? UPGRADE_INFO[UPGRADES.CRITICAL_HARVEST].multiplier : 1;
-              const wheatHarvested = wheatValue * harvestAmountValue * criticalMultiplier;
+              const wheatHarvested = wheatValue * gradeMultiplier * harvestAmountValue * criticalMultiplier;
               const xpMultiplier = getExperienceMultiplier(prev.upgrades[UPGRADES.EXPERIENCE_BOOST]);
               const xpGained = Math.floor(wheatValue * 5 * xpMultiplier);
 
