@@ -293,10 +293,15 @@ const FarmGame = () => {
           const newTotalXp = prev.player.xp + totalAutoXp;
           const newLevelInfo = calculateLevelFromXp(newTotalXp);
 
-          // Mise à jour des statistiques par rareté
+          // Mise à jour des statistiques par rareté et grade
           const newHarvestedByRarity = { ...prev.inventory.harvestedByRarity };
+          const newHarvestedByGrade = { ...prev.inventory.harvestedByGrade };
           cellsToHarvest.forEach(({ cell }) => {
             newHarvestedByRarity[cell.wheatType] = (newHarvestedByRarity[cell.wheatType] || 0) + 1;
+            const cellGrade = cell.grade || WHEAT_GRADES.NONE;
+            if (cellGrade !== WHEAT_GRADES.NONE) {
+              newHarvestedByGrade[cellGrade] = (newHarvestedByGrade[cellGrade] || 0) + 1;
+            }
           });
 
           return {
