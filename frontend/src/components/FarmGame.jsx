@@ -709,6 +709,13 @@ const FarmGame = () => {
     setTimeout(() => setSoundEffect(''), 300);
   };
 
+  const toggleCategory = (categoryKey) => {
+    setOpenCategories(prev => ({
+      ...prev,
+      [categoryKey]: !prev[categoryKey]
+    }));
+  };
+
   const resetGame = () => {
     setGameData(initialGameData);
     setHarvestAnimations({});
