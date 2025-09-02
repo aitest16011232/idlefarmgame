@@ -328,6 +328,43 @@ export const UPGRADE_INFO = {
     description: "Se débloque automatiquement avec le niveau du joueur",
     isAutoUnlock: true,
     baseChance: 0.25 // 0.25% par niveau de compétence
+  },
+  // Améliorations pour les grades
+  [UPGRADES.GOLD_GRADE_BOOST]: {
+    name: "Amélioration Grade Or",
+    description: "Augmente la probabilité d'obtenir des blés gradés Or",
+    baseCost: 1000,
+    maxLevel: Infinity,
+    gradeType: WHEAT_GRADES.GOLD,
+    requiredGrades: [5, 25, 50, 75, 100], // Paliers de débloquage
+    unlockCondition: 'grade_obtained' // Se débloque quand on obtient le premier grade
+  },
+  [UPGRADES.DIAMOND_GRADE_BOOST]: {
+    name: "Amélioration Grade Diamant",
+    description: "Augmente la probabilité d'obtenir des blés gradés Diamant",
+    baseCost: 5000,
+    maxLevel: Infinity,
+    gradeType: WHEAT_GRADES.DIAMOND,
+    requiredGrades: [5, 25, 50, 75, 100],
+    unlockCondition: 'grade_obtained'
+  },
+  [UPGRADES.RAINBOW_GRADE_BOOST]: {
+    name: "Amélioration Grade Arc-En-Ciel",
+    description: "Augmente la probabilité d'obtenir des blés gradés Arc-En-Ciel",
+    baseCost: 25000,
+    maxLevel: Infinity,
+    gradeType: WHEAT_GRADES.RAINBOW,
+    requiredGrades: [5, 25, 50, 75, 100],
+    unlockCondition: 'grade_obtained'
+  },
+  [UPGRADES.VOID_GRADE_BOOST]: {
+    name: "Amélioration Grade Void",
+    description: "Augmente la probabilité d'obtenir des blés gradés Void",
+    baseCost: 100000,
+    maxLevel: Infinity,
+    gradeType: WHEAT_GRADES.VOID,
+    requiredGrades: [5, 25, 50, 75, 100],
+    unlockCondition: 'grade_obtained'
   }
 };
 
