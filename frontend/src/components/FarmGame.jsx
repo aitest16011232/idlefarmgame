@@ -313,7 +313,8 @@ const FarmGame = () => {
               totalHarvested: prev.inventory.totalHarvested + totalAutoWheat,
               totalClicks: prev.inventory.totalClicks + cellsToHarvest.length,
               totalAutoHarvested: prev.inventory.totalAutoHarvested + cellsToHarvest.length,
-              harvestedByRarity: newHarvestedByRarity
+              harvestedByRarity: newHarvestedByRarity,
+              harvestedByGrade: newHarvestedByGrade
             },
             player: {
               ...prev.player,
