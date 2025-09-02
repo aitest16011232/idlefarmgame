@@ -110,6 +110,13 @@ const FarmGame = () => {
   const [soundEffect, setSoundEffect] = useState('');
   const [boostAnimations, setBoostAnimations] = useState({});
   const [harvestHistory, setHarvestHistory] = useState([]);
+  const [openCategories, setOpenCategories] = useState({
+    production: true,
+    automation: true,
+    terrain: true,
+    special: true,
+    grades: true
+  });
 
   // Sauvegarder automatiquement
   useEffect(() => {
