@@ -920,7 +920,7 @@ const FarmGame = () => {
                             position: 'absolute',
                             top: '2px',
                             right: '2px',
-                            fontSize: '12px',
+                            fontSize: '18px',
                             background: WHEAT_GRADE_INFO[cell.grade].starColor.includes('gradient') 
                               ? WHEAT_GRADE_INFO[cell.grade].starColor 
                               : undefined,
@@ -929,14 +929,15 @@ const FarmGame = () => {
                               : undefined,
                             color: 'white',
                             borderRadius: '50%',
-                            width: '16px',
-                            height: '16px',
+                            width: '24px',
+                            height: '24px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontWeight: 'bold',
-                            textShadow: '0 0 2px rgba(0,0,0,0.8)',
-                            zIndex: 10
+                            textShadow: '0 0 3px rgba(0,0,0,0.9)',
+                            zIndex: 10,
+                            border: '1px solid rgba(255,255,255,0.3)'
                           }}>
                             ⭐
                           </div>
